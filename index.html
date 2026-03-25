@@ -983,23 +983,127 @@ let _tSec='t-db',_submitting=false,_submittingP=false;
 /* ================================================================
    DATE HELPERS — local timezone
 ================================================================ */
-function localDate(dt){
-  const d=dt instanceof Date?dt:new Date();
-  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+// ── DATE ENGINE ─────────────────────────────────────────────
+// Tumia local timezone KAMWE (Tanzania = UTC+3)
+// Shida: Sheets inarudisha dates kama "Mon Mar 25 2026 00:00:00 GMT+0300"
+// au "2026-03-25T00:00:00.000Z" — zote zinahitaji kushughulikiwa
+
+// ── DATE ENGINE ── EAT (UTC+3) — Nairobi/Dar es Salaam
+// Kanuni kuu: strings za YYYY-MM-DD zinakatwa bila parse (hakuna timezone shift)
+// Strings za ISO UTC (Z) zinabadilishwa kwanza hadi EAT kabla ya kuonyesha
+
+const EAT_OFFSET = 3 * 60; // dakika — UTC+3
+
+// Geuza Date object hadi EAT na rudisha YYYY-MM-DD
+function toEATDate(d){
+  // Ongeza offset ya EAT kwenye UTC time
+  const eat = new Date(d.getTime() + EAT_OFFSET * 60 * 1000);
+  const y = eat.getUTCFullYear();
+  const m = String(eat.getUTCMonth()+1).padStart(2,'0');
+  const day = String(eat.getUTCDate()).padStart(2,'0');
+  return y+'-'+m+'-'+day;
 }
-const td=()=>localDate();
-const tStr=()=>{const n=new Date();return td()+' '+String(n.getHours()).padStart(2,'0')+':'+String(n.getMinutes()).padStart(2,'0')+':'+String(n.getSeconds()).padStart(2,'0');};
-const dAgo=d=>{const dt=new Date();dt.setDate(dt.getDate()-d);return localDate(dt);};
-const lastN=d=>{const a=[];for(let i=d-1;i>=0;i--)a.push(dAgo(i));return a;};
+
+// Geuza Date object hadi EAT na rudisha HH:MM
+function toEATTime(d){
+  const eat = new Date(d.getTime() + EAT_OFFSET * 60 * 1000);
+  return String(eat.getUTCHours()).padStart(2,'0')+':'+String(eat.getUTCMinutes()).padStart(2,'0');
+}
+
+// Leo kwa EAT
+function localDate(dt){
+  const d = dt instanceof Date ? dt : new Date();
+  return toEATDate(d);
+}
+
+const td = () => localDate();
+
+const tStr = () => {
+  const d = new Date();
+  return toEATDate(d)+' '+toEATTime(d)+':'+String(d.getUTCSeconds()).padStart(2,'0');
+};
+
+const dAgo = d => {
+  const dt = new Date(new Date().getTime() - d*24*60*60*1000);
+  return toEATDate(dt);
+};
+const lastN = d => {const a=[];for(let i=d-1;i>=0;i--)a.push(dAgo(i));return a;};
+
 function safeDate(s){
-  if(!s||s==='null'||s==='undefined')return'';
-  const str=String(s);
-  // YYYY-MM-DD — safi tayari
-  if(str.match(/^\d{4}-\d{2}-\d{2}$/))return str;
-  // Chukua sehemu ya tarehe tu (kabla ya T au nafasi)
-  const part=str.split('T')[0].split(' ')[0];
-  if(part.match(/^\d{4}-\d{2}-\d{2}$/))return part;
-  return str.slice(0,10)||'';
+  if(!s||s==='null'||s==='undefined'||s==='')return'';
+  const str = String(s).trim();
+
+  // 1. "YYYY-MM-DD" tayari — rudisha bila kugusa
+  if(/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+
+  // 2. "YYYY-MM-DD HH:MM..." — kata tarehe (local time, hakuna conversion)
+  const localDT = str.match(/^(\d{4}-\d{2}-\d{2})[ T](?!.*Z$)/);
+  if(localDT) return localDT[1];
+
+  // 3. ISO UTC "...Z" au "...+00:00" — geuza hadi EAT kwanza
+  //    "2026-03-24T21:00:00.000Z" = 2026-03-25 00:00 EAT
+  if(str.includes('Z') || str.match(/T.*[+-]\d{2}:\d{2}$/)){
+    const d = new Date(str);
+    if(!isNaN(d.getTime())) return toEATDate(d);
+  }
+
+  // 4. "YYYY-MM-DDT..." bila Z — local datetime string
+  if(str.match(/^\d{4}-\d{2}-\d{2}T/)) return str.slice(0,10);
+
+  // 5. "Mon Mar 25 2026 00:00:00 GMT+0300" — Sheets Date.toString()
+  if(str.includes('GMT')){
+    const d = new Date(str);
+    if(!isNaN(d.getTime())) return toEATDate(d);
+  }
+
+  // 6. Excel serial number (namba kama 46105)
+  if(/^\d+$/.test(str)){
+    const serial = parseInt(str);
+    if(serial > 40000 && serial < 60000){
+      // Excel epoch = 1899-12-30
+      const d = new Date(Date.UTC(1899,11,30) + serial * 86400000);
+      return toEATDate(d);
+    }
+  }
+
+  // 7. Slash format "3/25/2026" au "25/3/2026"
+  if(str.includes('/')){
+    const p = str.split('/');
+    if(p.length===3){
+      const a=parseInt(p[0]),b=parseInt(p[1]),yr=parseInt(p[2]);
+      if(yr>1900){
+        const mm=a<=12?a:b, dd=a<=12?b:a;
+        return yr+'-'+String(mm).padStart(2,'0')+'-'+String(dd).padStart(2,'0');
+      }
+    }
+  }
+
+  // 8. Angalau chars 10 za kwanza
+  if(str.length>=10) return str.slice(0,10);
+  return '';
+}
+
+// Fomati tarehe kwa mtumiaji: DD/MM/YYYY
+function fmtDate(s){
+  const d = safeDate(s);
+  if(!d) return '—';
+  const p = d.split('-');
+  return p.length===3 ? p[2]+'/'+p[1]+'/'+p[0] : d;
+}
+
+// Fomati wakati kwa mtumiaji: HH:MM (EAT UTC+3)
+function fmtTime(s){
+  if(!s||s==='null'||s==='undefined'||s==='') return '—';
+  const str = String(s).trim();
+  // ISO UTC (ina Z au timezone offset) — geuza hadi EAT KWANZA
+  if(str.includes('Z') || str.match(/T.*[+-]\d{2}:\d{2}$/)){
+    const d = new Date(str);
+    if(!isNaN(d.getTime())) return toEATTime(d);
+  }
+  // Local datetime "YYYY-MM-DD HH:MM..." bila Z — kata moja kwa moja
+  const localT = str.match(/^\d{4}-\d{2}-\d{2}[ T](\d{2}:\d{2})/);
+  if(localT) return localT[1];
+  return '—';
 }
 
 /* ================================================================
@@ -1306,7 +1410,7 @@ function loadDash(){
   if(low.length)al.push(`<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill" style="font-size:16px;"></i><span>Stoki chini: <strong>${low.slice(0,3).map(p=>p.name).join(', ')}${low.length>3?'...':''}</strong></span></div>`);
   if(debts.length)al.push(`<div class="alert alert-danger"><i class="bi bi-currency-exchange" style="font-size:16px;"></i><span>Wateja <strong>${debts.length}</strong> wana deni: <strong>TZS ${fmt(debts.reduce((s,c)=>s+n(c.currentDebt),0))}</strong></span></div>`);
   document.getElementById('t-db-alerts').innerHTML=al.join('');
-  document.getElementById('t-rs').innerHTML=DB.sales.slice(0,5).map(s=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;">${s.ref}</div><div style="font-size:11.5px;color:var(--text-3);">${s.custName||'—'} · ${s.date}</div></div><div style="text-align:right;"><div class="font-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(s.total)}</div><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></div></div>`).join('')||`<div style="text-align:center;padding:24px;color:var(--text-3);">Hakuna mauzo bado</div>`;
+  document.getElementById('t-rs').innerHTML=DB.sales.slice(0,5).map(s=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;">${s.ref}</div><div style="font-size:11.5px;color:var(--text-3);">${s.custName||'—'} · ${fmtDate(s.date)}</div></div><div style="text-align:right;"><div class="font-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(s.total)}</div><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></div></div>`).join('')||`<div style="text-align:center;padding:24px;color:var(--text-3);">Hakuna mauzo bado</div>`;
   document.getElementById('t-ls').innerHTML=low.length?low.slice(0,5).map(p=>{const pct=Math.min(100,n(p.minStock)>0?n(p.stock)/(n(p.minStock)*2)*100:80);return`<div class="mb-2"><div class="flex justify-between mb-1"><span style="font-size:12.5px;">${p.name}</span><span class="badge badge-danger">${p.stock} ${p.unit||''}</span></div><div class="progress"><div class="progress-bar red" style="width:${pct}%"></div></div></div>`}).join(''):`<div style="text-align:center;padding:20px;"><i class="bi bi-check-circle-fill" style="font-size:32px;color:var(--brand-light);display:block;margin-bottom:8px;"></i><div style="font-size:13px;font-weight:700;color:var(--brand-light);">Stoki Zote Sawa!</div></div>`;
   renderTCharts();
 }
@@ -1471,7 +1575,7 @@ function renderSales(){
     const pay=cleanPayment(s.payment);
     return`<tr>
     <td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${s.ref}</td>
-    <td class="td-muted">${s.date}</td>
+    <td class="td-muted">${fmtDate(s.date)}</td>
     <td class="td-name">${s.custName||'—'}</td>
     <td class="td-muted">${items.length} bidhaa</td>
     <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(s.total)}</td>
@@ -1487,7 +1591,7 @@ function renderSales(){
 function openSaleDet(id){
   window._dSaleId=id;const s=DB.sales.find(x=>x.id===id);if(!s)return;
   const items=Array.isArray(s.items)?s.items:[];
-  document.getElementById('sdet-c').innerHTML=`<div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:14px;"><div class="flex justify-between mb-2"><span class="font-bold">${s.ref}</span><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></div><div class="td-muted" style="font-size:13px;">${s.custName} · ${s.date} · TZS ${fmt(s.total)}</div><div style="font-size:11.5px;color:var(--text-3);margin-top:4px;">${items.map(it=>it.pname+' x'+it.qty).join(', ')}</div></div>`;
+  document.getElementById('sdet-c').innerHTML=`<div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:14px;"><div class="flex justify-between mb-2"><span class="font-bold">${s.ref}</span><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></div><div class="td-muted" style="font-size:13px;">${s.custName} · ${fmtDate(s.date)} · TZS ${fmt(s.total)}</div><div style="font-size:11.5px;color:var(--text-3);margin-top:4px;">${items.map(it=>it.pname+' x'+it.qty).join(', ')}</div></div>`;
   openM('m-sdet');
 }
 async function deleteSale(id){
@@ -1505,7 +1609,7 @@ function showInv(sale){
   if(!sale)return;
   const biz=DB.biz||{};
   const items=Array.isArray(sale.items)?sale.items:[];
-  document.getElementById('inv-c').innerHTML=`<div class="invoice-paper"><div class="invoice-header"><div><div class="invoice-logo">📦 ${biz.bizName||cT.name}</div>${biz.bizAddress?`<div style="font-size:12.5px;color:#666;margin-top:3px;">${biz.bizAddress}</div>`:''}<div style="font-size:12.5px;color:#666;">${biz.bizPhone||cT.phone||''}</div>${biz.tinNumber?`<div style="font-size:11px;color:#888;">TIN: ${biz.tinNumber}</div>`:''}</div><div style="text-align:right;"><div class="invoice-label">INVOICE</div><div class="invoice-number">${sale.ref}</div><div style="font-size:12.5px;color:#666;">${sale.date}</div><div style="margin-top:6px;"><span style="background:${sale.creditType==='credit'?'#fee2e2':'#dcfce7'};color:${sale.creditType==='credit'?'#dc2626':'#16a34a'};padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;">${sale.creditType==='credit'?'MKOPO':'TASLIMU'}</span></div></div></div><hr class="invoice-divider"/><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;"><div><div class="invoice-label">MTEJA</div><div style="font-weight:700;font-size:15px;">${sale.custName||'—'}</div></div><div style="text-align:right;"><div class="invoice-label">MALIPO</div><div style="font-weight:700;">${cleanPayment(sale.payment)}</div></div></div><table class="invoice-table"><thead><tr><th>#</th><th>Bidhaa</th><th>Idadi</th><th>Bei</th><th>Jumla</th></tr></thead><tbody>${items.map((it,i)=>`<tr><td>${i+1}</td><td>${it.pname}</td><td>${it.qty}</td><td>TZS ${fmt(it.price)}</td><td>TZS ${fmt(it.total)}</td></tr>`).join('')}${n(sale.discount)>0?`<tr><td colspan="4" style="text-align:right;color:#666;">Punguzo:</td><td style="color:#ef4444;">- TZS ${fmt(sale.discount)}</td></tr>`:''}<tr class="invoice-total-row"><td colspan="4" style="text-align:right;">JUMLA KUU:</td><td style="color:#16a34a;font-size:17px;">TZS ${fmt(sale.total)}</td></tr></tbody></table><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;font-size:13px;"><div style="background:#f0f9f4;padding:11px;border-radius:8px;"><span style="color:#666;">Kilicholipwa:</span> <strong>TZS ${fmt(sale.paid)}</strong></div><div style="background:#f0f9f4;padding:11px;border-radius:8px;"><span style="color:#666;">Chenji:</span> <strong>TZS ${fmt(sale.change)}</strong></div></div><div class="invoice-footer">Asante kwa kununua! · StokiPro v3 · ${td()}</div></div>`;
+  document.getElementById('inv-c').innerHTML=`<div class="invoice-paper"><div class="invoice-header"><div><div class="invoice-logo">📦 ${biz.bizName||cT.name}</div>${biz.bizAddress?`<div style="font-size:12.5px;color:#666;margin-top:3px;">${biz.bizAddress}</div>`:''}<div style="font-size:12.5px;color:#666;">${biz.bizPhone||cT.phone||''}</div>${biz.tinNumber?`<div style="font-size:11px;color:#888;">TIN: ${biz.tinNumber}</div>`:''}</div><div style="text-align:right;"><div class="invoice-label">INVOICE</div><div class="invoice-number">${sale.ref}</div><div style="font-size:12.5px;color:#666;">${fmtDate(sale.date)}</div><div style="margin-top:6px;"><span style="background:${sale.creditType==='credit'?'#fee2e2':'#dcfce7'};color:${sale.creditType==='credit'?'#dc2626':'#16a34a'};padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;">${sale.creditType==='credit'?'MKOPO':'TASLIMU'}</span></div></div></div><hr class="invoice-divider"/><div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;"><div><div class="invoice-label">MTEJA</div><div style="font-weight:700;font-size:15px;">${sale.custName||'—'}</div></div><div style="text-align:right;"><div class="invoice-label">MALIPO</div><div style="font-weight:700;">${cleanPayment(sale.payment)}</div></div></div><table class="invoice-table"><thead><tr><th>#</th><th>Bidhaa</th><th>Idadi</th><th>Bei</th><th>Jumla</th></tr></thead><tbody>${items.map((it,i)=>`<tr><td>${i+1}</td><td>${it.pname}</td><td>${it.qty}</td><td>TZS ${fmt(it.price)}</td><td>TZS ${fmt(it.total)}</td></tr>`).join('')}${n(sale.discount)>0?`<tr><td colspan="4" style="text-align:right;color:#666;">Punguzo:</td><td style="color:#ef4444;">- TZS ${fmt(sale.discount)}</td></tr>`:''}<tr class="invoice-total-row"><td colspan="4" style="text-align:right;">JUMLA KUU:</td><td style="color:#16a34a;font-size:17px;">TZS ${fmt(sale.total)}</td></tr></tbody></table><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px;font-size:13px;"><div style="background:#f0f9f4;padding:11px;border-radius:8px;"><span style="color:#666;">Kilicholipwa:</span> <strong>TZS ${fmt(sale.paid)}</strong></div><div style="background:#f0f9f4;padding:11px;border-radius:8px;"><span style="color:#666;">Chenji:</span> <strong>TZS ${fmt(sale.change)}</strong></div></div><div class="invoice-footer">Asante kwa kununua! · StokiPro v3 · ${td()}</div></div>`;
   openM('m-inv');
 }
 
@@ -1550,7 +1654,7 @@ function renderPurchs(){
   if(PF==='credit')rows=rows.filter(p=>p.creditType==='credit');
   const sq=(gv('pu-srch')||'').toLowerCase();
   if(sq)rows=rows.filter(p=>(p.ref+p.supName+p.date).toLowerCase().includes(sq));
-  pg(rows,'pu-tb','pu-pg',sl=>sl.map(p=>{const items=Array.isArray(p.items)?p.items:[];return`<tr><td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${p.ref}</td><td class="td-muted">${p.date}</td><td class="td-name">${p.supName||'—'}</td><td class="td-muted">${items.length} bidhaa</td><td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.total)}</td><td><span class="badge badge-neutral">${cleanPayment(p.payment)}</span></td><td><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?'Mkopo':'Taslimu'}</span></td></tr>`}).join(''));
+  pg(rows,'pu-tb','pu-pg',sl=>sl.map(p=>{const items=Array.isArray(p.items)?p.items:[];return`<tr><td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${p.ref}</td><td class="td-muted">${fmtDate(p.date)}</td><td class="td-name">${p.supName||'—'}</td><td class="td-muted">${items.length} bidhaa</td><td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.total)}</td><td><span class="badge badge-neutral">${cleanPayment(p.payment)}</span></td><td><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?'Mkopo':'Taslimu'}</span></td></tr>`}).join(''));
 }
 
 /* ================================================================
@@ -1562,7 +1666,7 @@ function renderCusts(){
   const q=(gv('cu-q')||'').toLowerCase();
   let rows=[...DB.customers];
   if(q)rows=rows.filter(c=>(c.name+c.phone).toLowerCase().includes(q));
-  pg(rows,'cu-tb','cu-pg',sl=>sl.map((c,i)=>`<tr><td class="td-mono td-muted">${i+1}</td><td><div class="flex items-center gap-2"><div style="width:30px;height:30px;border-radius:50%;background:${c.group==='VIP'?'linear-gradient(135deg,#d97706,#f59e0b)':c.group==='Jumla'?'linear-gradient(135deg,#1d4ed8,#3b82f6)':'linear-gradient(135deg,var(--brand-dark),var(--brand-light))'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;">${c.name[0]}</div><div class="td-name">${c.name}</div></div></td><td class="td-mono td-muted">${c.phone||'—'}</td><td><span class="badge badge-${c.group==='VIP'?'warning':c.group==='Jumla'?'info':'neutral'}">${c.group||'Kawaida'}</span></td><td class="td-mono">${c.salesCount||0}</td><td class="td-mono ${n(c.currentDebt)>0?'text-danger':''}">${n(c.currentDebt)>0?'TZS '+fmt(c.currentDebt):'<span class="text-success">0</span>'}</td><td class="td-muted" style="font-size:11.5px;">${c.lastSale||'—'}</td><td class="td-actions"><button class="btn btn-ghost btn-sm" onclick="viewCust('${c.id}')"><i class="bi bi-eye"></i></button><button class="btn btn-ghost btn-sm" onclick="editCust('${c.id}')"><i class="bi bi-pencil"></i></button></td></tr>`).join(''));
+  pg(rows,'cu-tb','cu-pg',sl=>sl.map((c,i)=>`<tr><td class="td-mono td-muted">${i+1}</td><td><div class="flex items-center gap-2"><div style="width:30px;height:30px;border-radius:50%;background:${c.group==='VIP'?'linear-gradient(135deg,#d97706,#f59e0b)':c.group==='Jumla'?'linear-gradient(135deg,#1d4ed8,#3b82f6)':'linear-gradient(135deg,var(--brand-dark),var(--brand-light))'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;">${c.name[0]}</div><div class="td-name">${c.name}</div></div></td><td class="td-mono td-muted">${c.phone||'—'}</td><td><span class="badge badge-${c.group==='VIP'?'warning':c.group==='Jumla'?'info':'neutral'}">${c.group||'Kawaida'}</span></td><td class="td-mono">${c.salesCount||0}</td><td class="td-mono ${n(c.currentDebt)>0?'text-danger':''}">${n(c.currentDebt)>0?'TZS '+fmt(c.currentDebt):'<span class="text-success">0</span>'}</td><td class="td-muted" style="font-size:11.5px;">${fmtDate(c.lastSale)||'—'}</td><td class="td-actions"><button class="btn btn-ghost btn-sm" onclick="viewCust('${c.id}')"><i class="bi bi-eye"></i></button><button class="btn btn-ghost btn-sm" onclick="editCust('${c.id}')"><i class="bi bi-pencil"></i></button></td></tr>`).join(''));
 }
 function openCustM(){document.getElementById('c-eid').value='';document.getElementById('cm-t').textContent='Mteja Mpya';['c-nm','c-ph','c-em','c-ad','c-cl','c-nt'].forEach(x=>{const e=document.getElementById(x);if(e)e.value='';});document.getElementById('c-gr').value='Kawaida';openM('m-cust');}
 function editCust(id){const c=DB.customers.find(x=>x.id===id);if(!c)return;document.getElementById('c-eid').value=c.id;document.getElementById('cm-t').textContent='Hariri Mteja';document.getElementById('c-nm').value=c.name;document.getElementById('c-ph').value=c.phone||'';document.getElementById('c-em').value=c.email||'';document.getElementById('c-ad').value=c.addr||'';document.getElementById('c-gr').value=c.group||'Kawaida';document.getElementById('c-cl').value=c.creditLimit||0;document.getElementById('c-nt').value=c.notes||'';openM('m-cust');}
@@ -1625,7 +1729,7 @@ function viewCust(id){
             const remaining=n(s.total)-n(s.paid);
             return`<tr>
               <td class="td-mono" style="color:var(--brand-light);font-size:11px;">${s.ref}</td>
-              <td class="td-muted">${s.date}</td>
+              <td class="td-muted">${fmtDate(s.date)}</td>
               <td class="td-muted" style="font-size:12px;">${items.map(it=>it.pname+' x'+it.qty).join(', ')||'—'}</td>
               <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(s.total)}</td>
               <td><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></td>
@@ -1640,15 +1744,16 @@ function viewCust(id){
       <div class="card-header"><h3>💰 Historia ya Malipo Yaliyopokelewa (${payments.length})</h3></div>
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>Tarehe</th><th>Kiasi</th><th>Njia</th><th>Deni Baada</th><th>Kumbukumbu</th></tr></thead>
+          <thead><tr><th>Tarehe</th><th>Wakati</th><th>Kiasi</th><th>Njia</th><th>Deni Baada</th><th>Kumbukumbu</th></tr></thead>
           <tbody>${payments.length?[...payments].reverse().map(p=>`<tr>
-            <td class="td-muted">${p.date||'—'}</td>
+            <td class="td-muted">${fmtDate(p.date)||'—'}</td>
+            <td class="td-mono td-muted" style="font-size:11.5px;">${fmtTime(p.created||p.date)}</td>
             <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.amount)}</td>
             <td><span class="badge badge-neutral">${p.method||'—'}</span></td>
             <td class="td-mono ${n(p.debtAfter)>0?'text-danger':'text-success'}">TZS ${fmt(p.debtAfter)}</td>
             <td class="td-muted" style="font-size:11.5px;">${p.note||'—'}</td>
           </tr>`).join(''):
-          `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-3);">Hakuna malipo yaliyorekodiwa</td></tr>`}
+          `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-3);">Hakuna malipo yaliyorekodiwa</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -1674,7 +1779,7 @@ function openRecvPayFromProfile(custId){
     <div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:12px;margin-bottom:4px;">
       <div class="flex justify-between mb-2"><span class="font-bold">${c.name}</span><span class="badge badge-credit">Deni: TZS ${fmt(c.currentDebt)}</span></div>
       <div style="font-size:12.5px;color:var(--text-2);margin-bottom:8px;">${creditSales.length} mauzo ya mkopo</div>
-      ${creditSales.slice(0,3).map(s=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);"><span class="td-muted">${s.ref} · ${s.date}</span><span class="font-mono">TZS ${fmt(s.total)}</span></div>`).join('')}
+      ${creditSales.slice(0,3).map(s=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);"><span class="td-muted">${s.ref} · ${fmtDate(s.date)}</span><span class="font-mono">TZS ${fmt(s.total)}</span></div>`).join('')}
     </div>`;
   openM('m-recv');
 }
@@ -1690,7 +1795,7 @@ function openRecvPay(saleId){
   document.getElementById('recv-info').innerHTML=`
     <div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:12px;">
       <div class="flex justify-between mb-1"><span class="font-bold">${s.ref}</span><span class="badge badge-credit">Mkopo</span></div>
-      <div class="td-muted" style="font-size:13px;">${s.custName} · ${s.date}</div>
+      <div class="td-muted" style="font-size:13px;">${s.custName} · ${fmtDate(s.date)}</div>
       <div class="flex justify-between mt-2"><span class="td-muted">Jumla ya Mauzo:</span><span class="font-mono font-bold">TZS ${fmt(s.total)}</span></div>
       ${cu?`<div class="flex justify-between mt-1"><span class="td-muted">Deni Lote:</span><span class="font-mono font-bold text-danger">TZS ${fmt(cu.currentDebt)}</span></div>`:''}
     </div>`;
@@ -1805,7 +1910,7 @@ function viewSup(id){
             const it=Array.isArray(p.items)?p.items:[];
             return`<tr>
               <td class="td-mono" style="color:var(--brand-light);font-size:11px;">${p.ref}</td>
-              <td class="td-muted">${p.date}</td>
+              <td class="td-muted">${fmtDate(p.date)}</td>
               <td class="td-muted" style="font-size:12px;">${it.map(x=>x.pname+'x'+x.qty).join(', ')||'—'}</td>
               <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.total)}</td>
               <td><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?'Mkopo':'Taslimu'}</span></td>
@@ -1824,15 +1929,16 @@ function viewSup(id){
       </div>
       <div class="table-wrap">
         <table class="data-table">
-          <thead><tr><th>Tarehe</th><th>Kiasi</th><th>Njia</th><th>Deni Baada</th><th>Kumbukumbu</th></tr></thead>
+          <thead><tr><th>Tarehe</th><th>Wakati</th><th>Kiasi</th><th>Njia</th><th>Deni Baada</th><th>Kumbukumbu</th></tr></thead>
           <tbody>${payments.length?[...payments].reverse().map(p=>`<tr>
-            <td class="td-muted">${p.date||'—'}</td>
+            <td class="td-muted">${fmtDate(p.date)||'—'}</td>
+            <td class="td-mono td-muted" style="font-size:11.5px;">${fmtTime(p.created||p.date)}</td>
             <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.amount)}</td>
             <td><span class="badge badge-neutral">${p.method||'—'}</span></td>
             <td class="td-mono ${n(p.debtAfter)>0?'text-danger':'text-success'}">TZS ${fmt(p.debtAfter)}</td>
             <td class="td-muted" style="font-size:11.5px;">${p.note||'—'}</td>
           </tr>`).join(''):
-          `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--text-3);">Hakuna malipo yaliyorekodiwa</td></tr>`}
+          `<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text-3);">Hakuna malipo yaliyorekodiwa</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -1860,7 +1966,7 @@ function openSupPayment(supId){
         <span class="badge badge-danger">Deni: TZS ${fmt(s.currentDebt)}</span>
       </div>
       <div style="font-size:12.5px;color:var(--text-2);margin-bottom:8px;">${credPurch.length} manunuzi ya mkopo</div>
-      ${credPurch.slice(0,3).map(p=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);"><span class="td-muted">${p.ref} · ${p.date}</span><span class="font-mono">TZS ${fmt(p.total)}</span></div>`).join('')}
+      ${credPurch.slice(0,3).map(p=>`<div style="display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid var(--border);"><span class="td-muted">${p.ref} · ${fmtDate(p.date)}</span><span class="font-mono">TZS ${fmt(p.total)}</span></div>`).join('')}
     </div>`;
   openM('m-sup-pay');
 }
@@ -1944,7 +2050,7 @@ function genRep(){
   document.getElementById('rp-stats').innerHTML=SC('Mauzo','TZS '+fmt(totS),sls.length+' muamala','brand')+SC('Manunuzi','TZS '+fmt(totP),pur.length+' muamala','amber')+SC('Faida','TZS '+fmt(prf),prf>=0?'📈':'📉',prf>=0?'info':'danger')+SC('Thamani Stoki','TZS '+fmt(totStk),DB.products.length+' bidhaa','info');
   const bD={};sls.forEach(s=>{bD[s.date]=bD[s.date]||{tot:0,cash:0,cred:0,cnt:0};bD[s.date].tot+=n(s.total);bD[s.date].cnt++;if(s.creditType==='credit')bD[s.date].cred+=n(s.total);else bD[s.date].cash+=n(s.total);});
   const days=Object.keys(bD).sort().reverse();
-  document.getElementById('rp-tb').innerHTML=days.length?days.map(d=>`<tr><td>${d}</td><td class="td-mono">${bD[d].cnt}</td><td class="td-mono" style="color:var(--brand-light);">TZS ${fmt(bD[d].cash)}</td><td class="td-mono text-danger">TZS ${fmt(bD[d].cred)}</td><td class="td-mono font-bold">TZS ${fmt(bD[d].tot)}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-3);">Hakuna data</td></tr>';
+  document.getElementById('rp-tb').innerHTML=days.length?days.map(d=>`<tr><td>${fmtDate(d)}</td><td class="td-mono">${bD[d].cnt}</td><td class="td-mono" style="color:var(--brand-light);">TZS ${fmt(bD[d].cash)}</td><td class="td-mono text-danger">TZS ${fmt(bD[d].cred)}</td><td class="td-mono font-bold">TZS ${fmt(bD[d].tot)}</td></tr>`).join(''):'<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-3);">Hakuna data</td></tr>';
 }
 
 /* ================================================================
