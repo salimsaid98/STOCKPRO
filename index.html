@@ -2421,7 +2421,7 @@ function toast(type,title,text=''){
    PAGINATION
 ================================================================ */
 function pg(data,tbId,pgId,renderFn,ps){
-  if(!ps||ps<1)ps=15;
+  if(!ps||ps<1)ps=5;
   const pgEl=document.getElementById(pgId);if(!pgEl)return;
   let page=parseInt(pgEl.dataset.p||'1');
   const total=data.length,pages=Math.max(1,Math.ceil(total/ps));
