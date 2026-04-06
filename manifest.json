@@ -1,0 +1,36 @@
+{
+  "name": "StokiPro — Mfumo wa Biashara",
+  "short_name": "StokiPro",
+  "description": "Mfumo wa kisasa wa kusimamia biashara, stoki, mauzo na wateja",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f1a0f",
+  "theme_color": "#16a34a",
+  "orientation": "any",
+  "lang": "sw",
+  "categories": ["business", "finance", "productivity"],
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='80' fill='%2316a34a'/><text y='360' x='80' font-size='320' font-family='Arial'>📦</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Mauzo Mapya",
+      "short_name": "Mauzo",
+      "description": "Anza muamala mpya wa mauzo",
+      "url": "./index.html#sale"
+    },
+    {
+      "name": "Angalia Stoki",
+      "short_name": "Stoki",
+      "description": "Angalia hali ya stoki",
+      "url": "./index.html#stock"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
