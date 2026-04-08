@@ -390,6 +390,11 @@ textarea.form-control{resize:vertical;min-height:80px;}
   #print-zone .no-print{display:none!important;}
   .invoice-paper{border:none!important;box-shadow:none!important;}
 }
+
+/* ── BRANCH ─────────────────────────────────── */
+.branch-active{border:2px solid var(--brand)!important;background:var(--brand-glow)!important}
+#branch-sel-wrap select{border-color:var(--border-2);background:var(--bg-3);color:var(--text-1)}
+#branch-sel-wrap select:focus{outline:none;border-color:var(--brand)}
 </style>
 </head>
 <body>
@@ -599,6 +604,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
         <a class="nav-link" onclick="tSec(this,'t-an')"><i class="bi bi-bar-chart-line nav-icon"></i>Analytics</a>
         <a class="nav-link" onclick="tSec(this,'t-rp')"><i class="bi bi-file-earmark-bar-graph nav-icon"></i>Ripoti</a>
         <div class="nav-section">Mipangilio</div>
+        <a class="nav-link" onclick="tSec(this,'t-br')"><i class="bi bi-building nav-icon"></i>Matawi</a>
         <a class="nav-link" onclick="tSec(this,'t-bs')"><i class="bi bi-building-gear nav-icon"></i>Biashara Yangu</a>
       </nav>
       <div class="sidebar-footer"><a class="nav-link" onclick="doLogout()"><i class="bi bi-box-arrow-left nav-icon"></i>Toka</a></div>
@@ -621,13 +627,23 @@ textarea.form-control{resize:vertical;min-height:80px;}
       <div class="more-item" onclick="tSec(null,'t-cu');closeMore()"><i class="bi bi-people"></i>Wateja</div>
       <div class="more-item" onclick="tSec(null,'t-su');closeMore()"><i class="bi bi-truck"></i>Wasambazaji</div>
       <div class="more-item" onclick="tSec(null,'t-rp');closeMore()"><i class="bi bi-file-earmark-bar-graph"></i>Ripoti</div>
+      <div class="more-item" onclick="tSec(null,'t-br');closeMore()"><i class="bi bi-building"></i>Matawi</div>
       <div class="more-item" onclick="tSec(null,'t-bs');closeMore()"><i class="bi bi-building-gear"></i>Biashara</div>
       <div class="more-item logout" onclick="closeMore();doLogout()"><i class="bi bi-box-arrow-left"></i>Toka</div>
     </div>
 
     <div class="main">
       <div class="topbar">
-        <div class="topbar-left"><span class="topbar-title" id="t-pt">Dashboard</span></div>
+        <div class="topbar-left">
+          <span class="topbar-title" id="t-pt">Dashboard</span>
+          <!-- Branch Selector -->
+          <div id="branch-sel-wrap" style="display:flex;align-items:center;gap:6px;margin-left:12px">
+            <i class="bi bi-building" style="color:var(--text-3);font-size:14px"></i>
+            <select id="branch-selector" class="form-select" style="padding:4px 28px 4px 10px;font-size:12px;height:30px;border-radius:8px;font-weight:600;max-width:180px" onchange="setBranch(this.value)">
+              <option value="">🏢 Matawi Yote</option>
+            </select>
+          </div>
+        </div>
         <div class="topbar-right">
           <div class="sync-status"><span class="sync-dot" id="t-sd"></span><span id="t-ss">Online</span></div>
           <button class="theme-toggle" onclick="toggleTheme()" id="tt-t"><i class="bi bi-moon-stars-fill"></i></button>
@@ -725,7 +741,22 @@ textarea.form-control{resize:vertical;min-height:80px;}
         </div>
 
         
-        <div class="section-panel" id="t-bs">
+                <!-- ===== MATAWI ===== -->
+        <div class="section-panel" id="t-br">
+          <div class="section-hdr mb-4">
+            <div class="section-hdr-title">Matawi ya Biashara</div>
+            <button class="btn btn-primary btn-sm" onclick="openBranchM()"><i class="bi bi-plus-lg"></i>Tawi Jipya</button>
+          </div>
+          <div id="br-current" class="alert alert-info mb-4" style="display:none">
+            <i class="bi bi-building-fill"></i>
+            <span>Unafanya kazi kwenye: <strong id="br-current-name"></strong> &nbsp;
+              <button onclick="setBranch('')" style="border:none;background:none;color:var(--brand-light);text-decoration:underline;cursor:pointer;font-size:12px">Onyesha zote</button>
+            </span>
+          </div>
+          <div id="br-list"></div>
+        </div>
+
+<div class="section-panel" id="t-bs">
           <div class="section-hdr mb-4">
             <div class="section-hdr-title">Biashara Yangu</div>
             <button class="btn btn-primary btn-sm" onclick="openBizEdit()"><i class="bi bi-pencil-square"></i>Hariri Taarifa</button>
@@ -1036,6 +1067,39 @@ textarea.form-control{resize:vertical;min-height:80px;}
   <button class="btn btn-primary w-full" onclick="saveSupPayment()"><i class="bi bi-check-circle"></i>Hifadhi Malipo</button>
 </div></div></div>
 
+<!-- Branch Modal -->
+<div class="modal-overlay" id="m-branch"><div class="modal"><div class="modal-header">
+  <h2 class="modal-title" id="brm-t">Tawi Jipya</h2>
+  <button class="modal-close" onclick="closeM('m-branch')"><i class="bi bi-x-lg"></i></button>
+</div><div class="modal-body">
+  <input type="hidden" id="br-eid"/>
+  <div class="form-group"><label class="form-label">Jina la Tawi *</label>
+    <input type="text" class="form-control" id="br-nm" placeholder="mfano: Tawi la Kariakoo"/></div>
+  <div class="input-row cols-2">
+    <div class="form-group"><label class="form-label">Simu</label>
+      <input type="text" class="form-control" id="br-ph" placeholder="+255 7xx xxx xxx"/></div>
+    <div class="form-group"><label class="form-label">Aina</label>
+      <select class="form-select" id="br-tp">
+        <option value="duka">🏪 Duka</option>
+        <option value="ghala">🏭 Ghala</option>
+        <option value="hq">🏠 Makao Makuu (HQ)</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-group"><label class="form-label">Anuani</label>
+    <textarea class="form-control" id="br-ad" rows="2" placeholder="Mtaa, Jiji"></textarea></div>
+  <div class="form-group">
+    <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px">
+      <input type="checkbox" id="br-hq" style="width:16px;height:16px;accent-color:var(--brand)"/>
+      Weka kama Makao Makuu (HQ)
+    </label>
+  </div>
+  <div class="flex gap-2 mt-3">
+    <button class="btn btn-ghost" style="flex:1" onclick="closeM('m-branch')">Ghairi</button>
+    <button class="btn btn-primary" style="flex:2" onclick="saveBranch()"><i class="bi bi-check-lg"></i>Hifadhi</button>
+  </div>
+</div></div></div>
+
 <div id="print-zone" style="display:none;">
 
 </div>
@@ -1046,7 +1110,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
 /* ================================================================
    CONFIG
 ================================================================ */
-const BACKEND='https://script.google.com/macros/s/AKfycbz4sVWtft3MM_3SRBYaUVBrt75fZi9vcupcxd5EJjGQ_9LapC7eYTvKvy7T72bdGaJw/exec';
+const BACKEND='https://script.google.com/macros/s/AKfycbzwycEzTUt7sl3bM71wMQ9qYCc2G5zedSi_FjFB5FxRVWafYgdGNRLbXwgB0rRR-0gt/exec';
 const PS=15;
 
 /* ================================================================
@@ -1160,6 +1224,7 @@ async function pullFromSheets(tid){
     merge('purchases',d.purchases,parsePurch);
     merge('customers',d.customers,parseCustomer);
     merge('suppliers',d.suppliers,x=>x);
+    merge('branches',d.branches||[],x=>x);
     if(d.settings){
       const _lb=(LS.get(tid,'biz')[0])||{};
       const _sb=d.settings;
@@ -1244,7 +1309,7 @@ function cleanPayment(p){
 /* ================================================================
    STATE
 ================================================================ */
-let cU=null,cT=null,sRows=[],pRows=[],SF='all',PF='all',_ch={};
+let cU=null,cT=null,cB=null,sRows=[],pRows=[],SF='all',PF='all',_ch={}; // cB = current branch
 let _tSec='t-db',_submitting=false,_submittingP=false;
 
 /* ================================================================
@@ -1458,6 +1523,7 @@ function loadFromLocal(){
   DB.purchases=LS.get(tid,'purchases').map(parsePurch).sort((a,b)=>b.date>a.date?1:b.date<a.date?-1:0);
   DB.customers=LS.get(tid,'customers').map(parseCustomer);
   DB.suppliers=LS.get(tid,'suppliers');
+  DB.branches=LS.get(tid,'branches');
   const _rb=(LS.get(tid,'biz')[0])||{};
   DB.biz=(function(b){
     if(!b||typeof b!=='object')return{};const r={...b};
@@ -1472,13 +1538,14 @@ function loadFromLocal(){
 }
 
 // DB cache (in-memory, loaded from LS)
-const DB={products:[],sales:[],purchases:[],customers:[],suppliers:[],biz:{}};
+const DB={products:[],sales:[],purchases:[],customers:[],suppliers:[],biz:{},branches:[]};
 
 const TSEC_LOADERS={
   't-pr':renderProds,'t-st':renderStock,'t-sa':renderSales,'t-pu':renderPurchs,
   't-cu':renderCusts,'t-su':renderSups,'t-an':loadTenAn,'t-rp':initRep,'t-db':loadDash,
   't-bs':()=>{loadFromLocal();loadBizSet();renderBizCard();},
   't-vat':loadTaxReport,
+  't-br':renderBranches,
 };
 
 /* ================================================================
@@ -1514,7 +1581,7 @@ const clrSess=()=>sessionStorage.removeItem('sp3v');
 function goPg(pg,tab){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const el=document.getElementById('page-'+pg);if(el)el.classList.add('active');if(pg==='auth'&&tab)authTab(tab);}
 function authTab(t){['l','r'].forEach(x=>{document.getElementById('at'+x)?.classList.toggle('active',x===t);const f=document.getElementById('af'+x);if(f)f.style.display=x===t?'block':'none';});}
 const AT={'a-db':'Dashboard','a-tn':'Tenants','a-us':'Watumiaji','a-an':'Analytics','a-ac':'Audit Logs','a-st':'Mipangilio'};
-const TT={'t-db':'Dashboard','t-pr':'Bidhaa','t-st':'Stoki','t-sa':'Mauzo','t-pu':'Manunuzi','t-cu':'Wateja','t-cprof':'Wasifu wa Mteja','t-su':'Wasambazaji','t-sprof':'Wasifu wa Msambazaji','t-an':'Analytics','t-rp':'Ripoti','t-bs':'Biashara Yangu','t-vat':'VAT / Kodi'};
+const TT={'t-db':'Dashboard','t-br':'Matawi ya Biashara','t-pr':'Bidhaa','t-st':'Stoki','t-sa':'Mauzo','t-pu':'Manunuzi','t-cu':'Wateja','t-cprof':'Wasifu wa Mteja','t-su':'Wasambazaji','t-sprof':'Wasifu wa Msambazaji','t-an':'Analytics','t-rp':'Ripoti','t-bs':'Biashara Yangu','t-vat':'VAT / Kodi'};
 const FAB_MAP={'t-sa':openSaleM,'t-pr':openProdM,'t-pu':openPurchM,'t-cu':openCustM,'t-su':openSupM,'t-st':()=>openM('m-adj')};
 
 function aSec(el,id){
@@ -1589,6 +1656,7 @@ async function doLogin(){
         }),500);
       }
       loadFromLocal();
+      restoreBranch();
       toast('success','Karibu! 👋','Habari '+u.fullname);
       goPg('tenant');loadDash();
       startAutoSync();// Anza auto-sync mara baada ya login
@@ -1788,9 +1856,10 @@ function loadDash(){
   document.getElementById('t-unm').textContent=cU.fullname;
   document.getElementById('t-brl').textContent='🏪 '+cT.name;
   document.getElementById('t-biztag').textContent=cT.name.slice(0,14).toUpperCase();
-  const tod=DB.sales.filter(s=>s.date===td());
+  const _brSales=filterByBranch(DB.sales);
+  const tod=_brSales.filter(s=>s.date===td());
   const todAmt=tod.reduce((s,x)=>s+n(x.total),0);
-  const wk=DB.sales.filter(s=>s.date>=dAgo(7)).reduce((s,x)=>s+n(x.total),0);
+  const wk=_brSales.filter(s=>s.date>=dAgo(7)).reduce((s,x)=>s+n(x.total),0);
   const low=DB.products.filter(p=>n(p.stock)<=n(p.minStock));
   const debts=DB.customers.filter(c=>n(c.currentDebt)>0);
   document.getElementById('t-lb').style.display=low.length?'inline':'none';
@@ -1799,7 +1868,7 @@ function loadDash(){
   if(low.length)al.push(`<div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill" style="font-size:16px;"></i><span>Stoki chini: <strong>${low.slice(0,3).map(p=>p.name).join(', ')}${low.length>3?'...':''}</strong></span></div>`);
   if(debts.length)al.push(`<div class="alert alert-danger"><i class="bi bi-currency-exchange" style="font-size:16px;"></i><span>Wateja <strong>${debts.length}</strong> wana deni: <strong>TZS ${fmt(debts.reduce((s,c)=>s+n(c.currentDebt),0))}</strong></span></div>`);
   document.getElementById('t-db-alerts').innerHTML=al.join('');
-  document.getElementById('t-rs').innerHTML=DB.sales.slice(0,5).map(s=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;">${s.ref}</div><div style="font-size:11.5px;color:var(--text-3);">${s.custName||'—'} · ${fmtDate(s.date)}</div></div><div style="text-align:right;"><div class="font-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(s.total)}</div><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></div></div>`).join('')||`<div style="text-align:center;padding:24px;color:var(--text-3);">Hakuna mauzo bado</div>`;
+  document.getElementById('t-rs').innerHTML=_brSales.slice(0,5).map(s=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;">${s.ref}</div><div style="font-size:11.5px;color:var(--text-3);">${s.custName||'—'} · ${fmtDate(s.date)}</div></div><div style="text-align:right;"><div class="font-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(s.total)}</div><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></div></div>`).join('')||`<div style="text-align:center;padding:24px;color:var(--text-3);">Hakuna mauzo bado</div>`;
   document.getElementById('t-ls').innerHTML=low.length?low.slice(0,5).map(p=>{const pct=Math.min(100,n(p.minStock)>0?n(p.stock)/(n(p.minStock)*2)*100:80);return`<div class="mb-2"><div class="flex justify-between mb-1"><span style="font-size:12.5px;">${p.name}</span><span class="badge badge-danger">${p.stock} ${p.unit||''}</span></div><div class="progress"><div class="progress-bar red" style="width:${pct}%"></div></div></div>`}).join(''):`<div style="text-align:center;padding:20px;"><i class="bi bi-check-circle-fill" style="font-size:32px;color:var(--brand-light);display:block;margin-bottom:8px;"></i><div style="font-size:13px;font-weight:700;color:var(--brand-light);">Stoki Zote Sawa!</div></div>`;
   renderTCharts();
 }
@@ -1943,7 +2012,7 @@ async function saveSale(printInv){
     const cid=gv('sl-cu');const cu=DB.customers.find(c=>c.id===cid);
     const pay=gv('sl-pay');const isC=pay==='Mkopo';
     const sale={
-      id:uid(),tenantId:cT.id,
+      id:uid(),tenantId:cT.id,branchId:cB?cB.id:'',
       ref:gv('sl-rf')||'INV-'+td().replace(/-/g,'').slice(2)+'-'+uid().slice(0,4),
       date:gv('sl-dt')||td(),
       custId:cid||'',custName:cu?cu.name:'Kawaida',
@@ -1981,7 +2050,7 @@ async function saveSale(printInv){
 }
 function setSF(f,el){SF=f;document.querySelectorAll('.filter-pill[id^="sf-"]').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');renderSales();}
 function renderSales(){
-  let rows=[...DB.sales];
+  let rows=filterByBranch([...DB.sales]);
   if(SF==='cash')rows=rows.filter(s=>s.creditType!=='credit');
   if(SF==='credit')rows=rows.filter(s=>s.creditType==='credit');
   const sq=(gv('sa-srch')||'').toLowerCase();
@@ -2069,7 +2138,7 @@ async function savePurch(){
   try{
     const tot=valid.reduce((s,r)=>s+r.total,0);const sid=gv('pu-su');const sup=DB.suppliers.find(s=>s.id===sid);
     const pay=gv('pu-pay');const isC=pay==='Mkopo';const pd=n(gv('pu-pd'));
-    const pur={id:uid(),tenantId:cT.id,ref:'PO-'+td().replace(/-/g,'').slice(2)+'-'+String(DB.purchases.length+1).padStart(4,'0'),date:gv('pu-dt')||td(),supId:sid||'',supName:sup?sup.name:'—',items:valid,total:tot,paid:pd,payment:pay,creditType:isC?'credit':'cash',created:tStr()};
+    const pur={id:uid(),tenantId:cT.id,branchId:cB?cB.id:'',ref:'PO-'+td().replace(/-/g,'').slice(2)+'-'+String(DB.purchases.length+1).padStart(4,'0'),date:gv('pu-dt')||td(),supId:sid||'',supName:sup?sup.name:'—',items:valid,total:tot,paid:pd,payment:pay,creditType:isC?'credit':'cash',created:tStr()};
     LS.save(cT.id,'purchases',pur);
     valid.forEach(row=>{const p=DB.products.find(x=>x.id===row.pid);if(p){p.stock=n(p.stock)+n(row.qty);LS.save(cT.id,'products',p);}});
     if(sup){if(isC)sup.currentDebt=(n(sup.currentDebt)||0)+tot;sup.totalPurch=(n(sup.totalPurch)||0)+tot;LS.save(cT.id,'suppliers',sup);}
@@ -2083,7 +2152,7 @@ async function savePurch(){
 }
 function setPF(f,el){PF=f;document.querySelectorAll('.filter-pill[id^="pf-"]').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');renderPurchs();}
 function renderPurchs(){
-  let rows=[...DB.purchases];
+  let rows=filterByBranch([...DB.purchases]);
   if(PF==='cash')rows=rows.filter(p=>p.creditType!=='credit');
   if(PF==='credit')rows=rows.filter(p=>p.creditType==='credit');
   const sq=(gv('pu-srch')||'').toLowerCase();
@@ -2175,7 +2244,6 @@ function viewCust(id){
       <div id="cprof-pay-pg" class="pg-bar"></div>
     </div>`;
   tSec(null,'t-cprof');
-  window._curCustId=id;
   setTimeout(()=>renderCprofTables(id),50);
 }
 
@@ -2486,7 +2554,6 @@ function viewSup(id){
     </div>`;
   tSec(null,'t-sprof');
   // Render paginated tables after DOM is set
-  window._curSupId=id;
   setTimeout(()=>renderSprofTables(id),50);
 }
 
@@ -2595,8 +2662,8 @@ async function saveSupPayment(){
 async function loadTenAn(){
   loadFromLocal();
   const days=parseInt(gv('t-an-p')||'30'),cut=dAgo(days);
-  const sF=DB.sales.filter(s=>s.date>=cut);
-  const pF=DB.purchases.filter(p=>p.date>=cut);
+  const sF=filterByBranch(DB.sales).filter(s=>s.date>=cut);
+  const pF=filterByBranch(DB.purchases).filter(p=>p.date>=cut);
   const totS=sF.reduce((s,x)=>s+n(x.total),0),totP=pF.reduce((s,x)=>s+n(x.total),0),prf=totS-totP;
   const cS=sF.filter(s=>s.creditType!=='credit').reduce((s,x)=>s+n(x.total),0);
   document.getElementById('t-an-s').innerHTML=SC('Mauzo',fmt(totS),'TZS · '+sF.length+' muamala','brand')+SC('Manunuzi',fmt(totP),'TZS · '+pF.length+' muamala','amber')+SC('Faida',fmt(prf),prf>=0?'📈 Faida':'📉 Hasara',prf>=0?'info':'danger')+SC('Taslimu/Mkopo',fmt(cS)+'/'+fmt(totS-cS),'TZS','info');
@@ -2619,8 +2686,8 @@ function initRep(){const now=new Date();const y=now.getFullYear(),m=String(now.g
 function genRep(){
   loadFromLocal();
   const from=gv('rp-f')||dAgo(30),to=gv('rp-t')||td();
-  const sls=DB.sales.filter(s=>s.date>=from&&s.date<=to);
-  const pur=DB.purchases.filter(p=>p.date>=from&&p.date<=to);
+  const sls=filterByBranch(DB.sales).filter(s=>s.date>=from&&s.date<=to);
+  const pur=filterByBranch(DB.purchases).filter(p=>p.date>=from&&p.date<=to);
   const totS=sls.reduce((s,x)=>s+n(x.total),0),totP=pur.reduce((s,x)=>s+n(x.total),0),prf=totS-totP;
   const totStk=DB.products.reduce((s,p)=>s+n(p.stock)*n(p.bp),0);
   document.getElementById('rp-stats').innerHTML=SC('Mauzo','TZS '+fmt(totS),sls.length+' muamala','brand')+SC('Manunuzi','TZS '+fmt(totP),pur.length+' muamala','amber')+SC('Faida','TZS '+fmt(prf),prf>=0?'📈':'📉',prf>=0?'info':'danger')+SC('Thamani Stoki','TZS '+fmt(totStk),DB.products.length+' bidhaa','info');
@@ -3117,8 +3184,8 @@ function renderTaxReport(from,to){
   const noSetup=document.getElementById('vat-no-setup');
   if(vatMode==='none'){if(noSetup)noSetup.style.display='block';return;}
   if(noSetup)noSetup.style.display='none';
-  const sales=DB.sales.filter(s=>s.date>=from&&s.date<=to);
-  const purchs=DB.purchases.filter(p=>p.date>=from&&p.date<=to);
+  const sales=filterByBranch(DB.sales).filter(s=>s.date>=from&&s.date<=to);
+  const purchs=filterByBranch(DB.purchases).filter(p=>p.date>=from&&p.date<=to);
   const sv=sales.map(s=>{const v=calcVAT(n(s.total),vatRate,vatMode);return{...s,...v};});
   const pv=purchs.map(p=>{const v=calcVAT(n(p.total),vatRate,vatMode);return{...p,...v};});
   const totSG=sv.reduce((s,x)=>s+x.gross,0),totSV=sv.reduce((s,x)=>s+x.vat,0),totSN=sv.reduce((s,x)=>s+x.net,0);
@@ -3207,6 +3274,207 @@ async function deletePurch(id){
   loadFromLocal();closeM('m-pdet');
   toast('info','Ununuzi umefutwa ✅');renderPurchs();loadDash();
 }
+
+/* ================================================================
+   BRANCH SYSTEM
+================================================================ */
+
+// Pata branchId inayotumika sasa — null = zote
+function getActiveBranchId(){
+  return cB ? cB.id : null;
+}
+
+// Filter data kwa branch inayotumika
+function filterByBranch(arr){
+  const bid = getActiveBranchId();
+  if(!bid) return arr; // null = onyesha zote
+  return arr.filter(x => x.branchId === bid || !x.branchId);
+}
+
+// Set current branch na reload data
+function setBranch(branchId){
+  if(!branchId){
+    cB = null;
+  } else {
+    cB = DB.branches.find(b => b.id === branchId) || null;
+  }
+  // Save choice
+  if(cT) localStorage.setItem('sp3-branch-'+cT.id, branchId||'');
+  // Update selector UI
+  updateBranchSelector();
+  // Reload current section
+  loadFromLocal();
+  loadDash();
+  const sec = document.querySelector('#page-tenant .section-panel.active');
+  if(sec && TSEC_LOADERS[sec.id]) TSEC_LOADERS[sec.id]();
+}
+
+// Restore last selected branch
+function restoreBranch(){
+  if(!cT) return;
+  const saved = localStorage.getItem('sp3-branch-'+cT.id);
+  if(saved && saved !== ''){
+    cB = DB.branches.find(b => b.id === saved) || null;
+  } else {
+    cB = null;
+  }
+  updateBranchSelector();
+}
+
+// Update branch selector dropdown in topbar
+function updateBranchSelector(){
+  const sel = document.getElementById('branch-selector');
+  if(!sel) return;
+  const branches = DB.branches.filter(b => b.status === 'active');
+  const curId = cB ? cB.id : '';
+  sel.innerHTML = `
+    <option value="">🏢 Matawi Yote</option>
+    ${branches.map(b => `<option value="${b.id}" ${b.id===curId?'selected':''}>${b.isHQ?'🏠':''} ${b.name}</option>`).join('')}
+  `;
+  // Update topbar label
+  const lbl = document.getElementById('branch-label');
+  if(lbl) lbl.textContent = cB ? cB.name : 'Matawi Yote';
+}
+
+/* ── BRANCHES CRUD ─────────────────────────────────────────── */
+
+function openBranchM(id){
+  const isEdit = !!id;
+  document.getElementById('br-eid').value = id||'';
+  document.getElementById('brm-t').textContent = isEdit ? 'Hariri Tawi' : 'Tawi Jipya';
+  if(isEdit){
+    const b = DB.branches.find(x=>x.id===id);
+    if(!b) return;
+    document.getElementById('br-nm').value = b.name||'';
+    document.getElementById('br-ph').value = b.phone||'';
+    document.getElementById('br-ad').value = b.address||'';
+    document.getElementById('br-tp').value = b.type||'duka';
+    document.getElementById('br-hq').checked = !!b.isHQ;
+  } else {
+    ['br-nm','br-ph','br-ad'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    document.getElementById('br-tp').value = 'duka';
+    document.getElementById('br-hq').checked = false;
+  }
+  openM('m-branch');
+}
+
+async function saveBranch(){
+  const eid = document.getElementById('br-eid').value;
+  const name = document.getElementById('br-nm').value.trim();
+  if(!name){toast('error','Weka jina la tawi');return;}
+  const isHQ = document.getElementById('br-hq').checked;
+  // If setting as HQ, remove HQ from others
+  if(isHQ){
+    DB.branches.forEach(b=>{
+      if(b.id !== eid && b.isHQ){
+        b.isHQ = false;
+        LS.save(cT.id,'branches',b);
+        bgSync(cT.id,'branches',b);
+      }
+    });
+  }
+  const branch = {
+    id: eid || uid(),
+    tenantId: cT.id,
+    name,
+    phone: document.getElementById('br-ph').value.trim(),
+    address: document.getElementById('br-ad').value.trim(),
+    type: document.getElementById('br-tp').value || 'duka',
+    isHQ,
+    status: 'active',
+    created: eid ? (DB.branches.find(x=>x.id===eid)?.created||td()) : td(),
+  };
+  const btn = document.querySelector('#m-branch .btn-primary');
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner spinner-sm"></span> Inahifadhi...';}
+  LS.save(cT.id,'branches',branch);
+  loadFromLocal();
+  closeM('m-branch');
+  toast('success', (eid?'Tawi limeharirishwa':'Tawi limeongezwa')+' ✅');
+  renderBranches();
+  updateBranchSelector();
+  if(btn){btn.disabled=false;btn.innerHTML='<i class="bi bi-check-lg"></i>Hifadhi';}
+  bgSync(cT.id,'branches',branch);
+}
+
+async function deleteBranch(id){
+  const b = DB.branches.find(x=>x.id===id);
+  if(!b) return;
+  if(b.isHQ){toast('error','Huwezi kufuta tawi kuu (HQ)');return;}
+  // Check if has data
+  const hasSales = DB.sales.some(s=>s.branchId===id);
+  const hasPurch = DB.purchases.some(p=>p.branchId===id);
+  if(hasSales||hasPurch){
+    if(!confirm(`Tawi "${b.name}" lina data (mauzo/manunuzi). Bado unataka kulifuta?`)) return;
+  } else {
+    if(!confirm(`Futa tawi "${b.name}"?`)) return;
+  }
+  LS.del(cT.id,'branches',id);
+  if(cB && cB.id===id) setBranch(null);
+  loadFromLocal();
+  renderBranches();
+  updateBranchSelector();
+  toast('info','Tawi limefutwa');
+  bgDel('branches',id);
+}
+
+function renderBranches(){
+  loadFromLocal();
+  // Update current branch indicator
+  const brCur = document.getElementById('br-current');
+  const brCurNm = document.getElementById('br-current-name');
+  if(brCur){
+    if(cB){brCur.style.display='flex';if(brCurNm)brCurNm.textContent=cB.name;}
+    else{brCur.style.display='none';}
+  }
+  const branches = [...DB.branches];
+  const wrap = document.getElementById('br-list');
+  if(!wrap) return;
+  if(!branches.length){
+    wrap.innerHTML = `<div class="empty-state" style="padding:60px 20px">
+      <span class="empty-icon">🏪</span>
+      <div class="empty-title">Hakuna matawi bado</div>
+      <div class="empty-sub">Bonyeza "+ Tawi Jipya" kuongeza</div>
+    </div>`;
+    return;
+  }
+  wrap.innerHTML = branches.map(b=>{
+    const salesCount = DB.sales.filter(s=>s.branchId===b.id).length;
+    const purchCount = DB.purchases.filter(p=>p.branchId===b.id).length;
+    const todaySales = DB.sales.filter(s=>s.branchId===b.id&&s.date===td()).reduce((sum,s)=>sum+n(s.total),0);
+    const typeIcon = b.type==='hq'?'🏠':b.type==='ghala'?'🏭':'🏪';
+    const isActive = cB && cB.id===b.id;
+    return `
+    <div class="card mb-3 ${isActive?'branch-active':''}">
+      <div class="card-body">
+        <div class="flex justify-between items-center mb-3">
+          <div class="flex items-center gap-3">
+            <div style="width:44px;height:44px;border-radius:12px;background:${isActive?'var(--brand)':'var(--bg-3)'};display:flex;align-items:center;justify-content:center;font-size:20px">${typeIcon}</div>
+            <div>
+              <div style="font-size:15px;font-weight:800">${b.name} ${b.isHQ?'<span class="badge badge-brand">HQ</span>':''}</div>
+              <div class="td-muted" style="font-size:12px">${b.type==='ghala'?'Ghala':'Duka'} ${b.phone?' · '+b.phone:''}</div>
+              ${b.address?`<div style="font-size:11px;color:var(--text-3)">${b.address}</div>`:''}
+            </div>
+          </div>
+          <div class="flex gap-2">
+            ${isActive
+              ? `<span class="badge badge-success">✓ Inafanya kazi</span>`
+              : `<button class="btn btn-primary btn-sm" onclick="setBranch('${b.id}')"><i class="bi bi-box-arrow-in-right"></i>Ingia</button>`
+            }
+            <button class="btn btn-ghost btn-sm" onclick="openBranchM('${b.id}')"><i class="bi bi-pencil"></i></button>
+            ${!b.isHQ?`<button class="btn btn-danger btn-sm" onclick="deleteBranch('${b.id}')"><i class="bi bi-trash"></i></button>`:''}
+          </div>
+        </div>
+        <div class="grid grid-4" style="gap:10px">
+          ${SC('Mauzo Leo','TZS '+fmt(todaySales),salesCount+' jumla','brand')}
+          ${SC('Manunuzi',purchCount,'jumla','amber')}
+          ${SC('Wateja',DB.customers.length,'wote','info')}
+          ${SC('Hali',b.status==='active'?'Hai':'Imesimama','','brand')}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function openM(id){document.getElementById(id)?.classList.add('open');}
 function closeM(id){document.getElementById(id)?.classList.remove('open');}
 document.addEventListener('click',e=>{if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('open');});
@@ -3240,7 +3508,7 @@ function pg(data,tbId,pgId,renderFn,ps){
   const numBtns=Array.from({length:Math.min(maxPgs,pages)},(_,i)=>{const p=startPg+i;return`<button class="pg-btn ${p===page?'on':''}" onclick="chPg('${tbId}','${pgId}',${p})">${p}</button>`;}).join('');
   pgEl.innerHTML=`<span class="pg-info">Onyesha ${(page-1)*ps+1}–${Math.min(page*ps,total)} kati ya ${total}</span><div class="pg-btns"><button class="pg-btn" ${page<=1?'disabled':''} onclick="chPg('${tbId}','${pgId}',${page-1})"><i class="bi bi-chevron-left"></i></button>${numBtns}<button class="pg-btn" ${page>=pages?'disabled':''} onclick="chPg('${tbId}','${pgId}',${page+1})"><i class="bi bi-chevron-right"></i></button></div>`;
 }
-const _pgMap={'pr-tb':renderProds,'sa-tb':renderSales,'pu-tb':renderPurchs,'cu-tb':renderCusts,'tn-tb':renderAdmTn,'ac-tb':renderActivity,'su-tb':renderSups,'st-tb':renderStock,'us-tb':renderAdmUs,'rp-tb':genRep,'cprof-sale-tb':()=>{if(window._curCustId)renderCprofTables(window._curCustId);},'cprof-pay-tb':()=>{if(window._curCustId)renderCprofTables(window._curCustId);},'sprof-pur-tb':()=>{if(window._curSupId)renderSprofTables(window._curSupId);},'sprof-pay-tb':()=>{if(window._curSupId)renderSprofTables(window._curSupId);}};
+const _pgMap={'pr-tb':renderProds,'sa-tb':renderSales,'pu-tb':renderPurchs,'cu-tb':renderCusts,'tn-tb':renderAdmTn,'ac-tb':renderActivity,'su-tb':renderSups,'st-tb':renderStock,'us-tb':renderAdmUs,'rp-tb':genRep,'cprof-sale-tb':()=>{},'cprof-pay-tb':()=>{},'sprof-pur-tb':()=>{},'sprof-pay-tb':()=>{}};
 function chPg(tbId,pgId,p){const el=document.getElementById(pgId);if(el){el.dataset.p=p;if(_pgMap[tbId])_pgMap[tbId]();}}
 
 /* ================================================================
