@@ -362,6 +362,8 @@ textarea.form-control{resize:vertical;min-height:80px;}
   .stat-icon-bg{display:none;}
   /* ── Analytics 3-col → 1-col ── */
   #an-tb,#an-hd,#an-bd{min-height:0;}
+  .pp-row:hover{background:var(--bg-3);border-radius:var(--radius-sm);}
+  .pp-row{transition:background var(--transition);}
   /* ── Reports date row ── */
   #t-rp .section-hdr-actions{flex-direction:column;}
   #t-rp .section-hdr-actions input[type=date]{width:100%!important;}
@@ -415,31 +417,32 @@ textarea.form-control{resize:vertical;min-height:80px;}
   <nav class="landing-nav">
     <div class="brand-logo"><div class="brand-icon">📦</div><div><div class="brand-name">Stoki<span>Pro</span></div><div class="brand-tag">v3 · Sheets-First · Auto-Sync</div></div></div>
     <div class="flex gap-2">
-      <button class="btn btn-ghost" onclick="goPg('auth','l')"><i class="bi bi-box-arrow-in-right"></i>Ingia</button>
-      <button class="btn btn-accent" onclick="goPg('auth','r')"><i class="bi bi-rocket-takeoff-fill"></i>Anza Bure</button>
+      <button class="btn btn-ghost lang-toggle" onclick="toggleLang()" style="padding:8px 12px;font-size:12px;font-weight:700;"><span style="font-size:13px;">🇬🇧</span> EN</button>
+      <button class="btn btn-ghost" onclick="goPg('auth','l')"><i class="bi bi-box-arrow-in-right"></i><span data-t="landing.login">Ingia</span></button>
+      <button class="btn btn-accent" onclick="goPg('auth','r')"><i class="bi bi-rocket-takeoff-fill"></i><span data-t="landing.start">Anza Bure</span></button>
     </div>
   </nav>
   <div class="hero-content">
-    <div class="hero-eyebrow"><i class="bi bi-lightning-charge-fill"></i>Sheets-First · Auto-Sync · Invoice · Analytics</div>
-    <h1 class="hero-title">Simamia Biashara Yako<br><span class="accent">Kwa Urahisi Kamili</span></h1>
-    <p class="hero-desc">Mfumo wa kisasa wa biashara — data yako kwenye Google Sheets yako moja kwa moja. Profiles za wateja, analytics za kina, invoices, madeni, na mengi zaidi.</p>
+    <div class="hero-eyebrow"><i class="bi bi-lightning-charge-fill"></i><span data-t="landing.tagline">Sheets-First · Auto-Sync · Invoice · Analytics</span></div>
+    <h1 class="hero-title"><span data-t="landing.hero">Simamia Biashara Yako</span><br><span class="accent" data-t="landing.hero2">Kwa Urahisi Kamili</span></h1>
+    <p class="hero-desc" data-t="landing.desc">Mfumo wa kisasa wa biashara — data yako kwenye Google Sheets yako moja kwa moja.</p>
     <div class="hero-ctas">
-      <button class="btn btn-primary btn-lg" onclick="goPg('auth','r')"><i class="bi bi-rocket-takeoff-fill"></i>Anza Sasa — Bure</button>
-      <button class="btn btn-ghost btn-lg" onclick="goPg('auth','l')"><i class="bi bi-play-circle-fill"></i>Jaribu Demo</button>
+      <button class="btn btn-primary btn-lg" onclick="goPg('auth','r')"><i class="bi bi-rocket-takeoff-fill"></i><span data-t="btn.start_free">Anza Sasa — Bure</span></button>
+      <button class="btn btn-ghost btn-lg" onclick="goPg('auth','l')"><i class="bi bi-play-circle-fill"></i><span data-t="btn.demo">Jaribu Demo</span></button>
     </div>
   </div>
   <div class="features-section">
-    <div style="text-align:center;margin-bottom:16px;"><h2 style="font-size:32px;font-weight:800;letter-spacing:-1px;">Vipengele Vyote Unavyohitaji</h2></div>
+    <div style="text-align:center;margin-bottom:16px;"><h2 style="font-size:32px;font-weight:800;letter-spacing:-1px;" data-t="landing.features">Vipengele Vyote Unavyohitaji</h2></div>
     <div class="features-grid">
-      <div class="feature-card"><div class="feature-icon">📊</div><h4>Analytics za Kina</h4><p>Top buyers, bidhaa zinazoendea, madeni — yote kwa mchoro.</p></div>
-      <div class="feature-card"><div class="feature-icon">🧾</div><h4>Invoice ya Mteja</h4><p>Chapisha risiti na invoice za kitaalamu kwa kila mauzo.</p></div>
-      <div class="feature-card"><div class="feature-icon">👤</div><h4>Profiles za Wateja</h4><p>Historia kamili — bidhaa, mauzo, madeni, malipo ya cash na mkopo.</p></div>
-      <div class="feature-card"><div class="feature-icon">🔄</div><h4>Auto-Sync</h4><p>Kila mabadiliko yanakwenda Google Sheets moja kwa moja.</p></div>
-      <div class="feature-card"><div class="feature-icon">📱</div><h4>Mobile Friendly</h4><p>FAB button na bottom tabs kwa matumizi rahisi kwenye simu.</p></div>
-      <div class="feature-card"><div class="feature-icon">📧</div><h4>Arifa za Email</h4><p>Stoki inayokwisha, madeni, na ripoti ya kila siku kwa email.</p></div>
+      <div class="feature-card"><div class="feature-icon">📊</div><h4 data-t="landing.f1_title">Analytics za Kina</h4><p data-t="landing.f1_desc">Top buyers, bidhaa zinazoendea, madeni — yote kwa mchoro.</p></div>
+      <div class="feature-card"><div class="feature-icon">🧾</div><h4 data-t="landing.f2_title">Invoice ya Mteja</h4><p data-t="landing.f2_desc">Chapisha risiti na invoice za kitaalamu kwa kila mauzo.</p></div>
+      <div class="feature-card"><div class="feature-icon">👤</div><h4 data-t="landing.f3_title">Profiles za Wateja</h4><p data-t="landing.f3_desc">Historia kamili — bidhaa, mauzo, madeni, malipo.</p></div>
+      <div class="feature-card"><div class="feature-icon">🔄</div><h4 data-t="landing.f4_title">Auto-Sync</h4><p data-t="landing.f4_desc">Kila mabadiliko yanakwenda Google Sheets moja kwa moja.</p></div>
+      <div class="feature-card"><div class="feature-icon">📱</div><h4 data-t="landing.f5_title">Mobile Friendly</h4><p data-t="landing.f5_desc">FAB button na bottom tabs kwa matumizi rahisi kwenye simu.</p></div>
+      <div class="feature-card"><div class="feature-icon">📧</div><h4 data-t="landing.f6_title">Arifa za Email</h4><p data-t="landing.f6_desc">Stoki inayokwisha, madeni, na ripoti ya kila siku kwa email.</p></div>
     </div>
   </div>
-  <div class="landing-footer">© 2026 StokiPro v3 — Imetengenezwa kwa ❤️ kwa biashara za Afrika Mashariki</div>
+  <div class="landing-footer" data-t="landing.footer">© 2026 StokiPro v3 — Imetengenezwa kwa ❤️ kwa biashara za Afrika Mashariki</div>
 </div>
 
 <div id="page-auth" class="page">
@@ -452,18 +455,21 @@ textarea.form-control{resize:vertical;min-height:80px;}
           <div><div class="brand-name">Stoki<span>Pro</span></div><div class="brand-tag">v3 · Sheets First</div></div>
         </div>
       </div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
+        <button class="btn btn-ghost btn-sm lang-toggle" onclick="toggleLang()" style="font-size:12px;font-weight:700;padding:6px 10px;"><span style="font-size:13px;">🇬🇧</span> EN</button>
+      </div>
       <div class="auth-tabs">
-        <div class="auth-tab active" id="atl" onclick="authTab('l')">Ingia</div>
-        <div class="auth-tab" id="atr" onclick="authTab('r')">Sajili</div>
+        <div class="auth-tab active" id="atl" onclick="authTab('l')" data-t="auth.login">Ingia</div>
+        <div class="auth-tab" id="atr" onclick="authTab('r')" data-t="auth.register">Sajili</div>
       </div>
       
       <div id="afl">
         <div id="auth-err" style="display:none;" class="alert alert-danger mb-2"><i class="bi bi-x-circle" style="font-size:15px;"></i><span id="auth-emsg"></span></div>
-        <div class="form-group"><label class="form-label">Jina la Mtumiaji</label><input type="text" class="form-control" id="lu" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-        <div class="form-group"><label class="form-label">Nywila</label><input type="password" class="form-control" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-        <button class="btn btn-primary btn-block" id="btn-login" onclick="doLogin()" style="font-size:15px;padding:12px;"><i class="bi bi-box-arrow-in-right"></i>Ingia</button>
+        <div class="form-group"><label class="form-label" data-t="lbl.username">Jina la Mtumiaji</label><input type="text" class="form-control" id="lu" data-tp="lbl.username" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <div class="form-group"><label class="form-label" data-t="lbl.password">Nywila</label><input type="password" class="form-control" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <button class="btn btn-primary btn-block" id="btn-login" onclick="doLogin()" style="font-size:15px;padding:12px;"><i class="bi bi-box-arrow-in-right"></i><span data-t="btn.login">Ingia</span></button>
         <div style="text-align:right;margin-top:8px;">
-          <button style="border:none;background:none;color:var(--brand-light);font-size:12.5px;cursor:pointer;font-family:var(--font);" onclick="openM('m-forgot')">Umesahau nywila?</button>
+          <button style="border:none;background:none;color:var(--brand-light);font-size:12.5px;cursor:pointer;font-family:var(--font);" onclick="openM('m-forgot')" data-t="lbl.forgot_pw">Umesahau nywila?</button>
         </div>
         <!-- <div class="auth-demo">
           <strong>Akaunti za Majaribio:</strong>
@@ -474,31 +480,31 @@ textarea.form-control{resize:vertical;min-height:80px;}
       </div>
       
       <div id="afr" style="display:none;">
-        <div style="font-size:12px;color:var(--text-3);margin-bottom:12px;background:var(--bg-3);padding:8px 12px;border-radius:var(--radius-sm);">👤 Taarifa za Akaunti</div>
-        <div class="form-group"><label class="form-label">Jina la Biashara *</label><input type="text" class="form-control" id="rb" placeholder="Duka la Mama Fatuma"/></div>
+        <div class="alert alert-success" style="margin-bottom:12px;"><i class="bi bi-person-circle" style="font-size:15px;flex-shrink:0;"></i><div style="font-weight:700;font-size:13px;" data-t="reg.account_info">👤 Taarifa za Akaunti</div></div>
+        <div class="form-group"><label class="form-label" data-t="reg.biz_name">Jina la Biashara *</label><input type="text" class="form-control" id="rb" placeholder="Duka la Mama Fatuma"/></div>
         <div class="input-row cols-2">
-          <div class="form-group"><label class="form-label">Jina Kamili *</label><input type="text" class="form-control" id="rn"/></div>
-          <div class="form-group"><label class="form-label">Simu</label><input type="text" class="form-control" id="rph" placeholder="+255 7xx xxx xxx"/></div>
+          <div class="form-group"><label class="form-label" data-t="reg.fullname">Jina Kamili *</label><input type="text" class="form-control" id="rn"/></div>
+          <div class="form-group"><label class="form-label" data-t="reg.phone">Simu</label><input type="text" class="form-control" id="rph" placeholder="+255 7xx xxx xxx"/></div>
         </div>
         <div class="input-row cols-2">
-          <div class="form-group"><label class="form-label">Username *</label><input type="text" class="form-control" id="ru"/></div>
-          <div class="form-group"><label class="form-label">Nywila *</label><input type="password" class="form-control" id="rpw"/></div>
+          <div class="form-group"><label class="form-label" data-t="reg.username">Username *</label><input type="text" class="form-control" id="ru"/></div>
+          <div class="form-group"><label class="form-label" data-t="reg.password">Nywila *</label><input type="password" class="form-control" id="rpw"/></div>
         </div>
-        <div class="form-group"><label class="form-label">Barua Pepe</label><input type="email" class="form-control" id="re"/></div>
-        <div style="font-size:12px;color:var(--text-3);margin:14px 0 10px;background:var(--bg-3);padding:8px 12px;border-radius:var(--radius-sm);">🏢 Taarifa za Biashara <span style="color:var(--text-3);font-size:11px;">(hiari — unaweza kuongeza baadaye)</span></div>
+        <div class="form-group"><label class="form-label" data-t="reg.email">Barua Pepe</label><input type="email" class="form-control" id="re"/></div>
+        <div class="alert alert-info" style="margin:14px 0 10px;"><i class="bi bi-info-circle-fill" style="font-size:15px;flex-shrink:0;"></i><div><div style="font-weight:700;font-size:13px;" data-t="reg.biz_info">🏢 Taarifa za Biashara</div><div style="font-size:11.5px;opacity:0.85;margin-top:2px;" data-t="reg.optional">(hiari — unaweza kuongeza baadaye)</div></div></div>
         <div class="input-row cols-2">
-          <div class="form-group"><label class="form-label">Anuani ya Biashara</label><input type="text" class="form-control" id="r-addr" placeholder="Mtaa, Jiji"/></div>
-          <div class="form-group"><label class="form-label">Aina ya Biashara</label><input type="text" class="form-control" id="r-type" placeholder="Retail, Jumla..."/></div>
+          <div class="form-group"><label class="form-label" data-t="reg.biz_address">Anuani ya Biashara</label><input type="text" class="form-control" id="r-addr" placeholder="Mtaa, Jiji"/></div>
+          <div class="form-group"><label class="form-label" data-t="reg.biz_type">Aina ya Biashara</label><input type="text" class="form-control" id="r-type" placeholder="Retail, Jumla..."/></div>
         </div>
         <div class="input-row cols-2">
-          <div class="form-group"><label class="form-label">Nambari ya TIN</label><input type="text" class="form-control" id="r-tin" placeholder="TIN number"/></div>
-          <div class="form-group"><label class="form-label">Sarafu</label>
+          <div class="form-group"><label class="form-label" data-t="reg.tin">Nambari ya TIN</label><input type="text" class="form-control" id="r-tin" placeholder="TIN number"/></div>
+          <div class="form-group"><label class="form-label" data-t="reg.currency">Sarafu</label>
             <select class="form-select" id="r-cur"><option value="TZS">TZS — Shilingi</option><option value="KES">KES</option><option value="USD">USD</option></select>
           </div>
         </div>
-        <button class="btn btn-primary btn-block" onclick="doReg()"><i class="bi bi-person-plus"></i>Sajili Biashara</button>
+        <button class="btn btn-primary btn-block" onclick="doReg()"><i class="bi bi-person-plus"></i><span data-t="reg.submit">Sajili Biashara</span></button>
       </div>
-      <div style="text-align:center;margin-top:14px;"><button class="btn btn-ghost btn-sm" onclick="goPg('landing')"><i class="bi bi-arrow-left"></i>Nyumbani</button></div>
+      <div style="text-align:center;margin-top:14px;"><button class="btn btn-ghost btn-sm" onclick="goPg('landing')"><i class="bi bi-arrow-left"></i><span data-t="reg.back">Nyumbani</span></button></div>
     </div>
   </div>
 </div>
@@ -510,14 +516,14 @@ textarea.form-control{resize:vertical;min-height:80px;}
       <div class="sidebar-user"><div class="flex items-center gap-2"><div class="user-avatar" id="adm-av">A</div><div><div class="user-name" id="adm-nm">Admin</div><div class="user-role">👑 Super Admin</div></div></div></div>
       <nav class="sidebar-nav">
         <div class="nav-section">Mfumo</div>
-        <a class="nav-link active" onclick="aSec(this,'a-db')"><i class="bi bi-grid-1x2 nav-icon"></i>Dashboard</a>
-        <a class="nav-link" onclick="aSec(this,'a-tn')"><i class="bi bi-buildings nav-icon"></i>Tenants<span class="nav-badge" id="a-tnc">0</span></a>
-        <a class="nav-link" onclick="aSec(this,'a-us')"><i class="bi bi-people nav-icon"></i>Watumiaji</a>
-        <div class="nav-section">Analytics</div>
-        <a class="nav-link" onclick="aSec(this,'a-an')"><i class="bi bi-bar-chart-line nav-icon"></i>Analytics</a>
-        <a class="nav-link" onclick="aSec(this,'a-ac')"><i class="bi bi-activity nav-icon"></i>Audit Logs</a>
-        <div class="nav-section">Mipangilio</div>
-        <a class="nav-link" onclick="aSec(this,'a-st')"><i class="bi bi-gear nav-icon"></i>Mipangilio</a>
+        <a class="nav-link active" onclick="aSec(this,'a-db')"><i class="bi bi-grid-1x2 nav-icon"></i><span data-t="sec.dashboard">Dashboard</span></a>
+        <a class="nav-link" onclick="aSec(this,'a-tn')"><i class="bi bi-buildings nav-icon"></i><span data-t="nav.tenants">Tenants</span><span class="nav-badge" id="a-tnc">0</span></a>
+        <a class="nav-link" onclick="aSec(this,'a-us')"><i class="bi bi-people nav-icon"></i><span data-t="nav.users">Watumiaji</span></a>
+        <div class="nav-section" data-t="nav.analytics">Analytics</div>
+        <a class="nav-link" onclick="aSec(this,'a-an')"><i class="bi bi-bar-chart-line nav-icon"></i><span data-t="nav.analytics">Analytics</span></a>
+        <a class="nav-link" onclick="aSec(this,'a-ac')"><i class="bi bi-activity nav-icon"></i><span data-t="nav.auditlogs">Audit Logs</span></a>
+        <div class="nav-section" data-t="nav.settings">Mipangilio</div>
+        <a class="nav-link" onclick="aSec(this,'a-st')"><i class="bi bi-gear nav-icon"></i><span data-t="nav.settings">Mipangilio</span></a>
       </nav>
       <div class="sidebar-footer"><a class="nav-link" onclick="doLogout()"><i class="bi bi-box-arrow-left nav-icon"></i>Toka</a></div>
     </aside>
@@ -525,30 +531,31 @@ textarea.form-control{resize:vertical;min-height:80px;}
       <div class="topbar">
         <div class="topbar-left"><span class="topbar-title" id="a-pt">Dashboard</span></div>
         <div class="topbar-right">
-          <div class="sync-status"><span class="sync-dot" id="a-sd"></span><span id="a-ss">Online</span></div>
+          <div class="sync-status"><span class="sync-dot" id="a-sd"></span><span id="a-ss" data-t="common.online">Online</span></div>
+          <button class="btn btn-ghost btn-sm lang-toggle" onclick="toggleLang()" style="font-size:12px;font-weight:700;padding:6px 10px;"><span style="font-size:13px;">🇬🇧</span> EN</button>
           <button class="theme-toggle" onclick="toggleTheme()" id="tt-a"><i class="bi bi-moon-stars-fill"></i></button>
           <button class="btn btn-ghost btn-sm" onclick="syncNow('adm')"><i class="bi bi-cloud-upload"></i></button>
         </div>
       </div>
       <div class="content">
         <div class="section-panel active" id="a-db">
-          <div class="section-hdr mb-4"><div class="section-hdr-title">Habari za Mfumo</div><span id="a-dt" style="font-size:12px;color:var(--text-3);font-family:var(--mono);"></span></div>
+          <div class="section-hdr mb-4"><div class="section-hdr-title" data-t="sec.admin_dash">Habari za Mfumo</div><span id="a-dt" style="font-size:12px;color:var(--text-3);font-family:var(--mono);"></span></div>
           <div class="grid grid-4 mb-4" id="a-stats"></div>
           <div class="grid grid-2">
-            <div class="card"><div class="card-header"><h3>Tenants wa Hivi Karibuni</h3><button class="btn btn-ghost btn-sm" onclick="aSec(null,'a-tn')">Wote →</button></div><div class="card-body" id="a-rtn"></div></div>
-            <div class="card"><div class="card-header"><h3>Muhtasari wa Mfumo</h3></div><div class="card-body" id="a-sum"></div></div>
+            <div class="card"><div class="card-header"><h3 data-t="adm.recent_tenants">Tenants wa Hivi Karibuni</h3><button class="btn btn-ghost btn-sm" onclick="aSec(null,'a-tn')" data-t="adm.see_all">Wote →</button></div><div class="card-body" id="a-rtn"></div></div>
+            <div class="card"><div class="card-header"><h3 data-t="adm.system_summary">Muhtasari wa Mfumo</h3></div><div class="card-body" id="a-sum"></div></div>
           </div>
         </div>
         <div class="section-panel" id="a-tn">
-          <div class="section-hdr"><div class="section-hdr-title">Wamiliki wa Biashara</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="tn-q" oninput="renderAdmTn()" placeholder="Tafuta..." style="width:170px;"/></div><button class="btn btn-primary btn-sm" onclick="openM('m-nt')"><i class="bi bi-plus-lg"></i>Ongeza</button></div></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Biashara</th><th>Mwenye</th><th>Aina</th><th>Bidhaa</th><th>Mauzo</th><th>Hali</th><th>Vitendo</th></tr></thead><tbody id="tn-tb"></tbody></table></div><div id="tn-pg" class="pg-bar"></div></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.admin_tenants">Wamiliki wa Biashara</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="tn-q" oninput="renderAdmTn()" data-tp="common.search" placeholder="Tafuta..." style="width:170px;"/></div><button class="btn btn-primary btn-sm" onclick="openM('m-nt')"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.business">Biashara</th><th>Mwenye</th><th data-t="tbl.type">Aina</th><th data-t="nav.products">Bidhaa</th><th data-t="nav.sales">Mauzo</th><th data-t="tbl.status">Hali</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="tn-tb"></tbody></table></div><div id="tn-pg" class="pg-bar"></div></div>
         </div>
         <div class="section-panel" id="a-us">
-          <div class="section-hdr"><div class="section-hdr-title">Watumiaji Wote</div><button class="btn btn-primary btn-sm" onclick="openM('m-nu')"><i class="bi bi-person-plus"></i>Mpya</button></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>#</th><th>Jina</th><th>Username</th><th>Biashara</th><th>Aina</th><th>Hali</th><th>Vitendo</th></tr></thead><tbody id="us-tb"></tbody></table></div><div id="us-pg" class="pg-bar"></div></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.admin_users">Watumiaji Wote</div><button class="btn btn-primary btn-sm" onclick="openM('m-nu')"><i class="bi bi-person-plus"></i><span data-t="btn.new">Mpya</span></button></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.no">#</th><th data-t="tbl.name">Jina</th><th>Username</th><th data-t="tbl.business">Biashara</th><th data-t="tbl.type">Aina</th><th data-t="tbl.status">Hali</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="us-tb"></tbody></table></div><div id="us-pg" class="pg-bar"></div></div>
         </div>
         <div class="section-panel" id="a-an">
-          <div class="section-hdr"><div class="section-hdr-title">Analytics ya Mfumo</div><select class="form-select" id="a-an-p" onchange="loadAdmAn()" style="width:110px;"><option value="7">Wiki 1</option><option value="30" selected>Mwezi 1</option><option value="90">Miezi 3</option></select></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.admin_analytics">Analytics ya Mfumo</div><select class="form-select" id="a-an-p" onchange="loadAdmAn()" style="width:110px;"><option value="7" data-t="an.week1">Wiki 1</option><option value="30" selected data-t="an.month1">Mwezi 1</option><option value="90" data-t="an.months3">Miezi 3</option></select></div>
           <div class="grid grid-4 mb-4" id="a-an-s"></div>
           <div class="grid grid-2">
             <div class="chart-card"><div class="chart-header"><span class="chart-title">Mauzo kwa Siku</span></div><div class="chart-body"><canvas id="ch-at" height="180"></canvas></div></div>
@@ -557,7 +564,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
         </div>
         <div class="section-panel" id="a-ac">
           <div class="section-hdr"><div class="section-hdr-title">Audit Logs</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="ac-q" oninput="renderActivity()" placeholder="Tafuta..." style="width:150px;"/></div><select class="form-select" id="ac-ft" onchange="renderActivity()" style="width:150px;"><option value="">Tenants Wote</option></select><select class="form-select" id="ac-fy" onchange="renderActivity()" style="width:110px;"><option value="">Aina Zote</option><option>Ingia</option><option>Mauzo</option><option>Ununuzi</option><option>Bidhaa</option><option>Stoki</option><option>Toka</option></select></div></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Wakati</th><th>Mtumiaji</th><th>Biashara</th><th>Shughuli</th><th>Aina</th></tr></thead><tbody id="ac-tb"></tbody></table></div><div id="ac-pg" class="pg-bar"></div></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.time">Wakati</th><th data-t="tbl.user">Mtumiaji</th><th data-t="tbl.business">Biashara</th><th data-t="tbl.activity">Shughuli</th><th data-t="tbl.type">Aina</th></tr></thead><tbody id="ac-tb"></tbody></table></div><div id="ac-pg" class="pg-bar"></div></div>
         </div>
         <div class="section-panel" id="a-st">
           <div class="section-hdr mb-4"><div class="section-hdr-title">Mipangilio ya Mfumo</div></div>
@@ -590,24 +597,24 @@ textarea.form-control{resize:vertical;min-height:80px;}
       <div class="sidebar-brand"><div class="brand-logo"><div class="brand-icon">📦</div><div><div class="brand-name">Stoki<span>Pro</span></div><div class="brand-tag" id="t-biztag">BIASHARA</div></div></div></div>
       <div class="sidebar-user"><div class="flex items-center gap-2"><div class="user-avatar" id="t-av">U</div><div><div class="user-name" id="t-unm">Mtumiaji</div><div class="user-role" id="t-brl">🏪</div></div></div></div>
       <nav class="sidebar-nav">
-        <div class="nav-section">Mauzo</div>
-        <a class="nav-link active" onclick="tSec(this,'t-db')"><i class="bi bi-grid-1x2 nav-icon"></i>Dashboard</a>
-        <a class="nav-link" onclick="tSec(this,'t-sa')"><i class="bi bi-receipt nav-icon"></i>Mauzo</a>
-        <a class="nav-link" onclick="tSec(this,'t-pu')"><i class="bi bi-cart-plus nav-icon"></i>Manunuzi</a>
-        <div class="nav-section">Bidhaa</div>
-        <a class="nav-link" onclick="tSec(this,'t-pr')"><i class="bi bi-box-seam nav-icon"></i>Bidhaa</a>
-        <a class="nav-link" onclick="tSec(this,'t-st')"><i class="bi bi-layers nav-icon"></i>Stoki<span class="nav-badge" id="t-lb" style="display:none;">!</span></a>
-        <div class="nav-section">Watu</div>
-        <a class="nav-link" onclick="tSec(this,'t-cu')"><i class="bi bi-people nav-icon"></i>Wateja</a>
-        <a class="nav-link" onclick="tSec(this,'t-su')"><i class="bi bi-truck nav-icon"></i>Wasambazaji</a>
-        <div class="nav-section">Ripoti</div>
-        <a class="nav-link" onclick="tSec(this,'t-an')"><i class="bi bi-bar-chart-line nav-icon"></i>Analytics</a>
-        <a class="nav-link" onclick="tSec(this,'t-rp')"><i class="bi bi-file-earmark-bar-graph nav-icon"></i>Ripoti</a>
-        <div class="nav-section">Mipangilio</div>
-        <a class="nav-link" onclick="tSec(this,'t-br')"><i class="bi bi-building nav-icon"></i>Matawi</a>
-        <a class="nav-link" onclick="tSec(this,'t-bs')"><i class="bi bi-building-gear nav-icon"></i>Biashara Yangu</a>
+        <div class="nav-section" data-t="nav.sales">Mauzo</div>
+        <a class="nav-link active" onclick="tSec(this,'t-db')"><i class="bi bi-grid-1x2 nav-icon"></i><span data-t="sec.dashboard">Dashboard</span></a>
+        <a class="nav-link" onclick="tSec(this,'t-sa')"><i class="bi bi-receipt nav-icon"></i><span data-t="nav.sales">Mauzo</span></a>
+        <a class="nav-link" onclick="tSec(this,'t-pu')"><i class="bi bi-cart-plus nav-icon"></i><span data-t="nav.purchases">Manunuzi</span></a>
+        <div class="nav-section" data-t="nav.products">Bidhaa</div>
+        <a class="nav-link" onclick="tSec(this,'t-pr')"><i class="bi bi-box-seam nav-icon"></i><span data-t="nav.products">Bidhaa</span></a>
+        <a class="nav-link" onclick="tSec(this,'t-st')"><i class="bi bi-layers nav-icon"></i><span data-t="nav.stock">Stoki</span><span class="nav-badge" id="t-lb" style="display:none;">!</span></a>
+        <div class="nav-section" data-t="nav.customers">Watu</div>
+        <a class="nav-link" onclick="tSec(this,'t-cu')"><i class="bi bi-people nav-icon"></i><span data-t="nav.customers">Wateja</span></a>
+        <a class="nav-link" onclick="tSec(this,'t-su')"><i class="bi bi-truck nav-icon"></i><span data-t="nav.suppliers">Wasambazaji</span></a>
+        <div class="nav-section" data-t="nav.reports">Ripoti</div>
+        <a class="nav-link" onclick="tSec(this,'t-an')"><i class="bi bi-bar-chart-line nav-icon"></i><span data-t="nav.analytics">Analytics</span></a>
+        <a class="nav-link" onclick="tSec(this,'t-rp')"><i class="bi bi-file-earmark-bar-graph nav-icon"></i><span data-t="nav.reports">Ripoti</span></a>
+        <div class="nav-section" data-t="nav.settings">Mipangilio</div>
+        <a class="nav-link" onclick="tSec(this,'t-br')"><i class="bi bi-building nav-icon"></i><span data-t="nav.branches">Matawi</span></a>
+        <a class="nav-link" onclick="tSec(this,'t-bs')"><i class="bi bi-building-gear nav-icon"></i><span data-t="nav.biz">Biashara Yangu</span></a>
       </nav>
-      <div class="sidebar-footer"><a class="nav-link" onclick="doLogout()"><i class="bi bi-box-arrow-left nav-icon"></i>Toka</a></div>
+      <div class="sidebar-footer"><a class="nav-link" onclick="doLogout()"><i class="bi bi-box-arrow-left nav-icon"></i><span data-t="nav.logout">Toka</span></a></div>
     </aside>
 
     
@@ -615,21 +622,21 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
     
     <div class="bot-tabs">
-      <button class="bot-tab active" onclick="tSec(null,'t-db');setBT(this)"><i class="bi bi-grid-1x2"></i>Nyumbani</button>
-      <button class="bot-tab" onclick="tSec(null,'t-sa');setBT(this)"><i class="bi bi-receipt"></i>Mauzo</button>
-      <button class="bot-tab" onclick="tSec(null,'t-pr');setBT(this)"><i class="bi bi-box-seam"></i>Bidhaa</button>
-      <button class="bot-tab" onclick="tSec(null,'t-an');setBT(this)"><i class="bi bi-bar-chart-line"></i>Analytics</button>
-      <button class="bot-tab" id="bt-more" onclick="toggleMore()"><i class="bi bi-grid-3x3-gap"></i>Zaidi</button>
+      <button class="bot-tab active" onclick="tSec(null,'t-db');setBT(this)"><i class="bi bi-grid-1x2"></i><span data-t="nav.home">Nyumbani</span></button>
+      <button class="bot-tab" onclick="tSec(null,'t-sa');setBT(this)"><i class="bi bi-receipt"></i><span data-t="nav.sales">Mauzo</span></button>
+      <button class="bot-tab" onclick="tSec(null,'t-pr');setBT(this)"><i class="bi bi-box-seam"></i><span data-t="nav.products">Bidhaa</span></button>
+      <button class="bot-tab" onclick="tSec(null,'t-an');setBT(this)"><i class="bi bi-bar-chart-line"></i><span data-t="nav.analytics">Analytics</span></button>
+      <button class="bot-tab" id="bt-more" onclick="toggleMore()"><i class="bi bi-grid-3x3-gap"></i><span data-t="nav.more">Zaidi</span></button>
     </div>
     <div class="more-drawer" id="more-dr">
-      <div class="more-item" onclick="tSec(null,'t-pu');closeMore()"><i class="bi bi-cart-plus"></i>Manunuzi</div>
-      <div class="more-item" onclick="tSec(null,'t-st');closeMore()"><i class="bi bi-layers"></i>Stoki</div>
-      <div class="more-item" onclick="tSec(null,'t-cu');closeMore()"><i class="bi bi-people"></i>Wateja</div>
-      <div class="more-item" onclick="tSec(null,'t-su');closeMore()"><i class="bi bi-truck"></i>Wasambazaji</div>
-      <div class="more-item" onclick="tSec(null,'t-rp');closeMore()"><i class="bi bi-file-earmark-bar-graph"></i>Ripoti</div>
-      <div class="more-item" onclick="tSec(null,'t-br');closeMore()"><i class="bi bi-building"></i>Matawi</div>
-      <div class="more-item" onclick="tSec(null,'t-bs');closeMore()"><i class="bi bi-building-gear"></i>Biashara</div>
-      <div class="more-item logout" onclick="closeMore();doLogout()"><i class="bi bi-box-arrow-left"></i>Toka</div>
+      <div class="more-item" onclick="tSec(null,'t-pu');closeMore()"><i class="bi bi-cart-plus"></i><span data-t="nav.purchases">Manunuzi</span></div>
+      <div class="more-item" onclick="tSec(null,'t-st');closeMore()"><i class="bi bi-layers"></i><span data-t="nav.stock">Stoki</span></div>
+      <div class="more-item" onclick="tSec(null,'t-cu');closeMore()"><i class="bi bi-people"></i><span data-t="nav.customers">Wateja</span></div>
+      <div class="more-item" onclick="tSec(null,'t-su');closeMore()"><i class="bi bi-truck"></i><span data-t="nav.suppliers">Wasambazaji</span></div>
+      <div class="more-item" onclick="tSec(null,'t-rp');closeMore()"><i class="bi bi-file-earmark-bar-graph"></i><span data-t="nav.reports">Ripoti</span></div>
+      <div class="more-item" onclick="tSec(null,'t-br');closeMore()"><i class="bi bi-building"></i><span data-t="nav.branches">Matawi</span></div>
+      <div class="more-item" onclick="tSec(null,'t-bs');closeMore()"><i class="bi bi-building-gear"></i><span data-t="nav.biz">Biashara</span></div>
+      <div class="more-item logout" onclick="closeMore();doLogout()"><i class="bi bi-box-arrow-left"></i><span data-t="nav.logout">Toka</span></div>
     </div>
 
     <div class="main">
@@ -640,14 +647,15 @@ textarea.form-control{resize:vertical;min-height:80px;}
           <div id="branch-sel-wrap" style="display:flex;align-items:center;gap:6px;margin-left:12px">
             <i class="bi bi-building" style="color:var(--text-3);font-size:14px"></i>
             <select id="branch-selector" class="form-select" style="padding:4px 28px 4px 10px;font-size:12px;height:30px;border-radius:8px;font-weight:600;max-width:180px" onchange="setBranch(this.value)">
-              <option value="">🏢 Matawi Yote</option>
+              <option value="" data-t="common.all_branches">🏢 Matawi Yote</option>
             </select>
           </div>
         </div>
         <div class="topbar-right">
-          <div class="sync-status"><span class="sync-dot" id="t-sd"></span><span id="t-ss">Online</span></div>
+          <div class="sync-status"><span class="sync-dot" id="t-sd"></span><span id="t-ss" data-t="common.online">Online</span></div>
+          <button class="btn btn-ghost btn-sm lang-toggle" onclick="toggleLang()" style="font-size:12px;font-weight:700;padding:6px 10px;"><span style="font-size:13px;">🇬🇧</span> EN</button>
           <button class="theme-toggle" onclick="toggleTheme()" id="tt-t"><i class="bi bi-moon-stars-fill"></i></button>
-          <button class="btn btn-ghost btn-sm" onclick="syncNow('ten')" title="Refresh data kutoka Sheets"><i class="bi bi-arrow-clockwise"></i></button>
+          <button class="btn btn-ghost btn-sm" onclick="syncNow('ten')" data-ti="btn.refresh"><i class="bi bi-arrow-clockwise"></i></button>
         </div>
       </div>
       <div class="content">
@@ -658,86 +666,100 @@ textarea.form-control{resize:vertical;min-height:80px;}
           <div id="t-db-alerts" class="mb-3"></div>
           <div class="grid grid-4 mb-4" id="t-stats"></div>
           <div class="grid grid-2 mb-4">
-            <div class="chart-card"><div class="chart-header"><span class="chart-title">Mauzo — Siku za Hivi Karibuni</span><select class="form-select" id="t-cp" onchange="renderTCharts()" style="width:85px;font-size:11.5px;padding:4px 8px;"><option value="7">7 Siku</option><option value="30">30 Siku</option></select></div><div class="chart-body"><canvas id="ch-ts" height="180"></canvas></div></div>
-            <div class="chart-card"><div class="chart-header"><span class="chart-title">Top Bidhaa (Idadi)</span></div><div class="chart-body"><canvas id="ch-tp" height="180"></canvas></div></div>
+            <div class="chart-card"><div class="chart-header"><span class="chart-title" data-t="dash.sales_chart">Mauzo — Siku za Hivi Karibuni</span><select class="form-select" id="t-cp" onchange="renderTCharts()" style="width:85px;font-size:11.5px;padding:4px 8px;"><option value="7" data-t="dash.7days">7 Siku</option><option value="30" data-t="dash.30days">30 Siku</option></select></div><div class="chart-body"><canvas id="ch-ts" height="180"></canvas></div></div>
+            <div class="chart-card"><div class="chart-header"><span class="chart-title" data-t="dash.top_products">Top Bidhaa (Idadi)</span></div><div class="chart-body"><canvas id="ch-tp" height="180"></canvas></div></div>
           </div>
           <div class="grid grid-2">
-            <div class="card"><div class="card-header"><h3>Mauzo ya Hivi Karibuni</h3><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-sa')">Yote →</button></div><div class="card-body" id="t-rs"></div></div>
-            <div class="card"><div class="card-header"><h3>Stoki Inayokwisha</h3><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-st')">Stoki →</button></div><div class="card-body" id="t-ls"></div></div>
+            <div class="card"><div class="card-header"><h3 data-t="dash.recent_sales">Mauzo ya Hivi Karibuni</h3><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-sa')" data-t="dash.see_all">Yote →</button></div><div class="card-body" id="t-rs"></div></div>
+            <div class="card"><div class="card-header"><h3 data-t="dash.low_stock">Stoki Inayokwisha</h3><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-st')" data-t="dash.see_stock">Stoki →</button></div><div class="card-body" id="t-ls"></div></div>
           </div>
         </div>
 
         
         <div class="section-panel" id="t-pr">
-          <div class="section-hdr"><div class="section-hdr-title">Bidhaa</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="pr-q" oninput="filterTb(this,'pr-tb')" placeholder="Tafuta..." style="width:160px;"/></div><select class="form-select" id="pr-cf" onchange="renderProds()" style="width:130px;"><option value="">Kategoria Zote</option></select><button class="btn btn-primary btn-sm" onclick="openProdM()"><i class="bi bi-plus-lg"></i>Mpya</button></div></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Bidhaa</th><th>Kat.</th><th>Kununua</th><th>Kuuza</th><th>Stoki</th><th>Margin</th><th>Hali</th><th>Vitendo</th></tr></thead><tbody id="pr-tb"></tbody></table></div><div id="pr-pg" class="pg-bar"></div></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.products">Bidhaa</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="pr-q" oninput="filterTb(this,'pr-tb')" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div><select class="form-select" id="pr-cf" onchange="renderProds()" style="width:130px;"><option value="" data-t="common.categories">Kategoria Zote</option></select><button class="btn btn-primary btn-sm" onclick="openProdM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button></div></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.product">Bidhaa</th><th data-t="tbl.category">Kat.</th><th data-t="tbl.buy_price">Kununua</th><th data-t="tbl.sell_price">Kuuza</th><th data-t="tbl.stock">Stoki</th><th data-t="tbl.margin">Margin</th><th data-t="tbl.status">Hali</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="pr-tb"></tbody></table></div><div id="pr-pg" class="pg-bar"></div></div>
         </div>
 
         
         <div class="section-panel" id="t-st">
-          <div class="section-hdr"><div class="section-hdr-title">Usimamizi wa Stoki</div><button class="btn btn-ghost btn-sm" onclick="openM('m-adj')"><i class="bi bi-plus-minus"></i>Rekebisha</button></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.stock_mgmt">Usimamizi wa Stoki</div><button class="btn btn-ghost btn-sm" onclick="openM('m-adj')"><i class="bi bi-plus-minus"></i><span data-t="btn.adjust_stock">Rekebisha</span></button></div>
           <div id="st-alerts" class="mb-3"></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Bidhaa</th><th>Stoki</th><th>Min</th><th>Stock In</th><th>Stock Out</th><th>Thamani</th><th>Faida Inayotarajiwa</th><th>Hali</th><th>Vitendo</th></tr></thead><tbody id="st-tb"></tbody></table></div><div id="st-pg" class="pg-bar"></div></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.product">Bidhaa</th><th data-t="tbl.stock">Stoki</th><th data-t="tbl.min">Min</th><th data-t="tbl.stock_in">Stock In</th><th data-t="tbl.stock_out">Stock Out</th><th data-t="tbl.value">Thamani</th><th data-t="tbl.exp_profit">Faida Inayotarajiwa</th><th data-t="tbl.status">Hali</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="st-tb"></tbody></table></div><div id="st-pg" class="pg-bar"></div></div>
         </div>
 
         
         <div class="section-panel" id="t-sa">
-          <div class="section-hdr"><div class="section-hdr-title">Mauzo</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="sa-srch" oninput="renderSales()" placeholder="Tafuta ref, mteja..." style="width:180px;"/></div><div class="filter-pills"><button class="filter-pill active" id="sf-a" onclick="setSF('all',this)">Zote</button><button class="filter-pill" id="sf-c" onclick="setSF('cash',this)"><i class="bi bi-cash-coin"></i>Taslimu</button><button class="filter-pill" id="sf-k" onclick="setSF('credit',this)"><i class="bi bi-clock-history"></i>Mkopo</button></div><button class="btn btn-primary btn-sm" onclick="openSaleM()"><i class="bi bi-plus-lg"></i>Mpya</button></div></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th>Tarehe</th><th>Mteja</th><th>Bidhaa</th><th>Jumla</th><th>Malipo</th><th>Aina</th><th>Vitendo</th></tr></thead><tbody id="sa-tb"></tbody></table></div><div id="sa-pg" class="pg-bar"></div></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.sales">Mauzo</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="sa-srch" oninput="renderSales()" data-tp="common.search" placeholder="Tafuta ref, mteja..." style="width:180px;"/></div><div class="filter-pills"><button class="filter-pill active" id="sf-a" onclick="setSF('all',this)" data-t="btn.all">Zote</button><button class="filter-pill" id="sf-c" onclick="setSF('cash',this)"><i class="bi bi-cash-coin"></i><span data-t="btn.cash">Taslimu</span></button><button class="filter-pill" id="sf-k" onclick="setSF('credit',this)"><i class="bi bi-clock-history"></i><span data-t="btn.credit">Mkopo</span></button></div><button class="btn btn-primary btn-sm" onclick="openSaleM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button></div></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.ref">Ref</th><th data-t="tbl.date">Tarehe</th><th data-t="tbl.customer">Mteja</th><th data-t="tbl.items">Bidhaa</th><th data-t="tbl.total">Jumla</th><th data-t="tbl.payment">Malipo</th><th data-t="tbl.type">Aina</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="sa-tb"></tbody></table></div><div id="sa-pg" class="pg-bar"></div></div>
         </div>
 
         
         <div class="section-panel" id="t-pu">
-          <div class="section-hdr"><div class="section-hdr-title">Manunuzi</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="pu-srch" oninput="renderPurchs()" placeholder="Tafuta ref, msambazaji..." style="width:190px;"/></div><div class="filter-pills"><button class="filter-pill active" id="pf-a" onclick="setPF('all',this)">Zote</button><button class="filter-pill" id="pf-c" onclick="setPF('cash',this)"><i class="bi bi-cash-coin"></i>Taslimu</button><button class="filter-pill" id="pf-k" onclick="setPF('credit',this)"><i class="bi bi-clock-history"></i>Mkopo</button></div><button class="btn btn-primary btn-sm" onclick="openPurchM()"><i class="bi bi-plus-lg"></i>Mpya</button></div></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th>Tarehe</th><th>Msambazaji</th><th>Bidhaa</th><th>Jumla</th><th>Malipo</th><th>Aina</th><th>Vitendo</th></tr></thead><tbody id="pu-tb"></tbody></table></div><div id="pu-pg" class="pg-bar"></div></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.purchases">Manunuzi</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="pu-srch" oninput="renderPurchs()" data-tp="common.search" placeholder="Tafuta ref, msambazaji..." style="width:190px;"/></div><div class="filter-pills"><button class="filter-pill active" id="pf-a" onclick="setPF('all',this)" data-t="btn.all">Zote</button><button class="filter-pill" id="pf-c" onclick="setPF('cash',this)"><i class="bi bi-cash-coin"></i><span data-t="btn.cash">Taslimu</span></button><button class="filter-pill" id="pf-k" onclick="setPF('credit',this)"><i class="bi bi-clock-history"></i><span data-t="btn.credit">Mkopo</span></button></div><button class="btn btn-primary btn-sm" onclick="openPurchM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button></div></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.ref">Ref</th><th data-t="tbl.date">Tarehe</th><th data-t="tbl.supplier">Msambazaji</th><th data-t="tbl.items">Bidhaa</th><th data-t="tbl.total">Jumla</th><th data-t="tbl.payment">Malipo</th><th data-t="tbl.type">Aina</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="pu-tb"></tbody></table></div><div id="pu-pg" class="pg-bar"></div></div>
         </div>
 
         
         <div class="section-panel" id="t-cu">
-          <div class="section-hdr"><div class="section-hdr-title">Wateja</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="cu-q" oninput="filterTb(this,'cu-tb')" placeholder="Tafuta..." style="width:160px;"/></div><button class="btn btn-primary btn-sm" onclick="openCustM()"><i class="bi bi-person-plus"></i>Mpya</button></div></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.customers">Wateja</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="cu-q" oninput="filterTb(this,'cu-tb')" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div><button class="btn btn-primary btn-sm" onclick="openCustM()"><i class="bi bi-person-plus"></i><span data-t="btn.new">Mpya</span></button></div></div>
           <div id="cu-alerts" class="mb-3"></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Kundi</th><th>Mauzo</th><th>Deni</th><th>Mwisho</th><th>Vitendo</th></tr></thead><tbody id="cu-tb"></tbody></table></div><div id="cu-pg" class="pg-bar"></div></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.no">#</th><th data-t="tbl.name">Jina</th><th data-t="tbl.phone">Simu</th><th data-t="tbl.group">Kundi</th><th data-t="nav.sales">Mauzo</th><th data-t="tbl.debt">Deni</th><th data-t="tbl.last">Mwisho</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="cu-tb"></tbody></table></div><div id="cu-pg" class="pg-bar"></div></div>
         </div>
 
         
         <div class="section-panel" id="t-cprof">
-          <div class="section-hdr"><div class="section-hdr-title">Wasifu wa Mteja</div><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-cu')"><i class="bi bi-arrow-left"></i>Rudi</button></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.cust_profile">Wasifu wa Mteja</div><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-cu')"><i class="bi bi-arrow-left"></i><span data-t="btn.back">Rudi</span></button></div>
           <div id="cprof-c"></div>
         </div>
 
         
         <div class="section-panel" id="t-su">
-          <div class="section-hdr"><div class="section-hdr-title">Wasambazaji</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="su-q" oninput="renderSups()" placeholder="Tafuta..." style="width:160px;"/></div><button class="btn btn-primary btn-sm" onclick="openSupM()"><i class="bi bi-truck"></i>Mpya</button></div></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.suppliers">Wasambazaji</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="su-q" oninput="renderSups()" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div><button class="btn btn-primary btn-sm" onclick="openSupM()"><i class="bi bi-truck"></i><span data-t="btn.new">Mpya</span></button></div></div>
           <div id="su-alerts" class="mb-3"></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>#</th><th>Jina</th><th>Simu</th><th>Bidhaa</th><th>Manunuzi</th><th>Deni</th><th>Vitendo</th></tr></thead><tbody id="su-tb"></tbody></table></div><div id="su-pg" class="pg-bar"></div></div>
+          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.no">#</th><th data-t="tbl.name">Jina</th><th data-t="tbl.phone">Simu</th><th data-t="nav.products">Bidhaa</th><th data-t="nav.purchases">Manunuzi</th><th data-t="tbl.debt">Deni</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="su-tb"></tbody></table></div><div id="su-pg" class="pg-bar"></div></div>
         </div>
 
         
         <div class="section-panel" id="t-sprof">
-          <div class="section-hdr"><div class="section-hdr-title">Wasifu wa Msambazaji</div><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-su')"><i class="bi bi-arrow-left"></i>Rudi</button></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.sup_profile">Wasifu wa Msambazaji</div><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-su')"><i class="bi bi-arrow-left"></i><span data-t="btn.back">Rudi</span></button></div>
           <div id="sprof-c"></div>
         </div>
 
         
         <div class="section-panel" id="t-an">
-          <div class="section-hdr"><div class="section-hdr-title">Analytics ya Biashara</div><select class="form-select" id="t-an-p" onchange="loadTenAn()" style="width:110px;"><option value="7">Wiki 1</option><option value="30" selected>Mwezi 1</option><option value="90">Miezi 3</option></select></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.analytics">Analytics ya Biashara</div><select class="form-select" id="t-an-p" onchange="loadTenAn()" style="width:110px;"><option value="7" data-t="an.week1">Wiki 1</option><option value="30" selected data-t="an.month1">Mwezi 1</option><option value="90" data-t="an.months3">Miezi 3</option></select></div>
           <div class="grid grid-4 mb-4" id="t-an-s"></div>
           <div class="grid grid-2 mb-4">
             <div class="chart-card"><div class="chart-header"><span class="chart-title">Mauzo vs Manunuzi</span></div><div class="chart-body"><canvas id="ch-mv" height="200"></canvas></div></div>
             <div class="chart-card"><div class="chart-header"><span class="chart-title">Faida kwa Siku</span></div><div class="chart-body"><canvas id="ch-pf" height="200"></canvas></div></div>
           </div>
           <div class="grid grid-3">
-            <div class="card"><div class="card-header"><h3>🏆 Top Buyers</h3></div><div class="card-body" id="an-tb"></div></div>
-            <div class="card"><div class="card-header"><h3>🔥 High Demand</h3></div><div class="card-body" id="an-hd"></div></div>
-            <div class="card"><div class="card-header"><h3>⚠️ Bad Debts</h3></div><div class="card-body" id="an-bd"></div></div>
+            <div class="card"><div class="card-header"><h3 data-t="an.top_buyers">🏆 Top Buyers</h3></div><div class="card-body" id="an-tb"></div></div>
+            <div class="card"><div class="card-header"><h3 data-t="an.high_demand">🔥 High Demand</h3></div><div class="card-body" id="an-hd"></div></div>
+            <div class="card"><div class="card-header"><h3 data-t="an.bad_debts">⚠️ Bad Debts</h3></div><div class="card-body" id="an-bd"></div></div>
+          </div>
+          <!-- Product Profit Leaderboard -->
+          <div class="card mt-4">
+            <div class="card-header">
+              <h3>🏅 <span data-t="an.prod_profit">Faida za Bidhaa</span></h3>
+              <div style="display:flex;align-items:center;gap:8px;">
+                <select class="form-select" id="pp-sort" onchange="renderProdProfit()" style="width:140px;font-size:12.5px;">
+                  <option value="profit" data-t="pp.sort_profit">Faida</option>
+                  <option value="revenue" data-t="pp.sort_rev">Mapato</option>
+                  <option value="units" data-t="pp.sort_qty">Idadi Iliyouzwa</option>
+                </select>
+              </div>
+            </div>
+            <div class="card-body" id="pp-list" style="padding:4px 16px;"></div>
           </div>
         </div>
 
         
         <div class="section-panel" id="t-rp">
-          <div class="section-hdr"><div class="section-hdr-title">Ripoti za Kina</div><div class="section-hdr-actions"><input type="date" class="form-control" id="rp-f" style="width:140px;"/><span style="color:var(--text-3);">—</span><input type="date" class="form-control" id="rp-t" style="width:140px;"/><button class="btn btn-primary btn-sm" onclick="genRep()"><i class="bi bi-bar-chart"></i>Tengeneza</button><button class="btn btn-ghost btn-sm" onclick="printReports()" class="no-print"><i class="bi bi-printer"></i></button></div></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.reports">Ripoti za Kina</div><div class="section-hdr-actions"><input type="date" class="form-control" id="rp-f" style="width:140px;"/><span style="color:var(--text-3);">—</span><input type="date" class="form-control" id="rp-t" style="width:140px;"/><button class="btn btn-primary btn-sm" onclick="genRep()"><i class="bi bi-bar-chart"></i><span data-t="rp.generate">Tengeneza</span></button><button class="btn btn-ghost btn-sm" onclick="printReports()" class="no-print"><i class="bi bi-printer"></i></button></div></div>
           <div class="grid grid-4 mb-4" id="rp-stats"></div>
-          <div class="card"><div class="card-header"><h3>Mauzo kwa Siku</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th>Tarehe</th><th>Miamala</th><th>Taslimu</th><th>Mkopo</th><th>Jumla (TZS)</th></tr></thead><tbody id="rp-tb"></tbody></table></div><div id="rp-pg" class="pg-bar"></div></div>
+          <div class="card"><div class="card-header"><h3 data-t="rp.daily_sales">Mauzo kwa Siku</h3></div><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.date">Tarehe</th><th data-t="rp.transactions">Miamala</th><th data-t="rp.cash">Taslimu</th><th data-t="rp.credit">Mkopo</th><th data-t="rp.total">Jumla (TZS)</th></tr></thead><tbody id="rp-tb"></tbody></table></div><div id="rp-pg" class="pg-bar"></div></div>
         </div>
 
         
@@ -988,23 +1010,25 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
 <div class="modal-overlay" id="m-nu"><div class="modal"><div class="modal-header"><h2 class="modal-title">Mtumiaji Mpya</h2><button class="modal-close" onclick="closeM('m-nu')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Jina Kamili *</label><input type="text" class="form-control" id="nu-n"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Username *</label><input type="text" class="form-control" id="nu-u"/></div><div class="form-group"><label class="form-label">Nywila *</label><input type="password" class="form-control" id="nu-pw"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Aina</label><select class="form-select" id="nu-rl"><option value="admin">Admin</option><option value="tenant">Tenant</option></select></div><div class="form-group"><label class="form-label">Biashara</label><select class="form-select" id="nu-ti"><option value="">—</option></select></div></div><button class="btn btn-primary w-full mt-2" onclick="addUser()"><i class="bi bi-check-lg"></i>Ongeza</button></div></div></div>
 
-<div class="modal-overlay" id="m-prod"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pm-t">Bidhaa Mpya</h2><button class="modal-close" onclick="closeM('m-prod')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="p-eid"/><div class="input-row cols-2"><div><div class="form-group"><label class="form-label">Jina la Bidhaa *</label><input type="text" class="form-control" id="p-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Kategoria</label><input type="text" class="form-control" id="p-ct" placeholder="Vyakula"/></div><div class="form-group"><label class="form-label">Kitengo</label><input type="text" class="form-control" id="p-un" placeholder="kg/pcs"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Bei Kununua</label><input type="number" class="form-control" id="p-bp" oninput="calcMg()"/></div><div class="form-group"><label class="form-label">Bei Kuuza</label><input type="number" class="form-control" id="p-sp" oninput="calcMg()"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Stoki ya Awali</label><input type="number" class="form-control" id="p-st" placeholder="0"/></div><div class="form-group"><label class="form-label">Kiwango cha Chini</label><input type="number" class="form-control" id="p-ms" placeholder="5"/></div></div></div><div><div class="form-group"><label class="form-label">Maelezo</label><textarea class="form-control" id="p-dc" rows="3"></textarea></div><div class="form-group"><label class="form-label">Barcode</label><input type="text" class="form-control" id="p-bc"/></div><div id="p-mg" style="display:none;background:var(--bg-3);padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;margin-top:8px;"></div></div></div><button class="btn btn-primary w-full mt-3" onclick="saveProds()"><i class="bi bi-check-lg"></i>Hifadhi Bidhaa</button></div></div></div>
+<div class="modal-overlay" id="m-prod"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pm-t" data-t="modal.new_product">Bidhaa Mpya</h2><button class="modal-close" onclick="closeM('m-prod')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="p-eid"/><div class="input-row cols-2"><div><div class="form-group"><label class="form-label" data-t="prod.name">Jina la Bidhaa *</label><input type="text" class="form-control" id="p-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.cat">Kategoria</label><input type="text" class="form-control" id="p-ct" placeholder="Vyakula"/></div><div class="form-group"><label class="form-label" data-t="prod.unit">Kitengo</label><input type="text" class="form-control" id="p-un" placeholder="kg/pcs"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.buy_price">Bei Kununua</label><input type="number" class="form-control" id="p-bp" oninput="calcMg()"/></div><div class="form-group"><label class="form-label" data-t="prod.sell_price">Bei Kuuza</label><input type="number" class="form-control" id="p-sp" oninput="calcMg()"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.stock">Stoki ya Awali</label><input type="number" class="form-control" id="p-st" placeholder="0"/></div><div class="form-group"><label class="form-label" data-t="prod.min_stock">Kiwango cha Chini</label><input type="number" class="form-control" id="p-ms" placeholder="5"/></div></div></div><div><div class="form-group"><label class="form-label" data-t="prod.desc">Maelezo</label><textarea class="form-control" id="p-dc" rows="3"></textarea></div><div class="form-group"><label class="form-label" data-t="prod.barcode">Barcode</label><input type="text" class="form-control" id="p-bc"/></div><div id="p-mg" style="display:none;background:var(--bg-3);padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;margin-top:8px;"></div></div></div><button class="btn btn-primary w-full mt-3" onclick="saveProds()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
-<div class="modal-overlay" id="m-adj"><div class="modal"><div class="modal-header"><h2 class="modal-title">Rekebisha Stoki</h2><button class="modal-close" onclick="closeM('m-adj')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Bidhaa</label><select class="form-select" id="adj-p"></select></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Aina</label><select class="form-select" id="adj-t"><option value="add">Ongeza (+)</option><option value="remove">Punguza (−)</option><option value="set">Weka Idadi</option></select></div><div class="form-group"><label class="form-label">Idadi</label><input type="number" class="form-control" id="adj-q" min="0"/></div></div><div class="form-group"><label class="form-label">Sababu</label><input type="text" class="form-control" id="adj-r" placeholder="Hiari"/></div><button class="btn btn-primary w-full mt-2" onclick="saveAdj()"><i class="bi bi-check-lg"></i>Hifadhi</button></div></div></div>
+<div class="modal-overlay" id="m-adj"><div class="modal"><div class="modal-header"><h2 class="modal-title" data-t="modal.adj_stock">Rekebisha Stoki</h2><button class="modal-close" onclick="closeM('m-adj')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="form-group"><label class="form-label" data-t="adj.product">Bidhaa</label><select class="form-select" id="adj-p"></select></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="adj.type">Aina</label><select class="form-select" id="adj-t"><option value="add" data-t="adj.add">Ongeza (+)</option><option value="remove" data-t="adj.remove">Punguza (−)</option><option value="set" data-t="adj.set">Weka Idadi</option></select></div><div class="form-group"><label class="form-label" data-t="adj.qty">Idadi</label><input type="number" class="form-control" id="adj-q" min="0"/></div></div><div class="form-group"><label class="form-label" data-t="adj.reason">Sababu</label><input type="text" class="form-control" id="adj-r" placeholder="Hiari"/></div><button class="btn btn-primary w-full mt-2" onclick="saveAdj()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
-<div class="modal-overlay" id="m-sale"><div class="modal modal-xl"><div class="modal-header"><h2 class="modal-title">Uuzaji Mpya</h2><button class="modal-close" onclick="closeM('m-sale')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-3 mb-3"><div class="form-group"><label class="form-label">Mteja</label><select class="form-select" id="sl-cu"></select></div><div class="form-group"><label class="form-label">Tarehe</label><input type="date" class="form-control" id="sl-dt"/></div><div class="form-group"><label class="form-label">Ref</label><input type="text" class="form-control" id="sl-rf"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;">Bidhaa Zilizouzwa</label><button class="btn btn-ghost btn-sm" onclick="addSRow()"><i class="bi bi-plus-lg"></i>Ongeza</button></div><div id="sl-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;"><div class="flex justify-between mb-3"><span style="color:var(--text-2);">Jumla kabla ya punguzo:</span><span class="font-mono font-bold" id="sl-sub">TZS 0</span></div><div class="input-row cols-2 mb-3"><div class="form-group" style="margin:0;"><label class="form-label">Punguzo (TZS)</label><input type="number" class="form-control" id="sl-dis" value="0" oninput="calcSale()"/></div><div class="form-group" style="margin:0;"><label class="form-label">Kodi ya Promo</label><input type="text" class="form-control" id="sl-prm"/></div></div><div class="flex justify-between mb-3" style="font-size:19px;"><span class="font-extrabold">JUMLA KUU:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="sl-tot">TZS 0</span></div><div class="input-row cols-3"><div class="form-group" style="margin:0;"><label class="form-label">Aina ya Malipo</label><select class="form-select" id="sl-pay" onchange="checkCred()"><option>Taslimu</option><option>M-Pesa</option><option>Tigo Pesa</option><option>Benki</option><option value="Mkopo">Mkopo</option></select></div><div class="form-group" style="margin:0;"><label class="form-label">Kilicholipwa</label><input type="number" class="form-control" id="sl-pd" oninput="calcChg()"/></div><div class="form-group" style="margin:0;"><label class="form-label">Chenji</label><div style="padding:10px 14px;background:var(--input-bg);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);font-family:var(--mono);font-weight:700;" id="sl-chg">TZS 0</div></div></div></div><div id="sl-crn" style="display:none;" class="alert alert-info mt-2"><i class="bi bi-info-circle"></i><span>Mauzo ya mkopo — deni litaongezwa kwa mteja.</span></div><div class="flex gap-2 mt-3"><button class="btn btn-primary" style="flex:1;" onclick="saveSale(false)"><i class="bi bi-check-circle"></i>Maliza</button><button class="btn btn-ghost" onclick="saveSale(true)"><i class="bi bi-printer"></i>+ Invoice</button></div></div></div></div>
+<div class="modal-overlay" id="m-sale"><div class="modal modal-xl"><div class="modal-header"><h2 class="modal-title" data-t="modal.new_sale">Uuzaji Mpya</h2><button class="modal-close" onclick="closeM('m-sale')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-3 mb-3"><div class="form-group"><label class="form-label" data-t="sale.customer">Mteja</label><select class="form-select" id="sl-cu"></select></div><div class="form-group"><label class="form-label" data-t="sale.date">Tarehe</label><input type="date" class="form-control" id="sl-dt"/></div><div class="form-group"><label class="form-label" data-t="sale.ref">Ref</label><input type="text" class="form-control" id="sl-rf"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;" data-t="sale.add_item">Bidhaa Zilizouzwa</label><button class="btn btn-ghost btn-sm" onclick="addSRow()"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div><div id="sl-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;"><div class="flex justify-between mb-3"><span style="color:var(--text-2);" data-t="sale.subtotal">Jumla kabla ya punguzo:</span><span class="font-mono font-bold" id="sl-sub">TZS 0</span></div><div class="input-row cols-2 mb-3"><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.discount">Punguzo (TZS)</label><input type="number" class="form-control" id="sl-dis" value="0" oninput="calcSale()"/></div><div class="form-group" style="margin:0;"><label class="form-label">Kodi ya Promo</label><input type="text" class="form-control" id="sl-prm"/></div></div><div class="flex justify-between mb-3" style="font-size:19px;"><span class="font-extrabold" data-t="sale.total">JUMLA KUU:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="sl-tot">TZS 0</span></div><div class="input-row cols-3"><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.payment">Aina ya Malipo</label><select class="form-select" id="sl-pay" onchange="checkCred()"><option data-t="pay.cash">Taslimu</option><option data-t="pay.mpesa">M-Pesa</option><option>Tigo Pesa</option><option data-t="pay.bank">Benki</option><option value="Mkopo" data-t="pay.credit">Mkopo</option></select></div><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.paid">Kilicholipwa</label><input type="number" class="form-control" id="sl-pd" oninput="calcChg()"/></div><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.change">Chenji</label><div style="padding:10px 14px;background:var(--input-bg);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);font-family:var(--mono);font-weight:700;" id="sl-chg">TZS 0</div></div></div></div><div id="sl-crn" style="display:none;" class="alert alert-info mt-2"><i class="bi bi-info-circle"></i><span>Mauzo ya mkopo — deni litaongezwa kwa mteja.</span></div><div class="flex gap-2 mt-3"><button class="btn btn-primary" style="flex:1;" onclick="saveSale(false)"><i class="bi bi-check-circle"></i>Maliza</button><button class="btn btn-ghost" onclick="saveSale(true)"><i class="bi bi-printer"></i>+ Invoice</button></div></div></div></div>
 
 <div class="modal-overlay" id="m-sdet"><div class="modal"><div class="modal-header"><h2 class="modal-title">Maelezo ya Mauzo</h2><button class="modal-close" onclick="closeM('m-sdet')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div id="sdet-c" class="mb-3"></div><div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i><span>Kufuta mauzo kutarudisha stoki na kuondoa deni.</span></div><div class="flex gap-2 mt-3"><button class="btn btn-danger" style="flex:1;" onclick="deleteSale(window._dSaleId)"><i class="bi bi-trash"></i>Futa Mauzo</button><button class="btn btn-ghost" onclick="closeM('m-sdet')">Ghairi</button></div></div></div></div>
 
 <div class="modal-overlay" id="m-pdet"><div class="modal"><div class="modal-header"><h2 class="modal-title">Maelezo ya Ununuzi</h2><button class="modal-close" onclick="closeM('m-pdet')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div id="pdet-c" class="mb-3"></div><div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i><span>Kufuta ununuzi kutarudisha stoki na kuondoa deni.</span></div><div class="flex gap-2 mt-3"><button class="btn btn-danger" style="flex:1;" onclick="deletePurch(window._dPurchId)"><i class="bi bi-trash"></i>Futa Ununuzi</button><button class="btn btn-ghost" onclick="closeM('m-pdet')">Ghairi</button></div></div></div></div>
 
-<div class="modal-overlay" id="m-inv"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title">Invoice / Risiti</h2><button class="modal-close" onclick="closeM('m-inv')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div id="inv-c"></div><div class="flex gap-2 mt-3 no-print"><button class="btn btn-primary" onclick="printContent(document.getElementById('inv-c').innerHTML)"><i class="bi bi-printer"></i>Chapisha</button><button class="btn btn-ghost" id="btn-wa-share" onclick="shareInvWhatsApp(window._currentInv)" style="background:#25D366;color:#fff;border-color:#25D366;"><i class="bi bi-whatsapp"></i>WhatsApp</button><button class="btn btn-ghost" onclick="closeM('m-inv')">Funga</button></div></div></div></div>
+<div class="modal-overlay" id="m-inv"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title">Invoice / Risiti</h2><button class="modal-close" onclick="closeM('m-inv')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div id="inv-c"></div><div class="flex gap-2 mt-3 no-print"><button class="btn btn-primary" onclick="printContent(document.getElementById('inv-c').innerHTML)"><i class="bi bi-printer"></i>Chapisha</button><button class="btn btn-ghost" id="btn-wa-share" onclick="shareInvWhatsApp(window._currentInv)" style="background:#25D366;color:#fff;border-color:#25D366;"><i class="bi bi-whatsapp"></i>WhatsApp</button><button class="btn btn-ghost" onclick="sendInvoiceEmail(window._currentInv)" style="background:var(--info-soft);color:var(--info);border-color:var(--info);"><i class="bi bi-envelope"></i>Tuma Email</button><button class="btn btn-ghost" onclick="closeM('m-inv')">Funga</button></div></div></div></div>
 
-<div class="modal-overlay" id="m-pur"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title">Ununuzi Mpya</h2><button class="modal-close" onclick="closeM('m-pur')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-2 mb-3"><div class="form-group"><label class="form-label">Msambazaji</label><select class="form-select" id="pu-su"></select></div><div class="form-group"><label class="form-label">Tarehe</label><input type="date" class="form-control" id="pu-dt"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;">Bidhaa Zilizununuliwa</label><button class="btn btn-ghost btn-sm" onclick="addPRow()"><i class="bi bi-plus-lg"></i>Ongeza</button></div><div id="pu-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px;" class="flex justify-between"><span class="font-extrabold">JUMLA:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="pu-tot">TZS 0</span></div><div class="input-row cols-2 mt-3"><div class="form-group"><label class="form-label">Aina ya Malipo</label><select class="form-select" id="pu-pay"><option>Taslimu</option><option>M-Pesa</option><option>Benki</option><option value="Mkopo">Mkopo</option></select></div><div class="form-group"><label class="form-label">Kilicholipwa</label><input type="number" class="form-control" id="pu-pd" placeholder="0"/></div></div><button class="btn btn-primary w-full mt-2" onclick="savePurch()"><i class="bi bi-check-circle"></i>Hifadhi Ununuzi</button></div></div></div>
+<div class="modal-overlay" id="m-pp"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pp-title" data-t="pp.modal_title">Uchambuzi wa Bidhaa</h2><button class="modal-close" onclick="closeM('m-pp')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="grid grid-3 mb-4" id="pp-stats"></div><div class="chart-card mb-3"><div class="chart-header"><span class="chart-title" data-t="pp.monthly_chart">Faida kwa Mwezi (Miezi 12)</span></div><div class="chart-body"><canvas id="ch-pp" height="220"></canvas></div></div><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.month">Mwezi</th><th data-t="pp.th_qty">Idadi</th><th data-t="pp.th_rev">Mapato</th><th data-t="pp.th_cost">Gharama</th><th data-t="pp.th_profit">Faida</th><th>Margin %</th></tr></thead><tbody id="pp-tb"></tbody></table></div></div></div></div>
 
-<div class="modal-overlay" id="m-cust"><div class="modal"><div class="modal-header"><h2 class="modal-title" id="cm-t">Mteja Mpya</h2><button class="modal-close" onclick="closeM('m-cust')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="c-eid"/><div class="form-group"><label class="form-label">Jina Kamili *</label><input type="text" class="form-control" id="c-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Simu</label><input type="text" class="form-control" id="c-ph"/></div><div class="form-group"><label class="form-label">Barua Pepe</label><input type="email" class="form-control" id="c-em"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Anuani</label><input type="text" class="form-control" id="c-ad"/></div><div class="form-group"><label class="form-label">Kundi</label><select class="form-select" id="c-gr"><option>Kawaida</option><option>VIP</option><option>Jumla</option></select></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Kikomo cha Mkopo (TZS)</label><input type="number" class="form-control" id="c-cl" placeholder="0"/></div><div class="form-group"><label class="form-label">Maelezo</label><input type="text" class="form-control" id="c-nt"/></div></div><button class="btn btn-primary w-full mt-2" onclick="saveCust()"><i class="bi bi-check-lg"></i>Hifadhi</button></div></div></div>
+<div class="modal-overlay" id="m-pur"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" data-t="modal.new_purchase">Ununuzi Mpya</h2><button class="modal-close" onclick="closeM('m-pur')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-2 mb-3"><div class="form-group"><label class="form-label" data-t="purch.supplier">Msambazaji</label><select class="form-select" id="pu-su"></select></div><div class="form-group"><label class="form-label" data-t="purch.date">Tarehe</label><input type="date" class="form-control" id="pu-dt"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;" data-t="purch.add_item">Bidhaa Zilizununuliwa</label><button class="btn btn-ghost btn-sm" onclick="addPRow()"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div><div id="pu-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px;" class="flex justify-between"><span class="font-extrabold" data-t="sale.total">JUMLA:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="pu-tot">TZS 0</span></div><div class="input-row cols-2 mt-3"><div class="form-group"><label class="form-label" data-t="purch.payment">Aina ya Malipo</label><select class="form-select" id="pu-pay"><option data-t="pay.cash">Taslimu</option><option data-t="pay.mpesa">M-Pesa</option><option data-t="pay.bank">Benki</option><option value="Mkopo" data-t="pay.credit">Mkopo</option></select></div><div class="form-group"><label class="form-label" data-t="purch.paid">Kilicholipwa</label><input type="number" class="form-control" id="pu-pd" placeholder="0"/></div></div><button class="btn btn-primary w-full mt-2" onclick="savePurch()"><i class="bi bi-check-circle"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
-<div class="modal-overlay" id="m-sup"><div class="modal"><div class="modal-header"><h2 class="modal-title" id="sm-t">Msambazaji Mpya</h2><button class="modal-close" onclick="closeM('m-sup')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="s-eid"/><div class="form-group"><label class="form-label">Jina / Biashara *</label><input type="text" class="form-control" id="s-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Simu</label><input type="text" class="form-control" id="s-ph"/></div><div class="form-group"><label class="form-label">Barua Pepe</label><input type="email" class="form-control" id="s-em"/></div></div><div class="form-group"><label class="form-label">Bidhaa Anazosambaza <span style="color:var(--text-3);font-size:11px;">(chagua moja au zaidi)</span></label><div id="s-pr-wrap" style="background:var(--input-bg);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);padding:10px;max-height:160px;overflow-y:auto;display:flex;flex-wrap:wrap;gap:6px;" onclick="this.querySelector('input')?.focus()"><div id="s-pr-chips" style="display:flex;flex-wrap:wrap;gap:4px;"></div><input type="text" id="s-pr-input" placeholder="Tafuta bidhaa..." style="border:none;background:transparent;outline:none;font-family:var(--font);font-size:13px;min-width:120px;color:var(--text-1);" oninput="filterSupProds(this.value)" onkeydown="supProdKey(event)"/></div><div id="s-pr-dropdown" style="display:none;position:absolute;background:var(--surface);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);z-index:100;max-height:180px;overflow-y:auto;min-width:220px;box-shadow:var(--shadow);"></div><input type="hidden" id="s-pr"/></div><div class="form-group"><label class="form-label">Muda wa Malipo (siku)</label><input type="number" class="form-control" id="s-dy" placeholder="30"/></div><button class="btn btn-primary w-full mt-2" onclick="saveSup()"><i class="bi bi-check-lg"></i>Hifadhi</button></div></div></div>
+<div class="modal-overlay" id="m-cust"><div class="modal"><div class="modal-header"><h2 class="modal-title" id="cm-t" data-t="modal.new_customer">Mteja Mpya</h2><button class="modal-close" onclick="closeM('m-cust')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="c-eid"/><div class="form-group"><label class="form-label" data-t="cust.name">Jina Kamili *</label><input type="text" class="form-control" id="c-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.phone">Simu</label><input type="text" class="form-control" id="c-ph"/></div><div class="form-group"><label class="form-label" data-t="cust.email">Barua Pepe</label><input type="email" class="form-control" id="c-em"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.address">Anuani</label><input type="text" class="form-control" id="c-ad"/></div><div class="form-group"><label class="form-label" data-t="cust.group">Kundi</label><select class="form-select" id="c-gr"><option>Kawaida</option><option>VIP</option><option>Jumla</option></select></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.credit_limit">Kikomo cha Mkopo (TZS)</label><input type="number" class="form-control" id="c-cl" placeholder="0"/></div><div class="form-group"><label class="form-label" data-t="cust.notes">Maelezo</label><input type="text" class="form-control" id="c-nt"/></div></div><button class="btn btn-primary w-full mt-2" onclick="saveCust()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
+
+<div class="modal-overlay" id="m-sup"><div class="modal"><div class="modal-header"><h2 class="modal-title" id="sm-t" data-t="modal.new_supplier">Msambazaji Mpya</h2><button class="modal-close" onclick="closeM('m-sup')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="s-eid"/><div class="form-group"><label class="form-label" data-t="sup.name">Jina / Biashara *</label><input type="text" class="form-control" id="s-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="sup.phone">Simu</label><input type="text" class="form-control" id="s-ph"/></div><div class="form-group"><label class="form-label" data-t="sup.email">Barua Pepe</label><input type="email" class="form-control" id="s-em"/></div></div><div class="form-group"><label class="form-label" data-t="sup.products">Bidhaa Anazosambaza <span style="color:var(--text-3);font-size:11px;">(chagua moja au zaidi)</span></label><div id="s-pr-wrap" style="background:var(--input-bg);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);padding:10px;max-height:160px;overflow-y:auto;display:flex;flex-wrap:wrap;gap:6px;" onclick="this.querySelector('input')?.focus()"><div id="s-pr-chips" style="display:flex;flex-wrap:wrap;gap:4px;"></div><input type="text" id="s-pr-input" placeholder="Tafuta bidhaa..." style="border:none;background:transparent;outline:none;font-family:var(--font);font-size:13px;min-width:120px;color:var(--text-1);" oninput="filterSupProds(this.value)" onkeydown="supProdKey(event)"/></div><div id="s-pr-dropdown" style="display:none;position:absolute;background:var(--surface);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);z-index:100;max-height:180px;overflow-y:auto;min-width:220px;box-shadow:var(--shadow);"></div><input type="hidden" id="s-pr"/></div><div class="form-group"><label class="form-label">Muda wa Malipo (siku)</label><input type="number" class="form-control" id="s-dy" placeholder="30"/></div><button class="btn btn-primary w-full mt-2" onclick="saveSup()"><i class="bi bi-check-lg"></i>Hifadhi</button></div></div></div>
 
 <div class="modal-overlay" id="m-recv"><div class="modal"><div class="modal-header"><h2 class="modal-title">💰 Pokea Malipo ya Mkopo</h2><button class="modal-close" onclick="closeM('m-recv')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body">
   <div id="recv-info" class="mb-3"></div>
@@ -1110,7 +1134,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
 /* ================================================================
    CONFIG
 ================================================================ */
-const BACKEND='https://script.google.com/macros/s/AKfycbzwycEzTUt7sl3bM71wMQ9qYCc2G5zedSi_FjFB5FxRVWafYgdGNRLbXwgB0rRR-0gt/exec';
+const BACKEND='https://script.google.com/macros/s/AKfycbyVgKlgdCZVSeUxEPylcmq97g22Us-2EQwJcrphvG0iTgqbTj6gA1lDZWp6vbRB2Do/exec';
 const PS=15;
 
 /* ================================================================
@@ -1179,6 +1203,86 @@ function bgSyncCustPayment(tid,payment){
 // Supplier payment sync
 function bgSyncSupPayment(tid,payment){
   api({action:'save_supplier_payment',data:{...payment,tenantId:tid}}).catch(()=>{});
+}
+
+/* ================================================================
+   EMAIL NOTIFICATIONS — Background, hazuii UI
+================================================================ */
+function getOwnerEmail(){
+  // Pata email ya mwenye biashara (tenant au user aliyeingia)
+  return (DB.biz&&DB.biz.bizEmail)||cT?.email||cU?.email||'';
+}
+
+// Low Stock — inaitwa baada ya kila uuzaji
+function checkLowStockEmail(soldItems){
+  if(!cT||!DB.biz?.alertLow)return;
+  const email=getOwnerEmail();
+  if(!email)return;
+  // Pata bidhaa ambazo zimefika au kupita minStock
+  const lowProds=DB.products.filter(p=>{
+    const inSale=soldItems.some(r=>r.pid===p.id);
+    return inSale&&n(p.stock)<=n(p.minStock);
+  });
+  if(!lowProds.length)return;
+  const items=lowProds.map(p=>({name:p.name,stock:n(p.stock),minStock:n(p.minStock),unit:p.unit||''}));
+  api({action:'send_low_stock',email,bizName:DB.biz?.bizName||cT.name,items}).catch(()=>{});
+}
+
+// Debt Reminder — inaitwa ukifungua app, mara moja kwa siku
+function checkDebtReminderEmail(){
+  if(!cT||!DB.biz?.alertDebt)return;
+  const email=getOwnerEmail();
+  if(!email)return;
+  const today=new Date();
+  const debtors=DB.customers.filter(c=>{
+    if(n(c.currentDebt)<=0)return false;
+    if(!c.lastSale)return false;
+    const last=new Date(c.lastSale);
+    const days=Math.floor((today-last)/(1000*60*60*24));
+    return days>=7;
+  }).map(c=>{
+    const last=new Date(c.lastSale);
+    const days=Math.floor((today-last)/(1000*60*60*24));
+    return{name:c.name,phone:c.phone||'',debt:n(c.currentDebt),daysSince:days,lastSale:c.lastSale||''};
+  });
+  if(!debtors.length)return;
+  api({action:'send_debt_reminder',email,bizName:DB.biz?.bizName||cT.name,debtors}).catch(()=>{});
+}
+
+// Daily Summary — inaitwa ukifungua app (mara moja kwa siku)
+function sendDailySummaryEmail(){
+  if(!cT)return;
+  const email=getOwnerEmail();
+  if(!email)return;
+  const today=td();
+  const lastKey='sp3-last-summary-'+cT.id;
+  if(localStorage.getItem(lastKey)===today)return; // Imeshafanywa leo
+  localStorage.setItem(lastKey,today);
+  const yesterday=new Date();yesterday.setDate(yesterday.getDate()-1);
+  const yStr=yesterday.toISOString().slice(0,10);
+  const ySales=DB.sales.filter(s=>s.date===yStr);
+  if(!ySales.length)return; // Hakuna mauzo jana — usitume
+  const salesTotal=ySales.reduce((s,x)=>s+n(x.total),0);
+  const cashTotal=ySales.filter(s=>s.creditType!=='credit').reduce((s,x)=>s+n(x.total),0);
+  const creditTotal=ySales.filter(s=>s.creditType==='credit').reduce((s,x)=>s+n(x.total),0);
+  const profitEst=ySales.reduce((s,x)=>{
+    const items=Array.isArray(x.items)?x.items:[];
+    return s+items.reduce((ss,it)=>{const p=DB.products.find(pr=>pr.id===it.pid);return ss+(p?(n(it.price)-n(p.bp))*n(it.qty):0);},0);
+  },0);
+  const newCustomers=DB.customers.filter(c=>c.created&&c.created.slice(0,10)===yStr).length;
+  const lowStockCount=DB.products.filter(p=>n(p.stock)<=n(p.minStock)).length;
+  api({action:'send_daily_summary',email,
+    bizName:DB.biz?.bizName||cT.name,date:yStr,
+    data:{salesCount:ySales.length,salesTotal,cashTotal,creditTotal,profitEst,newCustomers,lowStockCount}
+  }).catch(()=>{});
+}
+
+// Invoice Email — inatumwa ukichagua "Tuma kwa Email"
+function sendInvoiceEmail(sale){
+  const email=getOwnerEmail();
+  if(!email||!sale)return;
+  api({action:'send_invoice',email,bizName:DB.biz?.bizName||cT?.name||'',sale}).catch(()=>{});
+  toast('info','Invoice inatumwa kwa email...');
 }
 
 /* ================================================================
@@ -1461,13 +1565,13 @@ async function init(){
           setLoad(50,'Inapakia data kutoka Sheets...');
           await pullFromSheets(cT.id);
           setLoad(100,'Tayari!');
-          setTimeout(()=>{hideLoad();goPg('tenant');loadDash();startAutoSync();},200);
+          setTimeout(()=>{hideLoad();goPg('tenant');loadDash();startAutoSync();_i18n.apply();},200);
         }else{
           // Ana data local — onyesha haraka, sync background
           setLoad(50,'Inapakia data ya local...');
           loadFromLocal();
           setLoad(100,'Tayari!');
-          setTimeout(()=>{hideLoad();goPg('tenant');loadDash();startAutoSync();},200);
+          setTimeout(()=>{hideLoad();goPg('tenant');loadDash();startAutoSync();_i18n.apply();},200);
           // Background sync — sio haraka
           setTimeout(()=>pullFromSheets(cT.id).then(()=>{
             loadFromLocal();
@@ -1475,6 +1579,8 @@ async function init(){
             if(sec&&TSEC_LOADERS[sec.id])TSEC_LOADERS[sec.id]();
             loadDash();
           }),1000);
+          // Email notifications — background, baada ya data kupakia
+          setTimeout(()=>{sendDailySummaryEmail();checkDebtReminderEmail();},3000);
         }
         return;
       }else if(cU.role==='admin'){
@@ -1689,6 +1795,8 @@ async function doReg(){
   users.push(usr2);LS.setu('users',users);
   api({action:'save',store:'tenants',data:ten});
   api({action:'save',store:'users',data:usr2});
+  // Welcome email — background, haitablock UI
+  if(em){api({action:'send_welcome',email:em,fullname:nm,bizName:bz,username:ur}).catch(()=>{});}
   toast('success','Biashara imesajiliwa! Ingia sasa.');
   authTab('l');document.getElementById('lu').value=ur;
 }
@@ -1850,7 +1958,7 @@ function loadDash(){
   if(!cU||!cT)return;
   try{loadFromLocal();}catch(e){console.error('loadFromLocal:',e);return;}// Reload kutoka LS
   const h=new Date().getHours();
-  document.getElementById('t-greet').textContent=(h<12?'Habari za Asubuhi':h<17?'Habari za Mchana':'Habari za Jioni')+', '+cU.fullname.split(' ')[0]+'! 👋';
+  document.getElementById('t-greet').textContent=(h<12?t('greet.morning'):h<17?t('greet.afternoon'):t('greet.evening'))+', '+cU.fullname.split(' ')[0]+'! 👋';
   document.getElementById('t-date').textContent=new Date().toLocaleDateString('sw-TZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   document.getElementById('t-av').textContent=cU.fullname[0].toUpperCase();
   document.getElementById('t-unm').textContent=cU.fullname;
@@ -2045,6 +2153,8 @@ async function saveSale(printInv){
     valid.forEach(row=>{const p=DB.products.find(x=>x.id===row.pid);if(p)bgSync(cT.id,'products',p);});
     if(cu)bgSync(cT.id,'customers',cu);
     if(printInv)setTimeout(()=>showInv(sale),300);
+    // Email notifications — background
+    checkLowStockEmail(valid);
   }catch(e){toast('error','Hitilafu: '+e.message);}
   finally{_submitting=false;btns.forEach(b=>{b.disabled=false;});if(sb)sb.innerHTML='<i class="bi bi-check-circle"></i>Maliza';}
 }
@@ -2677,6 +2787,138 @@ async function loadTenAn(){
   document.getElementById('an-hd').innerHTML=topP.length?topP.map(([nm,qty],i)=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);"><span style="width:22px;height:22px;border-radius:50%;background:rgba(245,158,11,0.15);display:flex;align-items:center;justify-content:center;font-size:10.5px;font-weight:800;color:var(--accent);">${i+1}</span><div style="flex:1;font-size:13px;font-weight:600;">${nm}</div><span class="badge badge-warning">${qty} pcs</span></div>`).join(''):ES('Hakuna data');
   const bd=DB.customers.filter(c=>n(c.currentDebt)>0).sort((a,b)=>n(b.currentDebt)-n(a.currentDebt));
   document.getElementById('an-bd').innerHTML=bd.length?bd.slice(0,5).map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);"><i class="bi bi-exclamation-triangle-fill" style="color:var(--danger);font-size:14px;"></i><div style="flex:1;"><div style="font-size:13px;font-weight:600;">${c.name}</div><div style="font-size:10.5px;color:var(--text-3);">${c.phone||'—'}</div></div><span class="td-mono text-danger font-bold">TZS ${fmt(c.currentDebt)}</span></div>`).join(''):`<div style="text-align:center;padding:24px;"><i class="bi bi-check-circle-fill" style="font-size:32px;color:var(--brand-light);display:block;margin-bottom:8px;"></i><div style="font-size:13px;font-weight:700;color:var(--brand-light);">Hakuna Madeni!</div></div>`;
+  renderProdProfit();
+}
+
+/* ================================================================
+   PRODUCT PROFIT ANALYSIS
+================================================================ */
+function renderProdProfit(){
+  loadFromLocal();
+  const days=parseInt(gv('t-an-p')||'30'),cut=dAgo(days);
+  const sort=gv('pp-sort')||'profit';
+  const sF=filterByBranch(DB.sales).filter(s=>s.date>=cut);
+
+  // Accumulate profit per product
+  const pMap={};
+  sF.forEach(sale=>{
+    (sale.items||[]).forEach(it=>{
+      const prod=DB.products.find(p=>p.id===it.pid);
+      const bp=prod?n(prod.bp):0;
+      const price=n(it.price),qty=n(it.qty);
+      const revenue=price*qty,cost=bp*qty;
+      if(!pMap[it.pid]) pMap[it.pid]={name:it.pname||'—',units:0,revenue:0,cost:0,profit:0};
+      pMap[it.pid].units+=qty;
+      pMap[it.pid].revenue+=revenue;
+      pMap[it.pid].cost+=cost;
+      pMap[it.pid].profit+=revenue-cost;
+    });
+  });
+
+  let rows=Object.entries(pMap).map(([pid,d])=>({pid,...d,margin:d.revenue>0?(d.profit/d.revenue*100):0}));
+  rows.sort((a,b)=>b[sort]-a[sort]);
+
+  const el=document.getElementById('pp-list');
+  if(!el)return;
+  if(!rows.length){el.innerHTML=ES('Hakuna data ya mauzo katika kipindi hiki');return;}
+
+  const maxVal=Math.max(1,...rows.map(r=>Math.abs(r[sort])));
+  el.innerHTML=rows.map((r,i)=>{
+    const barW=Math.max(3,Math.round((Math.abs(r[sort])/maxVal)*100));
+    const profColor=r.profit>=0?'var(--brand-light)':'var(--danger)';
+    const barColor=r.profit>=0?'var(--brand)':'var(--danger)';
+    const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'';
+    return `<div class="pp-row" onclick="showProdProfitModal('${r.pid}')" style="cursor:pointer;padding:10px 4px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+      <span style="min-width:26px;height:26px;border-radius:50%;background:${i<3?'linear-gradient(135deg,var(--brand-dark),var(--brand-light))':'var(--bg-3)'};display:flex;align-items:center;justify-content:center;font-size:${i<3?'13':'11'}px;font-weight:800;color:${i<3?'#fff':'var(--text-2)'};">${medal||i+1}</span>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13.5px;font-weight:700;margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.name}</div>
+        <div style="height:5px;background:var(--bg-3);border-radius:99px;overflow:hidden;">
+          <div style="width:${barW}%;height:100%;background:${barColor};border-radius:99px;"></div>
+        </div>
+      </div>
+      <div style="text-align:right;min-width:120px;">
+        <div style="font-size:13px;font-weight:800;font-family:var(--mono);color:${profColor};">TZS ${fmt(r.profit)}</div>
+        <div style="font-size:10.5px;color:var(--text-3);">${r.units} units · ${r.margin.toFixed(1)}%</div>
+      </div>
+      <i class="bi bi-chevron-right" style="color:var(--text-3);font-size:11px;flex-shrink:0;"></i>
+    </div>`;
+  }).join('');
+}
+
+function showProdProfitModal(pid){
+  loadFromLocal();
+  const prod=DB.products.find(p=>p.id===pid);
+  const allSales=filterByBranch(DB.sales);
+
+  // Collect all sale items for this product (all time — no date filter)
+  const items=[];
+  allSales.forEach(sale=>{
+    (sale.items||[]).forEach(it=>{
+      if(it.pid===pid) items.push({...it,date:sale.date});
+    });
+  });
+
+  const name=prod?.name||(items[0]?.pname)||'—';
+  document.getElementById('pp-title').textContent=name+' — '+t('pp.analysis');
+
+  // Overall totals
+  const bp=prod?n(prod.bp):0;
+  const totUnits=items.reduce((s,it)=>s+n(it.qty),0);
+  const totRevenue=items.reduce((s,it)=>s+n(it.price)*n(it.qty),0);
+  const totCost=items.reduce((s,it)=>s+bp*n(it.qty),0);
+  const totProfit=totRevenue-totCost;
+  const margin=totRevenue>0?(totProfit/totRevenue*100):0;
+
+  document.getElementById('pp-stats').innerHTML=
+    SC(t('pp.total_profit'),'TZS '+fmt(totProfit),margin.toFixed(1)+'% margin',totProfit>=0?'brand':'danger')+
+    SC(t('pp.total_revenue'),'TZS '+fmt(totRevenue),totUnits+' '+t('pp.units_sold'),'info')+
+    SC(t('pp.buy_price_now'),'TZS '+fmt(bp),t('pp.current_bp'),'amber');
+
+  // Monthly breakdown — last 12 months with data
+  const mMap={};
+  items.forEach(it=>{
+    const m=(it.date||'').slice(0,7);if(!m)return;
+    if(!mMap[m]) mMap[m]={units:0,revenue:0,cost:0,profit:0};
+    const rev=n(it.price)*n(it.qty),cst=bp*n(it.qty);
+    mMap[m].units+=n(it.qty);mMap[m].revenue+=rev;mMap[m].cost+=cst;mMap[m].profit+=rev-cst;
+  });
+
+  const months=Object.keys(mMap).sort().slice(-12);
+  const bestM=months.length?months.reduce((best,m)=>mMap[m].profit>(mMap[best]?.profit||-Infinity)?m:best,months[0]):null;
+
+  // Chart
+  const dk=isDk(),gc=dk?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.06)',tc=dk?'#4d6b5c':'#9ab5a4';
+  dCh('ch-pp');
+  if(months.length){
+    _ch['ch-pp']=new Chart(document.getElementById('ch-pp'),{
+      type:'bar',
+      data:{
+        labels:months,
+        datasets:[
+          {label:t('pp.profit'),data:months.map(m=>mMap[m].profit),backgroundColor:months.map(m=>mMap[m].profit>=0?'rgba(22,163,74,0.75)':'rgba(239,68,68,0.75)'),borderRadius:5,order:1},
+          {label:t('pp.revenue'),data:months.map(m=>mMap[m].revenue),backgroundColor:'rgba(59,130,246,0.35)',borderRadius:5,order:2}
+        ]
+      },
+      options:{...cOpt(dk,gc,tc),plugins:{legend:{position:'bottom',labels:{color:tc,font:{family:'DM Mono',size:10},boxWidth:10}}}}
+    });
+  }
+
+  // Table
+  document.getElementById('pp-tb').innerHTML=months.length?months.slice().reverse().map(m=>{
+    const d=mMap[m];
+    const mg=d.revenue>0?(d.profit/d.revenue*100).toFixed(1):'0.0';
+    const isBest=m===bestM;
+    return `<tr${isBest?' style="background:var(--success-soft);"':''}>
+      <td style="font-family:var(--mono);">${m}${isBest?' <span class="badge badge-success">Best</span>':''}</td>
+      <td class="td-mono">${d.units}</td>
+      <td class="td-mono" style="color:var(--info);">TZS ${fmt(d.revenue)}</td>
+      <td class="td-mono" style="color:var(--warning);">TZS ${fmt(d.cost)}</td>
+      <td class="td-mono font-bold" style="color:${d.profit>=0?'var(--brand-light)':'var(--danger)'};">TZS ${fmt(d.profit)}</td>
+      <td class="td-mono">${mg}%</td>
+    </tr>`;
+  }).join(''):'<tr><td colspan="6" style="text-align:center;padding:16px;color:var(--text-3);">Hakuna data</td></tr>';
+
+  openM('m-pp');
 }
 
 /* ================================================================
@@ -3534,6 +3776,372 @@ window.addEventListener('DOMContentLoaded',()=>{
   // startAutoSync inaitwa ndani ya init() na doLogin()
   init();
 });
+
+/* ================================================================
+   i18n — LUGHA (Kiswahili ↔ English)
+   Matumizi:
+     HTML:  data-t="key"         → textContent
+            data-tp="key"        → placeholder
+            data-ti="key"        → title attribute
+     JS:    t('key')             → returns translated string
+   Badilisha lugha: setLang('en') au setLang('sw')
+================================================================ */
+const _i18n = {
+  lang: localStorage.getItem('sp3-lang') || 'sw',
+
+  sw: {
+    // Navigation
+    'nav.home':'Nyumbani','nav.sales':'Mauzo','nav.products':'Bidhaa','nav.analytics':'Analytics',
+    'nav.more':'Zaidi','nav.purchases':'Manunuzi','nav.stock':'Stoki','nav.customers':'Wateja',
+    'nav.suppliers':'Wasambazaji','nav.reports':'Ripoti','nav.branches':'Matawi',
+    'nav.biz':'Biashara Yangu','nav.logout':'Toka','nav.settings':'Mipangilio','nav.users':'Watumiaji',
+    'nav.tenants':'Tenants','nav.auditlogs':'Audit Logs',
+    // Section titles
+    'sec.dashboard':'Dashboard','sec.products':'Bidhaa','sec.stock':'Usimamizi wa Stoki',
+    'sec.sales':'Mauzo','sec.purchases':'Manunuzi','sec.customers':'Wateja',
+    'sec.suppliers':'Wasambazaji','sec.analytics':'Analytics ya Biashara',
+    'sec.reports':'Ripoti za Kina','sec.branches':'Matawi ya Biashara','sec.biz':'Biashara Yangu',
+    'sec.admin_dash':'Habari za Mfumo','sec.admin_analytics':'Analytics ya Mfumo',
+    'sec.admin_settings':'Mipangilio ya Mfumo','sec.admin_tenants':'Wamiliki wa Biashara',
+    'sec.admin_users':'Watumiaji Wote',
+    // Buttons
+    'btn.login':'Ingia','btn.register':'Anza Bure','btn.logout':'Toka',
+    'btn.save':'Hifadhi','btn.cancel':'Funga','btn.new':'Mpya','btn.edit':'Hariri',
+    'btn.delete':'Futa','btn.search':'Tafuta','btn.print':'Chapisha','btn.refresh':'Refresh',
+    'btn.all':'Zote','btn.cash':'Taslimu','btn.credit':'Mkopo','btn.close':'Funga',
+    'btn.add':'Ongeza','btn.adjust':'Rekebisha','btn.back':'Rudi','btn.generate':'Tengeneza',
+    'btn.view':'Angalia','btn.demo':'Jaribu Demo','btn.start_free':'Anza Sasa — Bure',
+    'btn.new_branch':'Tawi Jipya','btn.new_sale':'Mauzo Mapya','btn.pay_debt':'Lipa Deni',
+    'btn.email':'Tuma Email','btn.whatsapp':'WhatsApp',
+    // Table headers
+    'tbl.product':'Bidhaa','tbl.category':'Kat.','tbl.buy_price':'Kununua','tbl.sell_price':'Kuuza',
+    'tbl.stock':'Stoki','tbl.margin':'Margin','tbl.status':'Hali','tbl.actions':'Vitendo',
+    'tbl.min':'Min','tbl.stock_in':'Stock In','tbl.stock_out':'Stock Out',
+    'tbl.value':'Thamani','tbl.exp_profit':'Faida Inayotarajiwa',
+    'tbl.ref':'Ref','tbl.date':'Tarehe','tbl.customer':'Mteja','tbl.items':'Bidhaa',
+    'tbl.total':'Jumla','tbl.payment':'Malipo','tbl.type':'Aina',
+    'tbl.supplier':'Msambazaji','tbl.no':'#','tbl.name':'Jina','tbl.phone':'Simu',
+    'tbl.group':'Kundi','tbl.debt':'Deni','tbl.last':'Mwisho','tbl.purchases':'Manunuzi',
+    'tbl.time':'Wakati','tbl.user':'Mtumiaji','tbl.business':'Biashara','tbl.activity':'Shughuli',
+    // Form labels
+    'lbl.username':'Jina la Mtumiaji','lbl.password':'Nywila','lbl.fullname':'Jina Kamili',
+    'lbl.phone':'Simu','lbl.email':'Barua Pepe','lbl.address':'Anuani',
+    'lbl.biz_name':'Jina la Biashara','lbl.biz_type':'Aina ya Biashara',
+    'lbl.forgot_pw':'Umesahau nywila?','lbl.search':'Tafuta...',
+    // Auth tabs
+    'auth.login':'Ingia','auth.register':'Sajili',
+    // Landing page
+    'landing.login':'Ingia','landing.start':'Anza Bure',
+    'landing.tagline':'Sheets-First · Auto-Sync · Invoice · Analytics',
+    'landing.hero':'Simamia Biashara Yako',
+    'landing.hero2':'Kwa Urahisi Kamili',
+    'landing.desc':'Mfumo wa kisasa wa biashara — data yako kwenye Google Sheets yako moja kwa moja. Profiles za wateja, analytics za kina, invoices, madeni, na mengi zaidi.',
+    'landing.features':'Vipengele Vyote Unavyohitaji',
+    'landing.footer':'© 2026 StokiPro v3 — Imetengenezwa kwa ❤️ kwa biashara za Afrika Mashariki',
+    'landing.f1_title':'Analytics za Kina','landing.f1_desc':'Top buyers, bidhaa zinazoendea, madeni — yote kwa mchoro.',
+    'landing.f2_title':'Invoice ya Mteja','landing.f2_desc':'Chapisha risiti na invoice za kitaalamu kwa kila mauzo.',
+    'landing.f3_title':'Profiles za Wateja','landing.f3_desc':'Historia kamili — bidhaa, mauzo, madeni, malipo.',
+    'landing.f4_title':'Auto-Sync','landing.f4_desc':'Kila mabadiliko yanakwenda Google Sheets moja kwa moja.',
+    'landing.f5_title':'Mobile Friendly','landing.f5_desc':'FAB button na bottom tabs kwa matumizi rahisi kwenye simu.',
+    'landing.f6_title':'Arifa za Email','landing.f6_desc':'Stoki inayokwisha, madeni, na ripoti ya kila siku kwa email.',
+    // Dashboard
+    'dash.greeting':'Habari!','dash.recent_sales':'Mauzo ya Hivi Karibuni','dash.low_stock':'Stoki Inayokwisha',
+    'dash.see_all':'Yote →','dash.see_stock':'Stoki →',
+    // Common
+    'common.online':'Online','common.offline':'Nje ya Mtandao','common.all_branches':'Matawi Yote',
+    'common.categories':'Kategoria Zote','common.search':'Tafuta...',
+    // Dashboard cards & charts
+    'dash.sales_chart':'Mauzo — Siku za Hivi Karibuni','dash.top_products':'Top Bidhaa (Idadi)',
+    'dash.7days':'7 Siku','dash.30days':'30 Siku',
+    'dash.total_sales':'Mauzo Jumla','dash.total_profit':'Faida Jumla',
+    'dash.total_stock_val':'Thamani ya Stoki','dash.total_debt':'Madeni Yote',
+    // Section headers
+    'sec.stock_mgmt':'Usimamizi wa Stoki','sec.cust_profile':'Wasifu wa Mteja',
+    'sec.sup_profile':'Wasifu wa Msambazaji','sec.vat':'VAT / Kodi',
+    // Section action buttons
+    'btn.new_product':'Mpya','btn.new_sale_btn':'Mpya','btn.new_purchase':'Mpya',
+    'btn.new_customer':'Mpya','btn.new_supplier':'Mpya',
+    'btn.adjust_stock':'Rekebisha',
+    // Reports
+    'rp.daily_sales':'Mauzo kwa Siku','rp.transactions':'Miamala',
+    'rp.cash':'Taslimu','rp.credit':'Mkopo','rp.total':'Jumla (TZS)',
+    'rp.generate':'Tengeneza','rp.print':'Chapisha',
+    // Analytics cards
+    'an.top_buyers':'🏆 Top Buyers','an.high_demand':'🔥 High Demand','an.bad_debts':'⚠️ Bad Debts',
+    'an.sales_vs_purch':'Mauzo vs Manunuzi','an.profit_per_day':'Faida kwa Siku',
+    'an.week1':'Wiki 1','an.month1':'Mwezi 1','an.months3':'Miezi 3',
+    'an.prod_profit':'Faida za Bidhaa',
+    // Product profit modal
+    'pp.sort_profit':'Faida','pp.sort_rev':'Mapato','pp.sort_qty':'Idadi Iliyouzwa',
+    'pp.modal_title':'Uchambuzi wa Bidhaa','pp.analysis':'Uchambuzi',
+    'pp.monthly_chart':'Faida kwa Mwezi (Miezi 12)',
+    'pp.th_qty':'Idadi','pp.th_rev':'Mapato','pp.th_cost':'Gharama','pp.th_profit':'Faida',
+    'pp.total_profit':'Faida Jumla','pp.total_revenue':'Mapato Jumla',
+    'pp.buy_price_now':'Bei ya Kununua','pp.current_bp':'Bei ya Sasa',
+    'pp.units_sold':'pcs zilizouzwa','pp.profit':'Faida','pp.revenue':'Mapato',
+    'tbl.month':'Mwezi',
+    // Biz settings
+    'biz.title':'Biashara Yangu','biz.payment_methods':'💳 Njia za Malipo',
+    'biz.vat_status':'🧾 Hali ya VAT','biz.email_alerts':'🔔 Arifa za Email',
+    'biz.vat_full_report':'Ripoti Kamili','biz.edit':'Hariri Taarifa',
+    'biz.output_vat':'📤 Output VAT (Mauzo)','biz.input_vat':'📥 Input VAT (Manunuzi)',
+    // Admin dashboard
+    'adm.recent_tenants':'Tenants wa Hivi Karibuni','adm.system_summary':'Muhtasari wa Mfumo',
+    'adm.see_all':'Wote →','adm.add':'Ongeza',
+    // Form labels — Products
+    'prod.name':'Jina la Bidhaa *','prod.cat':'Kategoria','prod.unit':'Kitengo',
+    'prod.buy_price':'Bei ya Kununua','prod.sell_price':'Bei ya Kuuza',
+    'prod.stock':'Stoki ya Awali','prod.min_stock':'Kiwango cha Chini',
+    'prod.desc':'Maelezo','prod.barcode':'Barcode',
+    // Form labels — Sale
+    'sale.customer':'Mteja','sale.ref':'Nambari ya Invoice','sale.date':'Tarehe',
+    'sale.discount':'Punguzo (TZS)','sale.paid':'Kilicholipwa','sale.change':'Chenji',
+    'sale.payment':'Aina ya Malipo','sale.add_item':'Ongeza Bidhaa',
+    'sale.subtotal':'Jumla Ndogo','sale.total':'Jumla Kuu',
+    // Form labels — Purchase
+    'purch.supplier':'Msambazaji','purch.date':'Tarehe','purch.payment':'Aina ya Malipo',
+    'purch.paid':'Kilicholipwa','purch.add_item':'Ongeza Bidhaa',
+    // Form labels — Customer
+    'cust.name':'Jina Kamili *','cust.phone':'Simu','cust.email':'Barua Pepe',
+    'cust.address':'Anuani','cust.group':'Kundi','cust.credit_limit':'Kikomo cha Mkopo (TZS)',
+    'cust.notes':'Maelezo',
+    // Form labels — Supplier
+    'sup.name':'Jina / Biashara *','sup.phone':'Simu','sup.email':'Barua Pepe',
+    'sup.products':'Bidhaa Anazosambaza','sup.pay_days':'Muda wa Malipo (siku)',
+    // Stock adjustment
+    'adj.product':'Bidhaa','adj.type':'Aina ya Rekebisha',
+    'adj.add':'Ongeza Stoki','adj.remove':'Punguza Stoki','adj.set':'Weka Idadi',
+    'adj.qty':'Idadi','adj.reason':'Sababu',
+    // Greetings
+    'greet.morning':'Habari za Asubuhi','greet.afternoon':'Habari za Mchana',
+    'greet.evening':'Habari za Jioni',
+    // Modal titles
+    'modal.new_product':'Bidhaa Mpya','modal.edit_product':'Hariri Bidhaa',
+    'modal.new_sale':'Mauzo Mapya','modal.new_purchase':'Ununuzi Mpya',
+    'modal.new_customer':'Mteja Mpya','modal.edit_customer':'Hariri Mteja',
+    'modal.new_supplier':'Msambazaji Mpya','modal.edit_supplier':'Hariri Msambazaji',
+    'modal.new_branch':'Tawi Jipya','modal.edit_branch':'Hariri Tawi',
+    'modal.adj_stock':'Rekebisha Stoki','modal.invoice':'Invoice / Risiti',
+    'modal.recv_payment':'Pokea Malipo',
+    // Payment methods
+    'pay.cash':'Taslimu','pay.mpesa':'M-Pesa','pay.bank':'Benki','pay.credit':'Mkopo',
+    // Status
+    'status.active':'Amilifu','status.suspended':'Imesimamishwa',
+    'status.paid':'Imelipwa','status.pending':'Inasubiri',
+    'status.in_stock':'Ipo','status.low':'Inakwisha','status.out':'Imeisha',
+    // Branches
+    'br.name':'Jina la Tawi *','br.phone':'Simu','br.address':'Anuani',
+    'br.type':'Aina','br.hq':'Makao Makuu',
+    // Register form
+    'reg.account_info':'👤 Taarifa za Akaunti','reg.biz_info':'🏢 Taarifa za Biashara',
+    'reg.optional':'(hiari — unaweza kuongeza baadaye)',
+    'reg.biz_name':'Jina la Biashara *','reg.fullname':'Jina Kamili *',
+    'reg.phone':'Simu','reg.username':'Username *','reg.password':'Nywila *',
+    'reg.email':'Barua Pepe','reg.biz_address':'Anuani ya Biashara',
+    'reg.biz_type':'Aina ya Biashara','reg.tin':'Nambari ya TIN',
+    'reg.currency':'Sarafu','reg.submit':'Sajili Biashara','reg.back':'Nyumbani',
+  },
+
+  en: {
+    // Navigation
+    'nav.home':'Home','nav.sales':'Sales','nav.products':'Products','nav.analytics':'Analytics',
+    'nav.more':'More','nav.purchases':'Purchases','nav.stock':'Stock','nav.customers':'Customers',
+    'nav.suppliers':'Suppliers','nav.reports':'Reports','nav.branches':'Branches',
+    'nav.biz':'My Business','nav.logout':'Logout','nav.settings':'Settings','nav.users':'Users',
+    'nav.tenants':'Tenants','nav.auditlogs':'Audit Logs',
+    // Section titles
+    'sec.dashboard':'Dashboard','sec.products':'Products','sec.stock':'Stock Management',
+    'sec.sales':'Sales','sec.purchases':'Purchases','sec.customers':'Customers',
+    'sec.suppliers':'Suppliers','sec.analytics':'Business Analytics',
+    'sec.reports':'Detailed Reports','sec.branches':'Business Branches','sec.biz':'My Business',
+    'sec.admin_dash':'System Overview','sec.admin_analytics':'System Analytics',
+    'sec.admin_settings':'System Settings','sec.admin_tenants':'Business Owners',
+    'sec.admin_users':'All Users',
+    // Buttons
+    'btn.login':'Login','btn.register':'Get Started Free','btn.logout':'Logout',
+    'btn.save':'Save','btn.cancel':'Cancel','btn.new':'New','btn.edit':'Edit',
+    'btn.delete':'Delete','btn.search':'Search','btn.print':'Print','btn.refresh':'Refresh',
+    'btn.all':'All','btn.cash':'Cash','btn.credit':'Credit','btn.close':'Close',
+    'btn.add':'Add','btn.adjust':'Adjust','btn.back':'Back','btn.generate':'Generate',
+    'btn.view':'View','btn.demo':'Try Demo','btn.start_free':'Start Now — Free',
+    'btn.new_branch':'New Branch','btn.new_sale':'New Sale','btn.pay_debt':'Pay Debt',
+    'btn.email':'Send Email','btn.whatsapp':'WhatsApp',
+    // Table headers
+    'tbl.product':'Product','tbl.category':'Cat.','tbl.buy_price':'Buy Price','tbl.sell_price':'Sell Price',
+    'tbl.stock':'Stock','tbl.margin':'Margin','tbl.status':'Status','tbl.actions':'Actions',
+    'tbl.min':'Min','tbl.stock_in':'Stock In','tbl.stock_out':'Stock Out',
+    'tbl.value':'Value','tbl.exp_profit':'Expected Profit',
+    'tbl.ref':'Ref','tbl.date':'Date','tbl.customer':'Customer','tbl.items':'Items',
+    'tbl.total':'Total','tbl.payment':'Payment','tbl.type':'Type',
+    'tbl.supplier':'Supplier','tbl.no':'#','tbl.name':'Name','tbl.phone':'Phone',
+    'tbl.group':'Group','tbl.debt':'Debt','tbl.last':'Last','tbl.purchases':'Purchases',
+    'tbl.time':'Time','tbl.user':'User','tbl.business':'Business','tbl.activity':'Activity',
+    // Form labels
+    'lbl.username':'Username','lbl.password':'Password','lbl.fullname':'Full Name',
+    'lbl.phone':'Phone','lbl.email':'Email','lbl.address':'Address',
+    'lbl.biz_name':'Business Name','lbl.biz_type':'Business Type',
+    'lbl.forgot_pw':'Forgot password?','lbl.search':'Search...',
+    // Auth tabs
+    'auth.login':'Login','auth.register':'Register',
+    // Landing page
+    'landing.login':'Login','landing.start':'Get Started Free',
+    'landing.tagline':'Sheets-First · Auto-Sync · Invoice · Analytics',
+    'landing.hero':'Manage Your Business',
+    'landing.hero2':'With Complete Ease',
+    'landing.desc':'A modern business management system — your data goes directly to your Google Sheets. Customer profiles, deep analytics, invoices, debts, and much more.',
+    'landing.features':'Everything You Need',
+    'landing.footer':'© 2026 StokiPro v3 — Built with ❤️ for East African businesses',
+    'landing.f1_title':'Deep Analytics','landing.f1_desc':'Top buyers, fast-moving products, debts — all in charts.',
+    'landing.f2_title':'Customer Invoice','landing.f2_desc':'Print professional receipts and invoices for every sale.',
+    'landing.f3_title':'Customer Profiles','landing.f3_desc':'Full history — products, sales, debts, payments.',
+    'landing.f4_title':'Auto-Sync','landing.f4_desc':'Every change goes to Google Sheets instantly.',
+    'landing.f5_title':'Mobile Friendly','landing.f5_desc':'FAB button and bottom tabs for easy use on phone.',
+    'landing.f6_title':'Email Alerts','landing.f6_desc':'Low stock, debts, and daily reports via email.',
+    // Dashboard
+    'dash.greeting':'Hello!','dash.recent_sales':'Recent Sales','dash.low_stock':'Low Stock',
+    'dash.see_all':'All →','dash.see_stock':'Stock →',
+    // Common
+    'common.online':'Online','common.offline':'Offline','common.all_branches':'All Branches',
+    'common.categories':'All Categories','common.search':'Search...',
+    // Dashboard cards & charts
+    'dash.sales_chart':'Sales — Recent Days','dash.top_products':'Top Products (Qty)',
+    'dash.7days':'7 Days','dash.30days':'30 Days',
+    'dash.total_sales':'Total Sales','dash.total_profit':'Total Profit',
+    'dash.total_stock_val':'Stock Value','dash.total_debt':'Total Debts',
+    // Section headers
+    'sec.stock_mgmt':'Stock Management','sec.cust_profile':'Customer Profile',
+    'sec.sup_profile':'Supplier Profile','sec.vat':'VAT / Tax',
+    // Section action buttons
+    'btn.new_product':'New','btn.new_sale_btn':'New','btn.new_purchase':'New',
+    'btn.new_customer':'New','btn.new_supplier':'New',
+    'btn.adjust_stock':'Adjust',
+    // Reports
+    'rp.daily_sales':'Daily Sales','rp.transactions':'Transactions',
+    'rp.cash':'Cash','rp.credit':'Credit','rp.total':'Total (TZS)',
+    'rp.generate':'Generate','rp.print':'Print',
+    // Analytics cards
+    'an.top_buyers':'🏆 Top Buyers','an.high_demand':'🔥 High Demand','an.bad_debts':'⚠️ Bad Debts',
+    'an.sales_vs_purch':'Sales vs Purchases','an.profit_per_day':'Profit per Day',
+    'an.week1':'Week 1','an.month1':'Month 1','an.months3':'3 Months',
+    'an.prod_profit':'Product Profit Ranking',
+    // Product profit modal
+    'pp.sort_profit':'Profit','pp.sort_rev':'Revenue','pp.sort_qty':'Units Sold',
+    'pp.modal_title':'Product Analysis','pp.analysis':'Analysis',
+    'pp.monthly_chart':'Monthly Profit (Last 12 Months)',
+    'pp.th_qty':'Qty','pp.th_rev':'Revenue','pp.th_cost':'Cost','pp.th_profit':'Profit',
+    'pp.total_profit':'Total Profit','pp.total_revenue':'Total Revenue',
+    'pp.buy_price_now':'Buy Price','pp.current_bp':'Current BP',
+    'pp.units_sold':'units sold','pp.profit':'Profit','pp.revenue':'Revenue',
+    'tbl.month':'Month',
+    // Biz settings
+    'biz.title':'My Business','biz.payment_methods':'💳 Payment Methods',
+    'biz.vat_status':'🧾 VAT Status','biz.email_alerts':'🔔 Email Alerts',
+    'biz.vat_full_report':'Full Report','biz.edit':'Edit Info',
+    'biz.output_vat':'📤 Output VAT (Sales)','biz.input_vat':'📥 Input VAT (Purchases)',
+    // Admin dashboard
+    'adm.recent_tenants':'Recent Tenants','adm.system_summary':'System Summary',
+    'adm.see_all':'All →','adm.add':'Add',
+    // Form labels — Products
+    'prod.name':'Product Name *','prod.cat':'Category','prod.unit':'Unit',
+    'prod.buy_price':'Buy Price','prod.sell_price':'Sell Price',
+    'prod.stock':'Opening Stock','prod.min_stock':'Minimum Stock',
+    'prod.desc':'Description','prod.barcode':'Barcode',
+    // Form labels — Sale
+    'sale.customer':'Customer','sale.ref':'Invoice Number','sale.date':'Date',
+    'sale.discount':'Discount (TZS)','sale.paid':'Amount Paid','sale.change':'Change',
+    'sale.payment':'Payment Type','sale.add_item':'Add Item',
+    'sale.subtotal':'Subtotal','sale.total':'Grand Total',
+    // Form labels — Purchase
+    'purch.supplier':'Supplier','purch.date':'Date','purch.payment':'Payment Type',
+    'purch.paid':'Amount Paid','purch.add_item':'Add Item',
+    // Form labels — Customer
+    'cust.name':'Full Name *','cust.phone':'Phone','cust.email':'Email',
+    'cust.address':'Address','cust.group':'Group','cust.credit_limit':'Credit Limit (TZS)',
+    'cust.notes':'Notes',
+    // Form labels — Supplier
+    'sup.name':'Name / Business *','sup.phone':'Phone','sup.email':'Email',
+    'sup.products':'Products Supplied','sup.pay_days':'Payment Period (days)',
+    // Stock adjustment
+    'adj.product':'Product','adj.type':'Adjustment Type',
+    'adj.add':'Add Stock','adj.remove':'Remove Stock','adj.set':'Set Quantity',
+    'adj.qty':'Quantity','adj.reason':'Reason',
+    // Greetings
+    'greet.morning':'Good Morning','greet.afternoon':'Good Afternoon',
+    'greet.evening':'Good Evening',
+    // Modal titles
+    'modal.new_product':'New Product','modal.edit_product':'Edit Product',
+    'modal.new_sale':'New Sale','modal.new_purchase':'New Purchase',
+    'modal.new_customer':'New Customer','modal.edit_customer':'Edit Customer',
+    'modal.new_supplier':'New Supplier','modal.edit_supplier':'Edit Supplier',
+    'modal.new_branch':'New Branch','modal.edit_branch':'Edit Branch',
+    'modal.adj_stock':'Adjust Stock','modal.invoice':'Invoice / Receipt',
+    'modal.recv_payment':'Receive Payment',
+    // Payment methods
+    'pay.cash':'Cash','pay.mpesa':'M-Pesa','pay.bank':'Bank','pay.credit':'Credit',
+    // Status
+    'status.active':'Active','status.suspended':'Suspended',
+    'status.paid':'Paid','status.pending':'Pending',
+    'status.in_stock':'In Stock','status.low':'Low Stock','status.out':'Out of Stock',
+    // Branches
+    'br.name':'Branch Name *','br.phone':'Phone','br.address':'Address',
+    'br.type':'Type','br.hq':'Headquarters',
+    // Register form
+    'reg.account_info':'👤 Account Information','reg.biz_info':'🏢 Business Information',
+    'reg.optional':'(optional — you can add later)',
+    'reg.biz_name':'Business Name *','reg.fullname':'Full Name *',
+    'reg.phone':'Phone','reg.username':'Username *','reg.password':'Password *',
+    'reg.email':'Email','reg.biz_address':'Business Address',
+    'reg.biz_type':'Business Type','reg.tin':'TIN Number',
+    'reg.currency':'Currency','reg.submit':'Register Business','reg.back':'Home',
+  },
+
+  t(key) {
+    return this[this.lang]?.[key] || this['sw'][key] || key;
+  },
+
+  apply() {
+    document.querySelectorAll('[data-t]').forEach(el => {
+      el.textContent = this.t(el.dataset.t);
+    });
+    document.querySelectorAll('[data-tp]').forEach(el => {
+      el.placeholder = this.t(el.dataset.tp);
+    });
+    document.querySelectorAll('[data-ti]').forEach(el => {
+      el.title = this.t(el.dataset.ti);
+    });
+    // Update lang toggle buttons
+    document.querySelectorAll('.lang-toggle').forEach(btn => {
+      btn.innerHTML = this.lang === 'sw'
+        ? '<span style="font-size:13px;">🇬🇧</span> EN'
+        : '<span style="font-size:13px;">🇹🇿</span> SW';
+      btn.title = this.lang === 'sw' ? 'Switch to English' : 'Badilisha kwa Kiswahili';
+    });
+    // Re-render dynamic sections kama zimefunguliwa
+    try {
+      if(typeof loadDash==='function' && document.getElementById('t-db')?.classList.contains('active')) loadDash();
+      if(typeof renderProds==='function' && document.getElementById('t-pr')?.classList.contains('active')) renderProds();
+      if(typeof renderStock==='function' && document.getElementById('t-st')?.classList.contains('active')) renderStock();
+      if(typeof renderSales==='function' && document.getElementById('t-sa')?.classList.contains('active')) renderSales();
+      if(typeof renderPurchs==='function' && document.getElementById('t-pu')?.classList.contains('active')) renderPurchs();
+      if(typeof renderCusts==='function' && document.getElementById('t-cu')?.classList.contains('active')) renderCusts();
+      if(typeof renderSups==='function' && document.getElementById('t-su')?.classList.contains('active')) renderSups();
+    } catch(e) {}
+  },
+
+  set(lang) {
+    this.lang = lang;
+    localStorage.setItem('sp3-lang', lang);
+    this.apply();
+  }
+};
+
+// Shortcut global
+function t(key) { return _i18n.t(key); }
+function setLang(lang) { _i18n.set(lang); }
+function toggleLang() { _i18n.set(_i18n.lang === 'sw' ? 'en' : 'sw'); }
+
+// Apply mara tu ukurasa unapakia
+document.addEventListener('DOMContentLoaded', () => { _i18n.apply(); });
 
 </script>
 </body>
