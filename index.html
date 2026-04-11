@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="sw" data-theme="dark">
 <head>
 <meta charset="UTF-8"/>
@@ -10,6 +10,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <style>
 :root {
   --brand:#16a34a;--brand-light:#22c55e;--brand-dark:#15803d;--brand-glow:rgba(22,163,74,0.18);
@@ -452,6 +454,29 @@ textarea.form-control{resize:vertical;min-height:80px;}
 .branch-active{border:2px solid var(--brand)!important;background:var(--brand-glow)!important}
 #branch-sel-wrap select{border-color:var(--border-2);background:var(--bg-3);color:var(--text-1)}
 #branch-sel-wrap select:focus{outline:none;border-color:var(--brand)}
+
+/* ── QR FEATURES ─────────────────────────────────── */
+.prod-mode-toggle{display:flex;background:var(--bg-3);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);padding:3px;gap:3px;margin-bottom:14px;}
+.prod-mode-btn{flex:1;padding:7px 10px;border:none;border-radius:calc(var(--radius-sm) - 2px);background:transparent;color:var(--text-2);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;font-family:var(--font);display:flex;align-items:center;justify-content:center;gap:6px;}
+.prod-mode-btn.active{background:var(--brand);color:#fff;}
+.qr-preview-box{background:var(--bg-3);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);padding:14px;text-align:center;min-height:90px;display:flex;align-items:center;justify-content:center;}
+.qr-preview-box canvas,.qr-preview-box img{display:block;margin:0 auto;}
+.qr-scan-btn{width:100%;padding:13px;border:2px dashed var(--brand);border-radius:var(--radius-sm);background:var(--brand-glow);color:var(--brand-light);font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:all 0.15s;font-family:var(--font);}
+.qr-scan-btn:hover{background:var(--brand);color:#fff;border-style:solid;}
+.qr-scan-btn i{font-size:20px;}
+#qr-scanner-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.94);z-index:1200;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.scanner-wrap{width:min(340px,90vw);position:relative;}
+.scanner-wrap #qr-reader{border-radius:12px;overflow:hidden;}
+.sc{position:absolute;width:26px;height:26px;border-color:var(--brand-light);border-style:solid;}
+.sc.tl{top:8px;left:8px;border-width:3px 0 0 3px;border-radius:4px 0 0 0;}
+.sc.tr{top:8px;right:8px;border-width:3px 3px 0 0;border-radius:0 4px 0 0;}
+.sc.bl{bottom:8px;left:8px;border-width:0 0 3px 3px;border-radius:0 0 0 4px;}
+.sc.br{bottom:8px;right:8px;border-width:0 3px 3px 0;border-radius:0 0 4px 0;}
+.scan-line{position:absolute;left:8px;right:8px;height:2px;background:var(--brand-light);box-shadow:0 0 10px var(--brand),0 0 20px var(--brand);animation:scanline 2s linear infinite;z-index:11;}
+@keyframes scanline{0%{top:8px}100%{top:calc(100% - 8px)}}
+.scanner-status{color:#fff;font-size:14px;font-weight:600;text-align:center;padding:0 20px;}
+.scanner-status.ok{color:var(--brand-light);}
+.scanner-mode-badge{background:var(--brand-glow);border:1px solid var(--brand);color:var(--brand-light);font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px;}
 </style>
 </head>
 <body>
@@ -1133,7 +1158,24 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
 <div class="modal-overlay" id="m-nu"><div class="modal"><div class="modal-header"><h2 class="modal-title">Mtumiaji Mpya</h2><button class="modal-close" onclick="closeM('m-nu')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Jina Kamili *</label><input type="text" class="form-control" id="nu-n"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Username *</label><input type="text" class="form-control" id="nu-u"/></div><div class="form-group"><label class="form-label">Nywila *</label><input type="password" class="form-control" id="nu-pw"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Aina</label><select class="form-select" id="nu-rl"><option value="admin">Admin</option><option value="tenant">Tenant</option></select></div><div class="form-group"><label class="form-label">Biashara</label><select class="form-select" id="nu-ti"><option value="">—</option></select></div></div><button class="btn btn-primary w-full mt-2" onclick="addUser()"><i class="bi bi-check-lg"></i>Ongeza</button></div></div></div>
 
-<div class="modal-overlay" id="m-prod"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pm-t" data-t="modal.new_product">Bidhaa Mpya</h2><button class="modal-close" onclick="closeM('m-prod')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="p-eid"/><div class="input-row cols-2"><div><div class="form-group"><label class="form-label" data-t="prod.name">Jina la Bidhaa *</label><input type="text" class="form-control" id="p-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.cat">Kategoria</label><input type="text" class="form-control" id="p-ct" placeholder="Vyakula"/></div><div class="form-group"><label class="form-label" data-t="prod.unit">Kitengo</label><input type="text" class="form-control" id="p-un" placeholder="kg/pcs"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.buy_price">Bei Kununua</label><input type="number" class="form-control" id="p-bp" oninput="calcMg()"/></div><div class="form-group"><label class="form-label" data-t="prod.sell_price">Bei Kuuza</label><input type="number" class="form-control" id="p-sp" oninput="calcMg()"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.stock">Stoki ya Awali</label><input type="number" class="form-control" id="p-st" placeholder="0"/></div><div class="form-group"><label class="form-label" data-t="prod.min_stock">Kiwango cha Chini</label><input type="number" class="form-control" id="p-ms" placeholder="5"/></div></div></div><div><div class="form-group"><label class="form-label" data-t="prod.desc">Maelezo</label><textarea class="form-control" id="p-dc" rows="3"></textarea></div><div class="form-group"><label class="form-label" data-t="prod.barcode">Barcode</label><input type="text" class="form-control" id="p-bc"/></div><div id="p-mg" style="display:none;background:var(--bg-3);padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;margin-top:8px;"></div></div></div><div id="p-expiry-row" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:12px;">
+<div class="modal-overlay" id="m-prod"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pm-t" data-t="modal.new_product">Bidhaa Mpya</h2><button class="modal-close" onclick="closeM('m-prod')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="p-eid"/><div class="input-row cols-2"><div><div class="form-group"><label class="form-label" data-t="prod.name">Jina la Bidhaa *</label><input type="text" class="form-control" id="p-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.cat">Kategoria</label><input type="text" class="form-control" id="p-ct" placeholder="Vyakula" list="p-ct-list"/><datalist id="p-ct-list"></datalist></div><div class="form-group"><label class="form-label" data-t="prod.unit">Kitengo</label><select class="form-select" id="p-un"><option value="pcs">pcs</option><option value="kg">kg</option><option value="g">g</option><option value="litre">litre</option><option value="ml">ml</option><option value="mfuko">mfuko</option><option value="krati">krati</option><option value="sanduku">sanduku</option><option value="dosi">dosi</option><option value="mita">mita</option></select></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.buy_price">Bei Kununua</label><input type="number" class="form-control" id="p-bp" oninput="calcMg()"/></div><div class="form-group"><label class="form-label" data-t="prod.sell_price">Bei Kuuza</label><input type="number" class="form-control" id="p-sp" oninput="calcMg()"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.stock">Stoki ya Awali</label><input type="number" class="form-control" id="p-st" placeholder="0"/></div><div class="form-group"><label class="form-label" data-t="prod.min_stock">Kiwango cha Chini</label><input type="number" class="form-control" id="p-ms" placeholder="5"/></div></div></div><div>
+<div class="prod-mode-toggle">
+  <button class="prod-mode-btn active" id="pm-btn-manual" onclick="setProdMode('manual')"><i class="bi bi-pencil-square"></i>Kawaida</button>
+  <button class="prod-mode-btn" id="pm-btn-advanced" onclick="setProdMode('advanced')"><i class="bi bi-qr-code-scan"></i>Advanced (QR)</button>
+</div>
+<div class="form-group"><label class="form-label" data-t="prod.desc">Maelezo</label><textarea class="form-control" id="p-dc" rows="2"></textarea></div>
+<div class="form-group"><label class="form-label" data-t="prod.barcode">Barcode</label><input type="text" class="form-control" id="p-bc"/></div>
+<div id="p-mg" style="display:none;background:var(--bg-3);padding:10px 14px;border-radius:var(--radius-sm);font-size:13px;margin-top:8px;"></div>
+<div id="p-qr-panel" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:12px;">
+  <div style="font-size:12px;font-weight:700;color:var(--brand-light);margin-bottom:8px;"><i class="bi bi-qr-code"></i> QR Code ya Bidhaa</div>
+  <button class="qr-scan-btn mb-3" onclick="openScannerForProduct()"><i class="bi bi-qr-code-scan"></i>Scan QR — Jaza Fomu Moja kwa Moja</button>
+  <div class="qr-preview-box mb-2" id="p-qr-box"><span style="color:var(--text-3);font-size:12px;">QR itaonekana hapa baada ya kuhifadhi</span></div>
+  <div class="flex gap-2 mt-2">
+    <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="refreshProdQR()"><i class="bi bi-arrow-clockwise"></i>Onyesha QR</button>
+    <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="printQRLabel()"><i class="bi bi-printer"></i>Chapisha Label</button>
+  </div>
+</div>
+</div></div><div id="p-expiry-row" style="display:none;margin-top:10px;border-top:1px solid var(--border);padding-top:12px;">
   <div style="font-size:12px;font-weight:700;color:var(--brand-light);margin-bottom:8px;"><i class="bi bi-calendar-check"></i> Batch ya Kwanza (Expiry Tracking)</div>
   <div class="input-row cols-2">
     <div class="form-group"><label class="form-label">Nambari ya Batch (Hiari)</label><input type="text" class="form-control" id="p-bno" placeholder="e.g. LOT001"/></div>
@@ -1145,7 +1187,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
 <div class="modal-overlay" id="m-adj"><div class="modal"><div class="modal-header"><h2 class="modal-title" data-t="modal.adj_stock">Rekebisha Stoki</h2><button class="modal-close" onclick="closeM('m-adj')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="form-group"><label class="form-label" data-t="adj.product">Bidhaa</label><select class="form-select" id="adj-p"></select></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="adj.type">Aina</label><select class="form-select" id="adj-t"><option value="add" data-t="adj.add">Ongeza (+)</option><option value="remove" data-t="adj.remove">Punguza (−)</option><option value="set" data-t="adj.set">Weka Idadi</option></select></div><div class="form-group"><label class="form-label" data-t="adj.qty">Idadi</label><input type="number" class="form-control" id="adj-q" min="0"/></div></div><div class="form-group"><label class="form-label" data-t="adj.reason">Sababu</label><input type="text" class="form-control" id="adj-r" placeholder="Hiari"/></div><button class="btn btn-primary w-full mt-2" onclick="saveAdj()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
-<div class="modal-overlay" id="m-sale"><div class="modal modal-xl"><div class="modal-header"><h2 class="modal-title" data-t="modal.new_sale">Uuzaji Mpya</h2><button class="modal-close" onclick="closeM('m-sale')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-3 mb-3"><div class="form-group"><label class="form-label" data-t="sale.customer">Mteja</label><select class="form-select" id="sl-cu"></select></div><div class="form-group"><label class="form-label" data-t="sale.date">Tarehe</label><input type="date" class="form-control" id="sl-dt"/></div><div class="form-group"><label class="form-label" data-t="sale.ref">Ref</label><input type="text" class="form-control" id="sl-rf"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;" data-t="sale.add_item">Bidhaa Zilizouzwa</label><button class="btn btn-ghost btn-sm" onclick="addSRow()"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div><div id="sl-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;"><div class="flex justify-between mb-3"><span style="color:var(--text-2);" data-t="sale.subtotal">Jumla kabla ya punguzo:</span><span class="font-mono font-bold" id="sl-sub">TZS 0</span></div><div class="input-row cols-2 mb-3"><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.discount">Punguzo (TZS)</label><input type="number" class="form-control" id="sl-dis" value="0" oninput="calcSale()"/></div><div class="form-group" style="margin:0;"><label class="form-label">Kodi ya Promo</label><input type="text" class="form-control" id="sl-prm"/></div></div><div class="flex justify-between mb-3" style="font-size:19px;"><span class="font-extrabold" data-t="sale.total">JUMLA KUU:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="sl-tot">TZS 0</span></div><div class="input-row cols-3"><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.payment">Aina ya Malipo</label><select class="form-select" id="sl-pay" onchange="checkCred()"><option data-t="pay.cash">Taslimu</option><option data-t="pay.mpesa">M-Pesa</option><option>Tigo Pesa</option><option data-t="pay.bank">Benki</option><option value="Mkopo" data-t="pay.credit">Mkopo</option></select></div><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.paid">Kilicholipwa</label><input type="number" class="form-control" id="sl-pd" oninput="calcChg()"/></div><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.change">Chenji</label><div style="padding:10px 14px;background:var(--input-bg);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);font-family:var(--mono);font-weight:700;" id="sl-chg">TZS 0</div></div></div></div><div id="sl-crn" style="display:none;" class="alert alert-info mt-2"><i class="bi bi-info-circle"></i><span>Mauzo ya mkopo — deni litaongezwa kwa mteja.</span></div><div class="flex gap-2 mt-3"><button class="btn btn-primary" style="flex:1;" onclick="saveSale(false)"><i class="bi bi-check-circle"></i>Maliza</button><button class="btn btn-ghost" onclick="saveSale(true)"><i class="bi bi-printer"></i>+ Invoice</button></div></div></div></div>
+<div class="modal-overlay" id="m-sale"><div class="modal modal-xl"><div class="modal-header"><h2 class="modal-title" data-t="modal.new_sale">Uuzaji Mpya</h2><button class="modal-close" onclick="closeM('m-sale')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-3 mb-3"><div class="form-group"><label class="form-label" data-t="sale.customer">Mteja</label><select class="form-select" id="sl-cu"></select></div><div class="form-group"><label class="form-label" data-t="sale.date">Tarehe</label><input type="date" class="form-control" id="sl-dt"/></div><div class="form-group"><label class="form-label" data-t="sale.ref">Ref</label><input type="text" class="form-control" id="sl-rf"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;" data-t="sale.add_item">Bidhaa Zilizouzwa</label><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="openScannerForSale()"><i class="bi bi-qr-code-scan"></i>Scan</button><button class="btn btn-ghost btn-sm" onclick="addSRow()"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div></div><div id="sl-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;"><div class="flex justify-between mb-3"><span style="color:var(--text-2);" data-t="sale.subtotal">Jumla kabla ya punguzo:</span><span class="font-mono font-bold" id="sl-sub">TZS 0</span></div><div class="input-row cols-2 mb-3"><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.discount">Punguzo (TZS)</label><input type="number" class="form-control" id="sl-dis" value="0" oninput="calcSale()"/></div><div class="form-group" style="margin:0;"><label class="form-label">Kodi ya Promo</label><input type="text" class="form-control" id="sl-prm"/></div></div><div class="flex justify-between mb-3" style="font-size:19px;"><span class="font-extrabold" data-t="sale.total">JUMLA KUU:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="sl-tot">TZS 0</span></div><div class="input-row cols-3"><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.payment">Aina ya Malipo</label><select class="form-select" id="sl-pay" onchange="checkCred()"><option data-t="pay.cash">Taslimu</option><option data-t="pay.mpesa">M-Pesa</option><option>Tigo Pesa</option><option data-t="pay.bank">Benki</option><option value="Mkopo" data-t="pay.credit">Mkopo</option></select></div><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.paid">Kilicholipwa</label><input type="number" class="form-control" id="sl-pd" oninput="calcChg()"/></div><div class="form-group" style="margin:0;"><label class="form-label" data-t="sale.change">Chenji</label><div style="padding:10px 14px;background:var(--input-bg);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);font-family:var(--mono);font-weight:700;" id="sl-chg">TZS 0</div></div></div></div><div id="sl-crn" style="display:none;" class="alert alert-info mt-2"><i class="bi bi-info-circle"></i><span>Mauzo ya mkopo — deni litaongezwa kwa mteja.</span></div><div class="flex gap-2 mt-3"><button class="btn btn-primary" style="flex:1;" onclick="saveSale(false)"><i class="bi bi-check-circle"></i>Maliza</button><button class="btn btn-ghost" onclick="saveSale(true)"><i class="bi bi-printer"></i>+ Invoice</button></div></div></div></div>
 
 <div class="modal-overlay" id="m-sdet"><div class="modal"><div class="modal-header"><h2 class="modal-title">Maelezo ya Mauzo</h2><button class="modal-close" onclick="closeM('m-sdet')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div id="sdet-c" class="mb-3"></div><div class="alert alert-warning"><i class="bi bi-exclamation-triangle-fill"></i><span>Kufuta mauzo kutarudisha stoki na kuondoa deni.</span></div><div class="flex gap-2 mt-3"><button class="btn btn-danger" style="flex:1;" onclick="deleteSale(window._dSaleId)"><i class="bi bi-trash"></i>Futa Mauzo</button><button class="btn btn-ghost" onclick="closeM('m-sdet')">Ghairi</button></div></div></div></div>
 
@@ -1157,7 +1199,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
 <div class="modal-overlay" id="m-pp"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pp-title" data-t="pp.modal_title">Uchambuzi wa Bidhaa</h2><button class="modal-close" onclick="closeM('m-pp')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="grid grid-3 mb-4" id="pp-stats"></div><div class="chart-card mb-3"><div class="chart-header"><span class="chart-title" data-t="pp.monthly_chart">Faida kwa Mwezi (Miezi 12)</span></div><div class="chart-body"><canvas id="ch-pp" height="220"></canvas></div></div><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.month">Mwezi</th><th data-t="pp.th_qty">Idadi</th><th data-t="pp.th_rev">Mapato</th><th data-t="pp.th_cost">Gharama</th><th data-t="pp.th_profit">Faida</th><th>Margin %</th></tr></thead><tbody id="pp-tb"></tbody></table></div></div></div></div>
 
-<div class="modal-overlay" id="m-pur"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" data-t="modal.new_purchase">Ununuzi Mpya</h2><button class="modal-close" onclick="closeM('m-pur')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-2 mb-3"><div class="form-group"><label class="form-label" data-t="purch.supplier">Msambazaji</label><select class="form-select" id="pu-su"></select></div><div class="form-group"><label class="form-label" data-t="purch.date">Tarehe</label><input type="date" class="form-control" id="pu-dt"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;" data-t="purch.add_item">Bidhaa Zilizununuliwa</label><button class="btn btn-ghost btn-sm" onclick="addPRow()"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div><div id="pu-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px;" class="flex justify-between"><span class="font-extrabold" data-t="sale.total">JUMLA:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="pu-tot">TZS 0</span></div><div class="input-row cols-2 mt-3"><div class="form-group"><label class="form-label" data-t="purch.payment">Aina ya Malipo</label><select class="form-select" id="pu-pay"><option data-t="pay.cash">Taslimu</option><option data-t="pay.mpesa">M-Pesa</option><option data-t="pay.bank">Benki</option><option value="Mkopo" data-t="pay.credit">Mkopo</option></select></div><div class="form-group"><label class="form-label" data-t="purch.paid">Kilicholipwa</label><input type="number" class="form-control" id="pu-pd" placeholder="0"/></div></div><button class="btn btn-primary w-full mt-2" onclick="savePurch()"><i class="bi bi-check-circle"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
+<div class="modal-overlay" id="m-pur"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" data-t="modal.new_purchase">Ununuzi Mpya</h2><button class="modal-close" onclick="closeM('m-pur')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-2 mb-3"><div class="form-group"><label class="form-label" data-t="purch.supplier">Msambazaji</label><select class="form-select" id="pu-su"></select></div><div class="form-group"><label class="form-label" data-t="purch.date">Tarehe</label><input type="date" class="form-control" id="pu-dt"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;" data-t="purch.add_item">Bidhaa Zilizununuliwa</label><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="openScannerForPurch()"><i class="bi bi-qr-code-scan"></i>Scan</button><button class="btn btn-ghost btn-sm" onclick="addPRow()"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div></div><div id="pu-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px;" class="flex justify-between"><span class="font-extrabold" data-t="sale.total">JUMLA:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="pu-tot">TZS 0</span></div><div class="input-row cols-2 mt-3"><div class="form-group"><label class="form-label" data-t="purch.payment">Aina ya Malipo</label><select class="form-select" id="pu-pay"><option data-t="pay.cash">Taslimu</option><option data-t="pay.mpesa">M-Pesa</option><option data-t="pay.bank">Benki</option><option value="Mkopo" data-t="pay.credit">Mkopo</option></select></div><div class="form-group"><label class="form-label" data-t="purch.paid">Kilicholipwa</label><input type="number" class="form-control" id="pu-pd" placeholder="0"/></div></div><button class="btn btn-primary w-full mt-2" onclick="savePurch()"><i class="bi bi-check-circle"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
 <div class="modal-overlay" id="m-cust"><div class="modal"><div class="modal-header"><h2 class="modal-title" id="cm-t" data-t="modal.new_customer">Mteja Mpya</h2><button class="modal-close" onclick="closeM('m-cust')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="c-eid"/><div class="form-group"><label class="form-label" data-t="cust.name">Jina Kamili *</label><input type="text" class="form-control" id="c-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.phone">Simu</label><input type="text" class="form-control" id="c-ph"/></div><div class="form-group"><label class="form-label" data-t="cust.email">Barua Pepe</label><input type="email" class="form-control" id="c-em"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.address">Anuani</label><input type="text" class="form-control" id="c-ad"/></div><div class="form-group"><label class="form-label" data-t="cust.group">Kundi</label><select class="form-select" id="c-gr"><option>Kawaida</option><option>VIP</option><option>Jumla</option></select></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.credit_limit">Kikomo cha Mkopo (TZS)</label><input type="number" class="form-control" id="c-cl" placeholder="0"/></div><div class="form-group"><label class="form-label" data-t="cust.notes">Maelezo</label><input type="text" class="form-control" id="c-nt"/></div></div><button class="btn btn-primary w-full mt-2" onclick="saveCust()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
@@ -2466,11 +2508,14 @@ function renderProds(){
 function openProdM(){
   document.getElementById('p-eid').value='';
   document.getElementById('pm-t').textContent='Bidhaa Mpya';
-  ['p-nm','p-ct','p-un','p-bp','p-sp','p-st','p-ms','p-dc','p-bc','p-bno','p-exp'].forEach(x=>{const e=document.getElementById(x);if(e)e.value='';});
+  ['p-nm','p-ct','p-bp','p-sp','p-st','p-ms','p-dc','p-bc','p-bno','p-exp'].forEach(x=>{const e=document.getElementById(x);if(e)e.value='';});
+  const unEl=document.getElementById('p-un');if(unEl)unEl.value='pcs';
   document.getElementById('p-mg').style.display='none';
   const er=document.getElementById('p-expiry-row');
   if(er)er.style.display=isExpiryOn()?'block':'none';
   document.getElementById('p-exp-badge').innerHTML='';
+  setProdMode('manual');
+  populateCatDatalist();
   openM('m-prod');
 }
 function editProd(id){
@@ -2479,7 +2524,7 @@ function editProd(id){
   document.getElementById('pm-t').textContent='Hariri Bidhaa';
   document.getElementById('p-nm').value=p.name;
   document.getElementById('p-ct').value=p.cat||'';
-  document.getElementById('p-un').value=p.unit||'';
+  const unEl=document.getElementById('p-un');if(unEl)unEl.value=p.unit||'pcs';
   document.getElementById('p-bp').value=p.bp||0;
   document.getElementById('p-sp').value=p.sp||0;
   document.getElementById('p-st').value=p.stock||0;
@@ -2512,7 +2557,10 @@ function editProd(id){
       er.style.display='none';
     }
   }
-  calcMg();openM('m-prod');
+  calcMg();
+  setProdMode('manual');
+  populateCatDatalist();
+  openM('m-prod');
 }
 function calcMg(){const bp=n(gv('p-bp')),sp=n(gv('p-sp'));const el=document.getElementById('p-mg');if(bp>0&&sp>0){el.style.display='block';el.innerHTML=`Faida: <span class="font-mono font-bold" style="color:${sp-bp>=0?'var(--brand-light)':'var(--danger)'}">TZS ${fmt(sp-bp)} (${((sp-bp)/bp*100).toFixed(1)}%)</span>`;}else el.style.display='none';}
 async function saveProds(){
@@ -5268,6 +5316,241 @@ function toggleLang() { _i18n.set(_i18n.lang === 'sw' ? 'en' : 'sw'); }
 // Apply mara tu ukurasa unapakia
 document.addEventListener('DOMContentLoaded', () => { _i18n.apply(); });
 
+// ══════════════════════════════════════════════
+// QR CODE SYSTEM
+// ══════════════════════════════════════════════
+var _html5QrScanner = null;
+var _scannerMode = 'product'; // 'product' | 'sale' | 'purch'
+var _scannerTorchOn = false;
+
+function setProdMode(mode){
+  var isAdv = mode === 'advanced';
+  document.getElementById('pm-btn-manual').classList.toggle('active', !isAdv);
+  document.getElementById('pm-btn-advanced').classList.toggle('active', isAdv);
+  document.getElementById('p-qr-panel').style.display = isAdv ? 'block' : 'none';
+  if(isAdv){
+    var eid = document.getElementById('p-eid').value;
+    if(eid) refreshProdQR();
+  }
+}
+
+function refreshProdQR(){
+  var eid = document.getElementById('p-eid').value;
+  var nm = document.getElementById('p-nm').value.trim();
+  var box = document.getElementById('p-qr-box');
+  if(!box) return;
+  if(!eid && !nm){ box.innerHTML = '<span style="color:var(--text-3);font-size:12px;">Hifadhi bidhaa kwanza ili kutengeneza QR</span>'; return; }
+  var data = eid ? ('SP:PROD:'+eid) : ('SP:PROD:DRAFT:'+nm);
+  box.innerHTML = '';
+  try {
+    new QRCode(box, {text: data, width: 120, height: 120, colorDark:'#000000', colorLight:'#ffffff', correctLevel: QRCode.CorrectLevel.M});
+  } catch(e) {
+    box.innerHTML = '<span style="color:var(--danger);font-size:11px;">QR error: '+e.message+'</span>';
+  }
+}
+
+function printQRLabel(){
+  var box = document.getElementById('p-qr-box');
+  var canvas = box ? box.querySelector('canvas') : null;
+  if(!canvas){ refreshProdQR(); setTimeout(printQRLabel, 700); return; }
+  var nm = document.getElementById('p-nm') ? document.getElementById('p-nm').value.trim() : '';
+  if(!nm){ toast('error','Jaza jina la bidhaa'); return; }
+  var sp = gv('p-sp');
+  var unitEl = document.getElementById('p-un');
+  var unit = unitEl ? (unitEl.value || 'pcs') : 'pcs';
+  var biz = cT ? (cT.name || 'StokiPro') : 'StokiPro';
+  var qrSrc = canvas.toDataURL('image/png');
+  var T = '\x3c'; // '<' — avoids any HTML tag sequences in inline JS
+  var parts = [
+    T+'!DOCTYPE html>'+T+'html>'+T+'head>'+T+'meta charset="UTF-8">',
+    T+'style>*{margin:0;padding:0;}body{font-family:Arial,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;}',
+    '.label{width:58mm;border:1px dashed #ccc;padding:5mm;text-align:center;border-radius:4px;}',
+    '.biz{font-size:8px;color:#888;margin-bottom:3px;text-transform:uppercase;}',
+    '.nm{font-size:11px;font-weight:800;margin:4px 0 2px;}',
+    '.pr{font-size:14px;font-weight:900;color:#16a34a;}',
+    '.un{font-size:9px;color:#999;}',
+    'img{width:120px;height:120px;margin:4px auto;}',
+    '@media print{body{min-height:auto;}}'+T+'/style>'+T+'/head>',
+    T+'body onload="window.print()">'+T+'div class="label">',
+    T+'div class="biz">'+biz+T+'/div>',
+    T+'img src="'+qrSrc+'"/>',
+    T+'div class="nm">'+nm+T+'/div>',
+    T+'div class="pr">TZS '+fmt(n(sp))+' '+T+'span class="un">/ '+unit+T+'/span>'+T+'/div>',
+    T+'/div>'+T+'/body>'+T+'/html>'
+  ];
+  var html = parts.join('');
+  var blob = new Blob([html], {type:'text/html'});
+  var url = URL.createObjectURL(blob);
+  window.open(url, '_blank', 'width=320,height=420');
+  setTimeout(function(){ URL.revokeObjectURL(url); }, 15000);
+}
+
+function openScannerForProduct(){
+  _scannerMode = 'product';
+  document.getElementById('qr-scan-mode-badge').textContent = 'Scan Bidhaa — Jaza Fomu';
+  openScannerOverlay();
+}
+
+function openScannerForSale(){
+  _scannerMode = 'sale';
+  document.getElementById('qr-scan-mode-badge').textContent = 'Scan Bidhaa — Ongeza kwenye Cart';
+  openScannerOverlay();
+}
+
+function openScannerForPurch(){
+  _scannerMode = 'purch';
+  document.getElementById('qr-scan-mode-badge').textContent = 'Scan Bidhaa — Ongeza kwenye Manunuzi';
+  openScannerOverlay();
+}
+
+function openScannerOverlay(){
+  var overlay = document.getElementById('qr-scanner-overlay');
+  overlay.style.display = 'flex';
+  document.getElementById('qr-scan-status').textContent = 'Elekezea kamera kwenye QR code...';
+  document.getElementById('qr-scan-status').className = 'scanner-status';
+  document.getElementById('qr-reader').innerHTML = '';
+  _scannerTorchOn = false;
+  try {
+    _html5QrScanner = new Html5Qrcode('qr-reader');
+    var cfg = {fps:10, qrbox:{width:220,height:220}};
+    _html5QrScanner.start(
+      {facingMode:'environment'},
+      cfg,
+      function(decodedText){
+        handleQRScan(decodedText);
+      },
+      function(err){ /* scanning... */ }
+    ).then(function(){
+      // Try to show torch button if supported
+      var caps = _html5QrScanner.getRunningTrackCapabilities ? _html5QrScanner.getRunningTrackCapabilities() : null;
+      if(caps && caps.torch){ document.getElementById('qr-scan-torch-btn').style.display=''; }
+    }).catch(function(e){ console.warn('torch cap check failed',e); });
+  } catch(e) {
+    document.getElementById('qr-scan-status').textContent = 'Kamera haiwezi kufunguliwa: '+e.message;
+  }
+}
+
+function handleQRScan(text){
+  document.getElementById('qr-scan-status').textContent = 'Imepatikana: '+text;
+  document.getElementById('qr-scan-status').className = 'scanner-status ok';
+  if(_scannerMode === 'product'){
+    // Fill product form from QR
+    var pid = null;
+    if(text.startsWith('SP:PROD:')){
+      pid = text.replace('SP:PROD:','').replace('DRAFT:','');
+    } else {
+      // Barcode or other format — fill barcode field
+      if(document.getElementById('p-bc')) document.getElementById('p-bc').value = text;
+      closeScanner();
+      toast('info','Barcode imejazwa: '+text);
+      return;
+    }
+    var prod = DB.products.find(function(x){ return x.id === pid; });
+    if(prod){
+      closeScanner();
+      editProd(prod.id);
+      toast('ok','Bidhaa imepatikana: '+prod.name);
+    } else {
+      closeScanner();
+      toast('info','QR scan: '+text);
+    }
+  } else if(_scannerMode === 'sale'){
+    // Add product to sale cart
+    var prod = null;
+    if(text.startsWith('SP:PROD:')){
+      var pid = text.replace('SP:PROD:','');
+      prod = DB.products.find(function(x){ return x.id === pid; });
+    } else {
+      // Try barcode match
+      prod = DB.products.find(function(x){ return x.barcode === text; });
+    }
+    if(prod){
+      // Add to sale rows
+      var existing = sRows.find(function(r){ return r.pid === prod.id; });
+      if(existing){
+        existing.qty = (existing.qty||1) + 1;
+        existing.total = existing.qty * existing.price;
+      } else {
+        sRows.push({pid:prod.id, pname:prod.name, qty:1, price:prod.sp, total:prod.sp});
+      }
+      renderSRows();
+      calcSale();
+      document.getElementById('qr-scan-status').textContent = 'Imeongezwa: '+prod.name;
+      document.getElementById('qr-scan-status').className = 'scanner-status ok';
+      // Keep scanner open for multiple scans
+    } else {
+      document.getElementById('qr-scan-status').textContent = 'Bidhaa haipatikani kwa: '+text;
+      document.getElementById('qr-scan-status').className = 'scanner-status';
+    }
+  } else if(_scannerMode === 'purch'){
+    var prod = null;
+    if(text.startsWith('SP:PROD:')){
+      var pid = text.replace('SP:PROD:','');
+      prod = DB.products.find(function(x){ return x.id === pid; });
+    } else {
+      prod = DB.products.find(function(x){ return x.barcode === text; });
+    }
+    if(prod){
+      var existing = pRows.find(function(r){ return r.pid === prod.id; });
+      if(existing){
+        existing.qty = (existing.qty||1) + 1;
+        existing.total = existing.qty * existing.price;
+      } else {
+        pRows.push({pid:prod.id, qty:1, price:prod.bp, total:prod.bp});
+      }
+      renderPRows();
+      document.getElementById('qr-scan-status').textContent = 'Imeongezwa: '+prod.name;
+      document.getElementById('qr-scan-status').className = 'scanner-status ok';
+    } else {
+      document.getElementById('qr-scan-status').textContent = 'Bidhaa haipatikani kwa: '+text;
+      document.getElementById('qr-scan-status').className = 'scanner-status';
+    }
+  }
+}
+
+function closeScanner(){
+  var overlay = document.getElementById('qr-scanner-overlay');
+  overlay.style.display = 'none';
+  document.getElementById('qr-scan-torch-btn').style.display = 'none';
+  if(_html5QrScanner){
+    _html5QrScanner.stop().catch(function(e){ console.warn('scanner stop error',e); });
+    _html5QrScanner = null;
+  }
+}
+
+function toggleTorch(){
+  if(!_html5QrScanner) return;
+  _scannerTorchOn = !_scannerTorchOn;
+  try {
+    _html5QrScanner.applyVideoConstraints({advanced:[{torch:_scannerTorchOn}]});
+  } catch(e){ console.warn('torch error',e); }
+}
+
+function populateCatDatalist(){
+  var dl = document.getElementById('p-ct-list');
+  if(!dl || !DB.products) return;
+  var cats = [];
+  DB.products.forEach(function(p){ if(p.cat && cats.indexOf(p.cat)===-1) cats.push(p.cat); });
+  dl.innerHTML = cats.map(function(c){ return '<option value="'+c+'">'; }).join('');
+}
+
 </script>
+
+<div id="qr-scanner-overlay">
+  <div class="scanner-mode-badge" id="qr-scan-mode-badge">Scan Mode</div>
+  <div class="scanner-wrap">
+    <div id="qr-reader"></div>
+    <div style="position:absolute;inset:0;pointer-events:none;">
+      <div class="sc tl"></div><div class="sc tr"></div>
+      <div class="sc bl"></div><div class="sc br"></div>
+      <div class="scan-line"></div>
+    </div>
+  </div>
+  <div class="scanner-status" id="qr-scan-status">Elekezea kamera kwenye QR code...</div>
+  <div style="display:flex;gap:10px;margin-top:4px;">
+    <button class="btn btn-ghost" style="color:#fff;border-color:rgba(255,255,255,0.3);" onclick="closeScanner()"><i class="bi bi-x-lg"></i> Funga</button>
+    <button class="btn btn-ghost" id="qr-scan-torch-btn" style="color:#fff;border-color:rgba(255,255,255,0.3);display:none;" onclick="toggleTorch()"><i class="bi bi-lightning-fill"></i> Tochi</button>
+  </div>
+</div>
 </body>
 </html>
