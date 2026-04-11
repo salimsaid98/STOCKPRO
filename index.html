@@ -5430,7 +5430,25 @@ function openScannerOverlay(){
   }
 }
 
+function beepScan(){
+  try {
+    var ctx = new (window.AudioContext||window.webkitAudioContext)();
+    var osc = ctx.createOscillator();
+    var gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1046, ctx.currentTime); // C6
+    gain.gain.setValueAtTime(0.4, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.18);
+    osc.onended = function(){ ctx.close(); };
+  } catch(e){}
+}
+
 function handleQRScan(text){
+  beepScan();
   document.getElementById('qr-scan-status').textContent = 'Imepatikana: '+text;
   document.getElementById('qr-scan-status').className = 'scanner-status ok';
   if(_scannerMode === 'product'){
