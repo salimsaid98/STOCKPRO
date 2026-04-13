@@ -423,10 +423,18 @@ textarea.form-control{resize:vertical;min-height:80px;}
   .filter-pills{flex-wrap:wrap;}
   .search-box{width:100%;}
   .search-box .form-control{width:100%!important;}
-  /* ── Tables ── */
-  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
-  .data-table{min-width:500px;}
-  .data-table thead th,.data-table tbody td{padding:8px 10px;font-size:12px;}
+  /* ── Tables → Card list on mobile ── */
+  .table-wrap{overflow-x:unset;}
+  .data-table{min-width:unset;width:100%;border-collapse:collapse;}
+  .data-table thead{display:none;}
+  .data-table tbody tr{display:block;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px;padding:4px 0;}
+  .data-table tbody tr:hover{background:var(--bg-3);}
+  .data-table tbody td{display:flex;justify-content:space-between;align-items:center;padding:7px 12px;border-bottom:1px solid var(--border);font-size:13px;gap:8px;}
+  .data-table tbody td:last-child{border-bottom:none;}
+  .data-table tbody td::before{content:attr(data-label);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-3);flex-shrink:0;min-width:90px;}
+  .data-table tbody td:empty{display:none;}
+  .td-actions{justify-content:flex-end!important;}
+  .td-actions::before{display:none!important;}
   /* ── Cards ── */
   .card-body{padding:12px;}
   .card-header{padding:12px 14px;}
@@ -3050,7 +3058,7 @@ function renderProds(){
   // Sasisisha header ya table
   const prTh=document.querySelector('#t-pr .data-table thead tr');
   if(prTh){
-    prTh.innerHTML=`<th data-t="tbl.product">Bidhaa</th><th data-t="tbl.category">Kat.</th><th data-t="tbl.buy_price">Kununua</th><th data-t="tbl.sell_price">Kuuza</th><th data-t="tbl.stock">Stoki</th><th data-t="tbl.margin">Margin</th><th data-t="tbl.status">Hali</th>${isExpiryOn()?'<th>Expire</th>':''}<th data-t="tbl.actions">Vitendo</th>`;
+    prTh.innerHTML=`<th data-t="tbl.product">Bidhaa</th><th data-t="tbl.category">Kat.</th><th data-t="tbl.buy_price">Kununua</th><th data-t="tbl.sell_price">Kuuza</th><th data-t="tbl.stock">Stoki</th><th data-t="tbl.margin">Margin %</th><th>Faida/Kipande</th><th data-t="tbl.status">Hali</th>${isExpiryOn()?'<th>Expire</th>':''}<th data-t="tbl.actions">Vitendo</th>`;
   }
   pg(rows,'pr-tb','pr-pg',sl=>sl.map(p=>{
     const mg=n(p.bp)>0?((n(p.sp)-n(p.bp))/n(p.bp)*100).toFixed(0):0;
@@ -3063,6 +3071,7 @@ function renderProds(){
       <td class="td-mono" style="color:var(--brand-light);">TZS ${fmt(p.sp)}</td>
       <td class="td-mono font-bold">${p.stock} <span class="td-muted">${p.unit||''}</span></td>
       <td><span class="badge badge-${mg>=20?'success':mg>0?'warning':'danger'}">${mg}%</span></td>
+      <td class="td-mono" style="color:${n(p.sp)>n(p.bp)?'var(--brand-light)':n(p.sp)<n(p.bp)?'var(--danger)':'var(--text-3)'};">TZS ${fmt(n(p.sp)-n(p.bp))}</td>
       <td><span class="badge badge-${hs}">${n(p.stock)<=0?'Imeisha':n(p.stock)<=n(p.minStock)?'Inakwisha':'Ipo'}</span></td>
       ${isExpiryOn()?`<td>${nearExp?expiryBadge(nearExp):`<span style="color:var(--text-3);font-size:11px;">—</span>`}</td>`:''}
       <td class="td-actions">
@@ -5720,6 +5729,17 @@ function toast(type,title,text=''){
 /* ================================================================
    PAGINATION
 ================================================================ */
+function _applyMobileLabels(tbId){
+  const tb=document.getElementById(tbId); if(!tb)return;
+  const thead=tb.closest('table')?.querySelector('thead');
+  if(!thead)return;
+  const headers=[...thead.querySelectorAll('th')].map(th=>th.textContent.trim());
+  tb.querySelectorAll('tr').forEach(tr=>{
+    [...tr.querySelectorAll('td')].forEach((td,i)=>{
+      if(headers[i])td.setAttribute('data-label',headers[i]);
+    });
+  });
+}
 function pg(data,tbId,pgId,renderFn,ps){
   if(!ps||ps<1)ps=5;
   const pgEl=document.getElementById(pgId);if(!pgEl)return;
@@ -5729,6 +5749,7 @@ function pg(data,tbId,pgId,renderFn,ps){
   const slice=data.slice((page-1)*ps,page*ps);
   const tb=document.getElementById(tbId);
   if(tb)tb.innerHTML=renderFn(slice)||`<tr><td colspan="99"><div class="empty-state" style="padding:36px;"><span class="empty-icon">📭</span><div class="empty-title">Hakuna data</div></div></td></tr>`;
+  _applyMobileLabels(tbId);
   pgEl.dataset.p=page;
   if(total<=ps){pgEl.innerHTML='';return;}
   const maxPgs=5,startPg=Math.max(1,Math.min(pages-maxPgs+1,page-Math.floor(maxPgs/2)));
