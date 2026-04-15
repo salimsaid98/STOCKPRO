@@ -898,7 +898,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
         <div class="nav-section" data-t="nav.customers">Watu</div>
         <a class="nav-link" data-perm="customers" onclick="tSec(this,'t-cu')"><i class="bi bi-people nav-icon"></i><span data-t="nav.customers">Wateja</span></a>
         <a class="nav-link" data-perm="suppliers" onclick="tSec(this,'t-su')"><i class="bi bi-truck nav-icon"></i><span data-t="nav.suppliers">Wasambazaji</span></a>
-        <a class="nav-link" data-perm="expenses" onclick="tSec(this,'t-ex')"><i class="bi bi-wallet2 nav-icon"></i><span>Matumizi</span></a>
+        <a class="nav-link" data-perm="expenses" onclick="tSec(this,'t-ex')"><i class="bi bi-wallet2 nav-icon"></i><span data-t="nav.expenses">Matumizi</span></a>
         <div class="nav-section" data-t="nav.reports">Ripoti</div>
         <a class="nav-link" data-perm="reports" onclick="tSec(this,'t-an')"><i class="bi bi-bar-chart-line nav-icon"></i><span data-t="nav.analytics">Analytics</span></a>
         <a class="nav-link" data-perm="reports" onclick="tSec(this,'t-rp')"><i class="bi bi-file-earmark-bar-graph nav-icon"></i><span data-t="nav.reports">Ripoti</span></a>
@@ -927,8 +927,9 @@ textarea.form-control{resize:vertical;min-height:80px;}
       <div class="more-item" data-perm="stock" onclick="tSec(null,'t-st');closeMore()"><i class="bi bi-layers"></i><span data-t="nav.stock">Stoki</span></div>
       <div class="more-item" data-perm="customers" onclick="tSec(null,'t-cu');closeMore()"><i class="bi bi-people"></i><span data-t="nav.customers">Wateja</span></div>
       <div class="more-item" data-perm="suppliers" onclick="tSec(null,'t-su');closeMore()"><i class="bi bi-truck"></i><span data-t="nav.suppliers">Wasambazaji</span></div>
-      <div class="more-item" data-perm="expenses" onclick="tSec(null,'t-ex');closeMore()"><i class="bi bi-wallet2"></i><span>Matumizi</span></div>
+      <div class="more-item" data-perm="expenses" onclick="tSec(null,'t-ex');closeMore()"><i class="bi bi-wallet2"></i><span data-t="nav.expenses">Matumizi</span></div>
       <div class="more-item" data-perm="reports" onclick="tSec(null,'t-rp');closeMore()"><i class="bi bi-file-earmark-bar-graph"></i><span data-t="nav.reports">Ripoti</span></div>
+      <div class="more-item" data-owner-only onclick="tSec(null,'t-usr');closeMore()"><i class="bi bi-person-badge"></i><span data-t="nav.users_roles">Watumiaji</span></div>
       <div class="more-item" data-owner-only onclick="tSec(null,'t-ac');closeMore()"><i class="bi bi-clock-history"></i><span data-t="nav.activity">Shughuli</span></div>
       <div class="more-item" data-perm="settings" onclick="tSec(null,'t-br');closeMore()"><i class="bi bi-building"></i><span data-t="nav.branches">Matawi</span></div>
       <div class="more-item" data-perm="settings" onclick="tSec(null,'t-bs');closeMore()"><i class="bi bi-building-gear"></i><span data-t="nav.biz">Biashara</span></div>
@@ -1006,7 +1007,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
         
         <div class="section-panel" id="t-cprof">
-          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.cust_profile">Wasifu wa Mteja</div><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-cu')"><i class="bi bi-arrow-left"></i><span data-t="btn.back">Rudi</span></button></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.cust_profile">Wasifu wa Mteja</div><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="printCustProfile()" title="Chapisha"><i class="bi bi-printer" style="color:var(--brand-light);"></i></button><button class="btn btn-ghost btn-sm" onclick="exportCustProfilePDF()" title="PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;"></i></button><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-cu')"><i class="bi bi-arrow-left"></i><span data-t="btn.back">Rudi</span></button></div></div>
           <div id="cprof-c"></div>
         </div>
 
@@ -1019,7 +1020,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
         
         <div class="section-panel" id="t-sprof">
-          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.sup_profile">Wasifu wa Msambazaji</div><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-su')"><i class="bi bi-arrow-left"></i><span data-t="btn.back">Rudi</span></button></div>
+          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.sup_profile">Wasifu wa Msambazaji</div><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="printSupProfile()" title="Chapisha"><i class="bi bi-printer" style="color:var(--brand-light);"></i></button><button class="btn btn-ghost btn-sm" onclick="exportSupProfilePDF()" title="PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;"></i></button><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-su')"><i class="bi bi-arrow-left"></i><span data-t="btn.back">Rudi</span></button></div></div>
           <div id="sprof-c"></div>
         </div>
 
@@ -1080,7 +1081,11 @@ textarea.form-control{resize:vertical;min-height:80px;}
           <div class="card mt-4" id="pl-card">
             <div class="card-header" style="justify-content:space-between;">
               <h3 style="display:flex;align-items:center;gap:8px;"><i class="bi bi-graph-up-arrow" style="color:var(--brand-light);"></i> Faida &amp; Hasara (P&amp;L)</h3>
-              <button class="btn btn-ghost btn-sm" onclick="genPL()"><i class="bi bi-arrow-clockwise"></i> Hesabu</button>
+              <div style="display:flex;gap:6px;align-items:center;">
+                <button class="btn btn-ghost btn-sm" onclick="genPL()"><i class="bi bi-arrow-clockwise"></i> <span data-t="rp.generate">Tengeneza</span></button>
+                <button class="btn btn-ghost btn-sm" onclick="printPL()" title="Chapisha P&L"><i class="bi bi-printer" style="color:var(--brand-light);"></i></button>
+                <button class="btn btn-ghost btn-sm" onclick="exportPLPDF()" title="Pakua PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;"></i></button>
+              </div>
             </div>
             <div class="card-body" id="pl-body">
               <div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;"><i class="bi bi-info-circle"></i> Bonyeza "Tengeneza" juu ili kuona ripoti ya Faida &amp; Hasara</div>
@@ -2371,6 +2376,8 @@ function loadFromLocal(){
   DB.tUsers=LS.get(tid,'tUsers').map(parseTUser);
   DB.roles=LS.get(tid,'roles').map(parseRole);
   DB.expenses=LS.get(tid,'expenses');
+  DB.branchStock=LS.get(tid,'branchStock');
+  DB.movements=LS.get(tid,'movements');
   const _rb=(LS.get(tid,'biz')[0])||{};
   DB.biz=(function(b){
     if(!b||typeof b!=='object')return{};const r={...b};
@@ -2385,7 +2392,7 @@ function loadFromLocal(){
 }
 
 // DB cache (in-memory, loaded from LS)
-const DB={products:[],sales:[],purchases:[],customers:[],suppliers:[],biz:{},branches:[],tUsers:[],roles:[],expenses:[]};
+const DB={products:[],sales:[],purchases:[],customers:[],suppliers:[],biz:{},branches:[],tUsers:[],roles:[],expenses:[],branchStock:[],movements:[]};
 
 const TSEC_LOADERS={
   't-pr':renderProds,'t-st':renderStock,'t-sa':renderSales,'t-pu':renderPurchs,
@@ -3356,6 +3363,71 @@ async function saveAdj(){
 }
 
 /* ================================================================
+   BRANCH STOCK HELPERS
+================================================================ */
+// Get stock for a product in a specific branch (null/'all' = sum of all branches)
+function getBS(productId, branchId){
+  if(!branchId||branchId==='all'){
+    const entries=(DB.branchStock||[]).filter(s=>s.productId===productId);
+    if(entries.length) return entries.reduce((t,s)=>t+n(s.stock),0);
+    const p=DB.products.find(x=>x.id===productId);
+    return p?n(p.stock):0; // fallback to legacy p.stock
+  }
+  const bs=(DB.branchStock||[]).find(s=>s.productId===productId&&s.branchId===branchId);
+  return bs?n(bs.stock):0;
+}
+// Display stock for product in current branch context
+function pStock(prod){ return getBS(prod.id, cB?cB.id:null); }
+
+// Adjust stock for a product in a branch (delta positive=add, negative=deduct)
+function adjBS(productId, branchId, delta){
+  const prod=DB.products.find(p=>p.id===productId);
+  if(!prod) return;
+  if(!DB.branchStock) DB.branchStock=[];
+  if(!branchId||branchId==='all'){
+    // No branch context — legacy
+    prod.stock=Math.max(0,n(prod.stock)+delta);
+    LS.save(cT.id,'products',prod);
+    bgSync(cT.id,'products',prod);
+    return;
+  }
+  let bs=DB.branchStock.find(s=>s.productId===productId&&s.branchId===branchId);
+  if(bs){
+    bs.stock=Math.max(0,n(bs.stock)+delta);
+  } else {
+    bs={id:uid(),tenantId:cT.id,productId,branchId,stock:Math.max(0,delta),updatedAt:td()};
+    DB.branchStock.push(bs);
+  }
+  bs.updatedAt=td();
+  // Keep p.stock = sum of all branches
+  prod.stock=DB.branchStock.filter(s=>s.productId===productId).reduce((t,s)=>t+n(s.stock),0);
+  LS.save(cT.id,'branchStock',bs);
+  bgSync(cT.id,'branchStock',bs);
+  LS.save(cT.id,'products',prod);
+  bgSync(cT.id,'products',prod);
+}
+
+// One-time migration: copy product.stock to branchStock for default branch
+function migrateStockToBranches(){
+  if(!cT) return;
+  const already=(DB.branchStock||[]).some(s=>s.tenantId===cT.id);
+  if(already) return;
+  const branches=DB.branches||[];
+  if(!branches.length) return;
+  const defaultBr=branches.find(b=>b.isHQ)||branches[0];
+  let count=0;
+  DB.products.forEach(prod=>{
+    if(n(prod.stock)>0){
+      const bs={id:uid(),tenantId:cT.id,productId:prod.id,branchId:defaultBr.id,stock:n(prod.stock),updatedAt:td()};
+      DB.branchStock.push(bs);
+      LS.save(cT.id,'branchStock',bs);
+      count++;
+    }
+  });
+  if(count>0) toast('info','Stoki ya bidhaa '+count+' imehifadhiwa kwa branch: '+defaultBr.name);
+}
+
+/* ================================================================
    SALES
 ================================================================ */
 async function openSaleM(){
@@ -3423,7 +3495,7 @@ async function saveSale(printInv){
   if(!permGuard('sales','add')) return;
   const valid=sRows.filter(r=>r.pid&&r.qty>0);
   if(!valid.length){toast('error','Ongeza bidhaa angalau moja');return;}
-  for(const r of valid){const p=DB.products.find(x=>x.id===r.pid);if(p&&n(p.stock)<r.qty){toast('error','Stoki ya "'+p.name+'" haitoshi ('+p.stock+')');return;}}
+  for(const r of valid){const p=DB.products.find(x=>x.id===r.pid);if(p){const avail=getBS(p.id,cB?cB.id:null);if(avail<r.qty){toast('error','Stoki ya "'+p.name+'" haitoshi ('+avail+')');return;}}}
   _submitting=true;
   const btns=document.querySelectorAll('#m-sale button');
   btns.forEach(b=>{b.disabled=true;});
@@ -3744,6 +3816,101 @@ function printContent(html){
   },200);
 }
 
+function _buildProfilePrintHTML(profileEl, title){
+  const biz=DB.biz||{};
+  return `<div style="font-family:sans-serif;max-width:700px;margin:0 auto;padding:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #16a34a;padding-bottom:10px;margin-bottom:16px;">
+      <div><div style="font-size:20px;font-weight:800;color:#16a34a;">📦 ${biz.bizName||''}</div><div style="font-size:12px;color:#666;">${biz.bizPhone||''} ${biz.bizEmail?'· '+biz.bizEmail:''}</div></div>
+      <div style="text-align:right;"><div style="font-size:14px;font-weight:700;">${title}</div><div style="font-size:11px;color:#666;">${fmtDate(td())}</div></div>
+    </div>
+    ${profileEl?profileEl.innerHTML:''}
+    <div style="margin-top:24px;border-top:1px solid #e5e7eb;padding-top:10px;font-size:10px;color:#9ca3af;text-align:center;">
+      ${biz.bizName||''} · ${t('rp.print')} ${fmtDate(td())} · StokiPro v3
+    </div>
+  </div>`;
+}
+
+function printCustProfile(){
+  const el=document.getElementById('cprof-c');
+  if(!el||!_curCustId){toast('error','Fungua wasifu wa mteja kwanza');return;}
+  const c=DB.customers.find(x=>x.id===_curCustId);
+  printContent(_buildProfilePrintHTML(el,(c?c.name+' — ':'')+t('sec.cust_profile')));
+}
+
+function printSupProfile(){
+  const el=document.getElementById('sprof-c');
+  if(!el||!_curSupId){toast('error','Fungua wasifu wa msambazaji kwanza');return;}
+  const s=DB.suppliers.find(x=>x.id===_curSupId);
+  printContent(_buildProfilePrintHTML(el,(s?s.name+' — ':'')+t('sec.sup_profile')));
+}
+
+function exportCustProfilePDF(){
+  const el=document.getElementById('cprof-c');
+  if(!el||!_curCustId){toast('error','Fungua wasifu wa mteja kwanza');return;}
+  const c=DB.customers.find(x=>x.id===_curCustId);
+  _exportProfilePDF(el,(c?c.name:'profile')+'_customer');
+}
+
+function exportSupProfilePDF(){
+  const el=document.getElementById('sprof-c');
+  if(!el||!_curSupId){toast('error','Fungua wasifu wa msambazaji kwanza');return;}
+  const s=DB.suppliers.find(x=>x.id===_curSupId);
+  _exportProfilePDF(el,(s?s.name:'profile')+'_supplier');
+}
+
+function _exportProfilePDF(profileEl, filename){
+  if(!profileEl){return;}
+  const biz=DB.biz||{};
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210, margin=14;
+  let y=18;
+  const green=[22,163,74];
+
+  // Header bar
+  doc.setFillColor(...green);
+  doc.rect(0,0,W,14,'F');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(11);doc.setFont(undefined,'bold');
+  doc.text('📦 '+(biz.bizName||'StokiPro'),margin,9.5);
+  doc.setFontSize(8);doc.setFont(undefined,'normal');
+  doc.text(fmtDate(td()),W-margin,9.5,{align:'right'});
+  y=22;
+
+  // Stat cards — kama numbers kutoka DOM
+  const cards=profileEl.querySelectorAll('.stat-card,.sc-card,[class*="stat"]');
+  doc.setTextColor(30,30,30);
+
+  // Use html2canvas-like approach — kwa sababu jsPDF haiwezi kuchora HTML,
+  // tutaandika text data directly kutoka DB
+  const lines=[];
+  profileEl.querySelectorAll('.sc-val,.sc-label,.td-name,.td-mono,.font-bold,.font-mono').forEach(el=>{
+    const txt=(el.textContent||'').trim();
+    if(txt&&txt.length<120)lines.push(txt);
+  });
+
+  // Toa lines duplicate
+  const seen=new Set();
+  const uniq=lines.filter(l=>{if(seen.has(l))return false;seen.add(l);return true;});
+
+  doc.setFontSize(9);doc.setFont(undefined,'normal');
+  uniq.forEach(line=>{
+    if(y>280){doc.addPage();y=18;}
+    doc.text(String(line).slice(0,90),margin,y);
+    y+=5.5;
+  });
+
+  // Footer
+  doc.setFillColor(245,247,250);
+  doc.rect(0,285,W,12,'F');
+  doc.setTextColor(150,150,150);
+  doc.setFontSize(7.5);
+  doc.text((biz.bizName||'')+'  ·  StokiPro v3  ·  '+fmtDate(td()),W/2,292,{align:'center'});
+
+  doc.save(filename.replace(/\s+/g,'_')+'_'+td()+'.pdf');
+  toast('success','PDF imeshuka ✅');
+}
+
 /* ================================================================
    PURCHASES
 ================================================================ */
@@ -3817,7 +3984,7 @@ function renderPurchs(){
   if(PF==='credit')rows=rows.filter(p=>p.creditType==='credit');
   const sq=(gv('pu-srch')||'').toLowerCase();
   if(sq)rows=rows.filter(p=>(p.ref+p.supName+p.date).toLowerCase().includes(sq));
-  pg(rows,'pu-tb','pu-pg',sl=>sl.map(p=>{const items=Array.isArray(p.items)?p.items:[];return`<tr><td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${p.ref}</td><td class="td-muted">${fmtDate(p.date)}</td><td class="td-name">${p.supName||'—'}</td><td class="td-muted">${items.length} bidhaa</td><td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.total)}</td><td><span class="badge badge-neutral">${cleanPayment(p.payment)}</span></td><td><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?'Mkopo':'Taslimu'}</span></td><td class="td-actions"><button class="btn btn-ghost btn-sm" onclick="viewPurch('${p.id}')"><i class="bi bi-eye"></i></button><button class="btn btn-danger btn-sm" onclick="confirmDelPurch('${p.id}')"><i class="bi bi-trash"></i></button></td></tr>`}).join(''));
+  pg(rows,'pu-tb','pu-pg',sl=>sl.map(p=>{const items=Array.isArray(p.items)?p.items:[];return`<tr><td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${p.ref}</td><td class="td-muted">${fmtDate(p.date)}</td><td class="td-name">${p.supName||'—'}</td><td class="td-muted">${items.length} ${t('tbl.items')}</td><td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.total)}</td><td><span class="badge badge-neutral">${cleanPayment(p.payment)}</span></td><td><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?t('pay.credit'):t('pay.cash')}</span></td><td class="td-actions"><button class="btn btn-ghost btn-sm" onclick="viewPurch('${p.id}')"><i class="bi bi-eye"></i></button><button class="btn btn-danger btn-sm" onclick="confirmDelPurch('${p.id}')"><i class="bi bi-trash"></i></button></td></tr>`}).join(''));
 }
 
 /* ================================================================
@@ -5283,26 +5450,26 @@ function genPL(){
   body.innerHTML=`
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
     <div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:14px;">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;letter-spacing:0.06em;"><i class="bi bi-arrow-up-right-circle" style="color:var(--brand-light);"></i> MAPATO (Revenue)</div>
-      <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border);"><span class="td-muted">Mauzo - Taslimu</span><span class="font-mono" style="color:var(--brand-light);">TZS ${fmt(cashRev)}</span></div>
-      <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border);"><span class="td-muted">Mauzo - Mkopo</span><span class="font-mono text-warning">TZS ${fmt(creditRev)}</span></div>
-      <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border);"><span class="td-muted">Gharama za Bidhaa (COGS)</span><span class="font-mono text-danger">- TZS ${fmt(cogs)}</span></div>
-      <div style="display:flex;justify-content:space-between;padding:8px 0 2px;font-size:14px;font-weight:700;"><span>Faida ya Mauzo (Gross Profit)</span><span class="font-mono" style="color:${grossProfit>=0?'var(--brand-light)':'var(--danger)'};">TZS ${fmt(grossProfit)}</span></div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;letter-spacing:0.06em;"><i class="bi bi-arrow-up-right-circle" style="color:var(--brand-light);"></i> ${t('pl.revenue')}</div>
+      <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border);"><span class="td-muted">${t('pl.cash_sales')}</span><span class="font-mono" style="color:var(--brand-light);">TZS ${fmt(cashRev)}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border);"><span class="td-muted">${t('pl.credit_sales')}</span><span class="font-mono text-warning">TZS ${fmt(creditRev)}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13px;border-bottom:1px solid var(--border);"><span class="td-muted">${t('pl.cogs')}</span><span class="font-mono text-danger">- TZS ${fmt(cogs)}</span></div>
+      <div style="display:flex;justify-content:space-between;padding:8px 0 2px;font-size:14px;font-weight:700;"><span>${t('pl.gross_profit')}</span><span class="font-mono" style="color:${grossProfit>=0?'var(--brand-light)':'var(--danger)'};">TZS ${fmt(grossProfit)}</span></div>
     </div>
     <div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:14px;">
-      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;letter-spacing:0.06em;"><i class="bi bi-arrow-down-right-circle" style="color:var(--danger);"></i> MATUMIZI (Expenses)</div>
-      ${catRows||'<div style="color:var(--text-3);font-size:12px;padding:8px 0;">Hakuna matumizi yaliyorekodiwa katika kipindi hiki</div>'}
-      <div style="display:flex;justify-content:space-between;padding:8px 0 2px;font-size:13px;font-weight:700;border-top:1px solid var(--border);margin-top:4px;"><span>Jumla Matumizi</span><span class="font-mono text-danger">TZS ${fmt(totExp)}</span></div>
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-3);margin-bottom:12px;letter-spacing:0.06em;"><i class="bi bi-arrow-down-right-circle" style="color:var(--danger);"></i> ${t('pl.expenses')}</div>
+      ${catRows||'<div style="color:var(--text-3);font-size:12px;padding:8px 0;">'+t('pl.no_expenses')+'</div>'}
+      <div style="display:flex;justify-content:space-between;padding:8px 0 2px;font-size:13px;font-weight:700;border-top:1px solid var(--border);margin-top:4px;"><span>${t('pl.total_expenses')}</span><span class="font-mono text-danger">TZS ${fmt(totExp)}</span></div>
     </div>
   </div>
   <div style="background:${isProfit?'var(--success-soft)':'var(--danger-soft)'};border:2px solid ${isProfit?'var(--brand-light)':'var(--danger)'};border-radius:var(--radius);padding:18px;display:flex;justify-content:space-between;align-items:center;">
     <div>
-      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);">FAIDA / HASARA YA JUMLA (Net ${isProfit?'Profit':'Loss'})</div>
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);">${t('pl.net_label')} (Net ${isProfit?'Profit':'Loss'})</div>
       <div style="font-size:12px;color:var(--text-2);margin-top:2px;">${fmtDate(from)} — ${fmtDate(to)}</div>
     </div>
     <div style="font-size:28px;font-weight:800;font-family:var(--mono);color:${isProfit?'var(--brand-light)':'var(--danger)'};">${isProfit?'':'- '}TZS ${fmt(Math.abs(netProfit))}</div>
   </div>
-  <div style="font-size:11px;color:var(--text-3);margin-top:8px;text-align:right;"><i class="bi bi-info-circle"></i> COGS inahesabiwa kutoka bei ya kununua × idadi iliyouzwa</div>`;
+  <div style="font-size:11px;color:var(--text-3);margin-top:8px;text-align:right;"><i class="bi bi-info-circle"></i> ${t('pl.cogs_note')}</div>`;
 }
 
 /* ================================================================
@@ -5316,7 +5483,7 @@ function genRep(){
   const pur=filterByBranch(DB.purchases).filter(p=>p.date>=from&&p.date<=to);
   const totS=sls.reduce((s,x)=>s+n(x.total),0),totP=pur.reduce((s,x)=>s+n(x.total),0),prf=totS-totP;
   const totStk=DB.products.reduce((s,p)=>s+n(p.stock)*n(p.bp),0);
-  document.getElementById('rp-stats').innerHTML=SC('Mauzo','TZS '+fmt(totS),sls.length+' muamala','brand')+SC('Manunuzi','TZS '+fmt(totP),pur.length+' muamala','amber')+SC('Faida','TZS '+fmt(prf),prf>=0?'📈':'📉',prf>=0?'info':'danger')+SC('Thamani Stoki','TZS '+fmt(totStk),DB.products.length+' bidhaa','info');
+  document.getElementById('rp-stats').innerHTML=SC(t('rp.stat_sales'),'TZS '+fmt(totS),sls.length+' '+t('rp.stat_txn'),'brand')+SC(t('rp.stat_purchases'),'TZS '+fmt(totP),pur.length+' '+t('rp.stat_txn'),'amber')+SC(t('rp.stat_profit'),'TZS '+fmt(prf),prf>=0?'📈':'📉',prf>=0?'info':'danger')+SC(t('rp.stat_stock'),'TZS '+fmt(totStk),DB.products.length+' '+t('rp.stat_items'),'info');
   const bD={};sls.forEach(s=>{bD[s.date]=bD[s.date]||{tot:0,cash:0,cred:0,cnt:0};bD[s.date].tot+=n(s.total);bD[s.date].cnt++;if(s.creditType==='credit')bD[s.date].cred+=n(s.total);else bD[s.date].cash+=n(s.total);});
   const days=Object.keys(bD).sort().reverse();
   const repRows=days.length?days.map(d=>({d,cnt:bD[d].cnt,cash:bD[d].cash,cred:bD[d].cred,tot:bD[d].tot})):[];
@@ -5337,6 +5504,71 @@ function printReports(){
     ${table}
   </div>`;
   printContent(html);
+}
+
+function _isPLGenerated(){
+  const body=document.getElementById('pl-body');
+  return !!(body&&body.querySelector('[style]'));
+}
+function printPL(){
+  if(!_isPLGenerated()){toast('warning','Bonyeza "Tengeneza" kwanza');return;}
+  const body=document.getElementById('pl-body');
+  const biz=DB.biz||{};
+  const from=document.getElementById('rp-f')?.value||dAgo(30);
+  const to=document.getElementById('rp-t')?.value||td();
+  const html=`<div style="font-family:sans-serif;max-width:800px;margin:0 auto;padding:20px;color:#111;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #16a34a;padding-bottom:10px;margin-bottom:16px;">
+      <div><div style="font-size:18px;font-weight:800;color:#16a34a;">📊 ${biz.bizName||cT?.name||'StokiPro'}</div><div style="font-size:12px;color:#666;">${biz.bizPhone||''}</div></div>
+      <div style="text-align:right;"><div style="font-size:14px;font-weight:700;">Profit &amp; Loss</div><div style="font-size:11px;color:#666;">${fmtDate(from)} — ${fmtDate(to)}</div></div>
+    </div>
+    ${body.innerHTML}
+    <div style="margin-top:16px;border-top:1px solid #e5e7eb;padding-top:8px;font-size:10px;color:#9ca3af;text-align:center;">${biz.bizName||''} · ${fmtDate(td())} · StokiPro v3</div>
+  </div>`;
+  printContent(html);
+}
+function exportPLPDF(){
+  if(!_isPLGenerated()){toast('warning','Bonyeza "Tengeneza" kwanza');return;}
+  const body=document.getElementById('pl-body');
+  if(!window.jspdf){toast('error','jsPDF haipo');return;}
+  const biz=DB.biz||{};
+  const from=document.getElementById('rp-f')?.value||dAgo(30);
+  const to=document.getElementById('rp-t')?.value||td();
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,margin=14;
+  const green=[22,163,74];
+  let y=18;
+  // Header bar
+  doc.setFillColor(...green);doc.rect(0,0,W,14,'F');
+  doc.setTextColor(255,255,255);doc.setFontSize(11);doc.setFont(undefined,'bold');
+  doc.text('📊 '+(biz.bizName||cT?.name||'StokiPro'),margin,9.5);
+  doc.setFontSize(8);doc.setFont(undefined,'normal');
+  doc.text('P&L · '+fmtDate(from)+' — '+fmtDate(to),W-margin,9.5,{align:'right'});
+  y=24;
+  // Extract text rows from the PL body
+  const lines=[];
+  body.querySelectorAll('div[style*="justify-content:space-between"]').forEach(row=>{
+    const spans=row.querySelectorAll('span');
+    if(spans.length>=2){
+      const label=(spans[0].textContent||'').trim();
+      const value=(spans[spans.length-1].textContent||'').trim();
+      if(label&&value)lines.push({label,value,bold:row.style.fontWeight==='700'||row.style.fontSize==='14px'||row.style.fontSize==='28px'});
+    }
+  });
+  doc.setTextColor(30,30,30);
+  lines.forEach(({label,value,bold})=>{
+    if(y>280){doc.addPage();y=18;}
+    doc.setFontSize(bold?10:9);doc.setFont(undefined,bold?'bold':'normal');
+    doc.text(label.slice(0,70),margin,y);
+    doc.text(value.slice(0,40),W-margin,y,{align:'right'});
+    y+=bold?7:5.5;
+  });
+  // Footer
+  doc.setFillColor(245,247,250);doc.rect(0,285,W,12,'F');
+  doc.setTextColor(150,150,150);doc.setFontSize(7.5);
+  doc.text((biz.bizName||'')+'  ·  StokiPro v3  ·  '+fmtDate(td()),W/2,292,{align:'center'});
+  doc.save((biz.bizName||'StokiPro').replace(/\s+/g,'_')+'_PL_'+td()+'.pdf');
+  toast('success','PDF imeshuka ✅');
 }
 
 /* ================================================================
@@ -5977,14 +6209,14 @@ function viewPurch(id){
   const p=DB.purchases.find(x=>x.id===id);if(!p)return;
   window._dPurchId=id;
   const items=Array.isArray(p.items)?p.items:[];
-  document.getElementById('pdet-c').innerHTML=`<div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:14px;"><div class="flex justify-between mb-2"><span class="font-bold">${p.ref}</span><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?'Mkopo':'Taslimu'}</span></div><div class="td-muted" style="font-size:13px;">${p.supName||'—'} · ${fmtDate(p.date)} · TZS ${fmt(p.total)}</div><div style="font-size:11.5px;color:var(--text-3);margin-top:8px;">${items.map(it=>it.pname+' x'+it.qty).join(' | ')||'—'}</div></div>`;
+  document.getElementById('pdet-c').innerHTML=`<div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:14px;"><div class="flex justify-between mb-2"><span class="font-bold">${p.ref}</span><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?t('pay.credit'):t('pay.cash')}</span></div><div class="td-muted" style="font-size:13px;">${p.supName||'—'} · ${fmtDate(p.date)} · TZS ${fmt(p.total)}</div><div style="font-size:11.5px;color:var(--text-3);margin-top:8px;">${items.map(it=>it.pname+' x'+it.qty).join(' | ')||'—'}</div></div>`;
   openM('m-pdet');
 }
 function confirmDelPurch(id){
   const p=DB.purchases.find(x=>x.id===id);if(!p)return;
   window._dPurchId=id;
   const items=Array.isArray(p.items)?p.items:[];
-  document.getElementById('pdet-c').innerHTML=`<div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:14px;"><div class="flex justify-between mb-2"><span class="font-bold">${p.ref}</span><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?'Mkopo':'Taslimu'}</span></div><div class="td-muted" style="font-size:13px;">${p.supName||'—'} · ${fmtDate(p.date)} · TZS ${fmt(p.total)}</div><div style="font-size:11.5px;color:var(--text-3);margin-top:4px;">${items.map(it=>it.pname+' x'+it.qty).join(', ')||'—'}</div></div>`;
+  document.getElementById('pdet-c').innerHTML=`<div style="background:var(--bg-3);border-radius:var(--radius-sm);padding:14px;"><div class="flex justify-between mb-2"><span class="font-bold">${p.ref}</span><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?t('pay.credit'):t('pay.cash')}</span></div><div class="td-muted" style="font-size:13px;">${p.supName||'—'} · ${fmtDate(p.date)} · TZS ${fmt(p.total)}</div><div style="font-size:11.5px;color:var(--text-3);margin-top:4px;">${items.map(it=>it.pname+' x'+it.qty).join(', ')||'—'}</div></div>`;
   openM('m-pdet');
 }
 async function deletePurch(id){
@@ -6289,7 +6521,7 @@ const _i18n = {
     'nav.suppliers':'Wasambazaji','nav.reports':'Ripoti','nav.branches':'Matawi',
     'nav.biz':'Biashara Yangu','nav.logout':'Toka','nav.settings':'Mipangilio','nav.users':'Watumiaji',
     'nav.tenants':'Tenants','nav.auditlogs':'Audit Logs',
-    'nav.activity':'Shughuli','nav.users_roles':'Watumiaji',
+    'nav.activity':'Shughuli','nav.users_roles':'Watumiaji','nav.expenses':'Matumizi',
     // Section titles
     'sec.dashboard':'Dashboard','sec.products':'Bidhaa','sec.stock':'Usimamizi wa Stoki',
     'sec.sales':'Mauzo','sec.purchases':'Manunuzi','sec.customers':'Wateja',
@@ -6396,6 +6628,15 @@ const _i18n = {
     'rp.daily_sales':'Mauzo kwa Siku','rp.transactions':'Miamala',
     'rp.cash':'Taslimu','rp.credit':'Mkopo','rp.total':'Jumla (TZS)',
     'rp.generate':'Tengeneza','rp.print':'Chapisha',
+    'rp.stat_sales':'Mauzo','rp.stat_purchases':'Manunuzi','rp.stat_profit':'Faida','rp.stat_stock':'Thamani Stoki',
+    'rp.stat_txn':'muamala','rp.stat_items':'bidhaa',
+    'pl.revenue':'MAPATO (Revenue)','pl.expenses':'MATUMIZI (Expenses)',
+    'pl.cash_sales':'Mauzo - Taslimu','pl.credit_sales':'Mauzo - Mkopo',
+    'pl.cogs':'Gharama za Bidhaa (COGS)','pl.gross_profit':'Faida ya Mauzo (Gross Profit)',
+    'pl.no_expenses':'Hakuna matumizi yaliyorekodiwa katika kipindi hiki',
+    'pl.total_expenses':'Jumla Matumizi','pl.net_label':'FAIDA / HASARA YA JUMLA',
+    'pl.cogs_note':'COGS inahesabiwa kutoka bei ya kununua × idadi iliyouzwa',
+    'pl.print':'Chapisha P&L','pl.pdf':'Pakua PDF',
     // Analytics cards
     'an.top_buyers':'🏆 Top Buyers','an.high_demand':'🔥 High Demand','an.bad_debts':'⚠️ Bad Debts',
     'an.sales_vs_purch':'Mauzo vs Manunuzi','an.profit_per_day':'Faida kwa Siku',
@@ -6497,7 +6738,7 @@ const _i18n = {
     'nav.suppliers':'Suppliers','nav.reports':'Reports','nav.branches':'Branches',
     'nav.biz':'My Business','nav.logout':'Logout','nav.settings':'Settings','nav.users':'Users',
     'nav.tenants':'Tenants','nav.auditlogs':'Audit Logs',
-    'nav.activity':'Activity','nav.users_roles':'Users',
+    'nav.activity':'Activity','nav.users_roles':'Users','nav.expenses':'Expenses',
     // Section titles
     'sec.dashboard':'Dashboard','sec.products':'Products','sec.stock':'Stock Management',
     'sec.sales':'Sales','sec.purchases':'Purchases','sec.customers':'Customers',
@@ -6604,6 +6845,15 @@ const _i18n = {
     'rp.daily_sales':'Daily Sales','rp.transactions':'Transactions',
     'rp.cash':'Cash','rp.credit':'Credit','rp.total':'Total (TZS)',
     'rp.generate':'Generate','rp.print':'Print',
+    'rp.stat_sales':'Sales','rp.stat_purchases':'Purchases','rp.stat_profit':'Profit','rp.stat_stock':'Stock Value',
+    'rp.stat_txn':'transactions','rp.stat_items':'items',
+    'pl.revenue':'REVENUE','pl.expenses':'EXPENSES',
+    'pl.cash_sales':'Cash Sales','pl.credit_sales':'Credit Sales',
+    'pl.cogs':'Cost of Goods (COGS)','pl.gross_profit':'Gross Profit',
+    'pl.no_expenses':'No expenses recorded for this period',
+    'pl.total_expenses':'Total Expenses','pl.net_label':'NET PROFIT / LOSS',
+    'pl.cogs_note':'COGS calculated from buy price × quantity sold',
+    'pl.print':'Print P&L','pl.pdf':'Download PDF',
     // Analytics cards
     'an.top_buyers':'🏆 Top Buyers','an.high_demand':'🔥 High Demand','an.bad_debts':'⚠️ Bad Debts',
     'an.sales_vs_purch':'Sales vs Purchases','an.profit_per_day':'Profit per Day',
@@ -6730,6 +6980,7 @@ const _i18n = {
       if(typeof renderSups==='function' && document.getElementById('t-su')?.classList.contains('active')) renderSups();
       if(typeof viewCust==='function' && _curCustId && document.getElementById('t-cprof')?.classList.contains('active')) viewCust(_curCustId);
       if(typeof viewSup==='function' && _curSupId && document.getElementById('t-sprof')?.classList.contains('active')) viewSup(_curSupId);
+      if(typeof genRep==='function' && document.getElementById('t-rp')?.classList.contains('active')) genRep();
     } catch(e) {}
   },
 
@@ -6901,15 +7152,15 @@ document.addEventListener('DOMContentLoaded', () => { _i18n.apply(); });
 // Built-in roles (cannot be deleted, can be used as base)
 var BUILTIN_ROLES = [
   {id:'role_owner',   name:'Owner',      color:'brand',   isBuiltIn:true,
-   perms:{products:{v:1,a:1,e:1,d:1},sales:{v:1,a:1,e:1,d:1},purchases:{v:1,a:1,e:1,d:1},stock:{v:1,a:1,e:1,d:1},customers:{v:1,a:1,e:1,d:1},suppliers:{v:1,a:1,e:1,d:1},reports:1,settings:1,users:1}},
+   perms:{products:{v:1,a:1,e:1,d:1},sales:{v:1,a:1,e:1,d:1},purchases:{v:1,a:1,e:1,d:1},stock:{v:1,a:1,e:1,d:1},customers:{v:1,a:1,e:1,d:1},suppliers:{v:1,a:1,e:1,d:1},movements:{v:1,a:1,e:1,d:1},reports:1,settings:1,users:1}},
   {id:'role_manager', name:'Manager',    color:'info',    isBuiltIn:true,
-   perms:{products:{v:1,a:1,e:1,d:1},sales:{v:1,a:1,e:1,d:1},purchases:{v:1,a:1,e:1,d:1},stock:{v:1,a:1,e:1,d:0},customers:{v:1,a:1,e:1,d:0},suppliers:{v:1,a:1,e:1,d:0},reports:1,settings:0,users:0}},
+   perms:{products:{v:1,a:1,e:1,d:1},sales:{v:1,a:1,e:1,d:1},purchases:{v:1,a:1,e:1,d:1},stock:{v:1,a:1,e:1,d:0},customers:{v:1,a:1,e:1,d:0},suppliers:{v:1,a:1,e:1,d:0},movements:{v:1,a:1,e:1,d:0},reports:1,settings:0,users:0}},
   {id:'role_cashier', name:'Cashier',    color:'warning', isBuiltIn:true,
-   perms:{products:{v:1,a:0,e:0,d:0},sales:{v:1,a:1,e:0,d:0},purchases:{v:0,a:0,e:0,d:0},stock:{v:1,a:0,e:0,d:0},customers:{v:1,a:1,e:0,d:0},suppliers:{v:0,a:0,e:0,d:0},reports:0,settings:0,users:0}},
+   perms:{products:{v:1,a:0,e:0,d:0},sales:{v:1,a:1,e:0,d:0},purchases:{v:0,a:0,e:0,d:0},stock:{v:1,a:0,e:0,d:0},customers:{v:1,a:1,e:0,d:0},suppliers:{v:0,a:0,e:0,d:0},movements:{v:0,a:0,e:0,d:0},reports:0,settings:0,users:0}},
   {id:'role_store',   name:'Storekeeper',color:'neutral',  isBuiltIn:true,
-   perms:{products:{v:1,a:1,e:1,d:0},sales:{v:0,a:0,e:0,d:0},purchases:{v:1,a:1,e:0,d:0},stock:{v:1,a:1,e:1,d:0},customers:{v:0,a:0,e:0,d:0},suppliers:{v:1,a:0,e:0,d:0},reports:0,settings:0,users:0}},
+   perms:{products:{v:1,a:1,e:1,d:0},sales:{v:0,a:0,e:0,d:0},purchases:{v:1,a:1,e:0,d:0},stock:{v:1,a:1,e:1,d:0},customers:{v:0,a:0,e:0,d:0},suppliers:{v:1,a:0,e:0,d:0},movements:{v:1,a:1,e:0,d:0},reports:0,settings:0,users:0}},
   {id:'role_viewer',  name:'Viewer',     color:'neutral',  isBuiltIn:true,
-   perms:{products:{v:1,a:0,e:0,d:0},sales:{v:1,a:0,e:0,d:0},purchases:{v:1,a:0,e:0,d:0},stock:{v:1,a:0,e:0,d:0},customers:{v:1,a:0,e:0,d:0},suppliers:{v:1,a:0,e:0,d:0},reports:1,settings:0,users:0}},
+   perms:{products:{v:1,a:0,e:0,d:0},sales:{v:1,a:0,e:0,d:0},purchases:{v:1,a:0,e:0,d:0},stock:{v:1,a:0,e:0,d:0},customers:{v:1,a:0,e:0,d:0},suppliers:{v:1,a:0,e:0,d:0},movements:{v:1,a:0,e:0,d:0},reports:1,settings:0,users:0}},
 ];
 
 var PERM_MODULES = [
@@ -6919,6 +7170,7 @@ var PERM_MODULES = [
   {key:'stock',     label:'Stoki / Adjustment'},
   {key:'customers', label:'Wateja'},
   {key:'suppliers', label:'Wasambazaji'},
+  {key:'movements', label:'Movements / Transfer (Hariri=Approve)'},
   {key:'reports',   label:'Ripoti & Analytics', simple:true},
   {key:'settings',  label:'Settings ya Biashara', simple:true},
   {key:'users',     label:'Watumiaji & Roles', simple:true},
@@ -6959,7 +7211,7 @@ function hasPerm(module, action){
   var p = role.perms[module];
   if(p === undefined) return false;
   if(typeof p === 'number') return p === 1;
-  var amap = {view:'v', add:'a', edit:'e', delete:'d'};
+  var amap = {view:'v', add:'a', edit:'e', delete:'d', approve:'e'};
   return p[amap[action]||action] === 1;
 }
 function permGuard(module, action){
