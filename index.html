@@ -993,7 +993,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
               <div id="st-act-stk" style="display:contents;">
                 <select class="form-select" id="st-br-f" onchange="renderStock()" style="width:140px;font-size:13px;display:none;"><option value="">Branches Zote</option></select>
                 <button class="btn btn-ghost btn-sm" id="st-dist-btn" onclick="openDistModal()" style="display:none;" title="Gawanya Stoki kwa Branches"><i class="bi bi-diagram-3"></i> Gawanya</button>
-                <button class="btn btn-ghost btn-sm" onclick="openM('m-adj')"><i class="bi bi-sliders"></i><span data-t="btn.adjust_stock">Rekebisha</span></button>
+                <button class="btn btn-ghost btn-sm" onclick="openAdjM()"><i class="bi bi-sliders"></i><span data-t="btn.adjust_stock">Rekebisha</span></button>
                 <button class="btn btn-ghost btn-sm" onclick="expExcel('stock')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button>
                 <button class="btn btn-ghost btn-sm" onclick="expPDF('stock')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button>
               </div>
@@ -1010,10 +1010,10 @@ textarea.form-control{resize:vertical;min-height:80px;}
           <!-- Movements sub-panel -->
           <div id="st-panel-mv" style="display:none;">
             <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px;">
-              <select class="form-select" id="mv-sf" onchange="renderMovements()" style="width:150px;font-size:13px;"><option value="">Hali Zote</option><option value="pending">Rasimu</option><option value="sent">Imetumwa</option><option value="approved">Imekubaliwa</option><option value="rejected">Imekataliwa</option></select>
-              <select class="form-select" id="mv-bf" onchange="renderMovements()" style="width:160px;font-size:13px;"><option value="">Branch Zote</option></select>
+              <select class="form-select" id="mv-sf" onchange="renderMovements()" style="width:150px;font-size:13px;"><option value="" data-t="mv.all_status">Hali Zote</option><option value="pending" data-t="mv.pending">Rasimu</option><option value="sent" data-t="mv.sent">Imetumwa</option><option value="approved" data-t="mv.approved">Imekubaliwa</option><option value="rejected" data-t="mv.rejected">Imekataliwa</option></select>
+              <select class="form-select" id="mv-bf" onchange="renderMovements()" style="width:160px;font-size:13px;"><option value="" data-t="mv.all_branches">Branch Zote</option></select>
             </div>
-            <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th data-t="tbl.date">Tarehe</th><th>Kutoka</th><th>Kwenda</th><th data-t="tbl.items">Bidhaa</th><th data-t="tbl.status">Hali</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="mv-tb"></tbody></table></div><div id="mv-pg" class="pg-bar"></div></div>
+            <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th data-t="tbl.date">Tarehe</th><th data-t="mv.from">Kutoka</th><th data-t="mv.to">Kwenda</th><th data-t="tbl.items">Bidhaa</th><th data-t="tbl.status">Hali</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="mv-tb"></tbody></table></div><div id="mv-pg" class="pg-bar"></div></div>
           </div>
         </div>
 
@@ -1158,12 +1158,12 @@ textarea.form-control{resize:vertical;min-height:80px;}
         <div class="section-panel" id="t-br">
           <div class="section-hdr mb-4">
             <div class="section-hdr-title">Matawi ya Biashara</div>
-            <button class="btn btn-primary btn-sm" onclick="openBranchM()"><i class="bi bi-plus-lg"></i>Tawi Jipya</button>
+            <button class="btn btn-primary btn-sm" onclick="openBranchM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new_branch">Tawi Jipya</span></button>
           </div>
           <div id="br-current" class="alert alert-info mb-4" style="display:none">
             <i class="bi bi-building-fill"></i>
-            <span>Unafanya kazi kwenye: <strong id="br-current-name"></strong> &nbsp;
-              <button onclick="setBranch('')" style="border:none;background:none;color:var(--brand-light);text-decoration:underline;cursor:pointer;font-size:12px">Onyesha zote</button>
+            <span><span data-t="br.current_label">Unafanya kazi kwenye:</span> <strong id="br-current-name"></strong> &nbsp;
+              <button onclick="setBranch('')" style="border:none;background:none;color:var(--brand-light);text-decoration:underline;cursor:pointer;font-size:12px" data-t="br.show_all">Onyesha zote</button>
             </span>
           </div>
           <div id="br-list"></div>
@@ -1528,7 +1528,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
 </div>
 <button class="btn btn-primary w-full mt-3" onclick="saveProds()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
-<div class="modal-overlay" id="m-adj"><div class="modal"><div class="modal-header"><h2 class="modal-title" data-t="modal.adj_stock">Rekebisha Stoki</h2><button class="modal-close" onclick="closeM('m-adj')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="form-group"><label class="form-label" data-t="adj.product">Bidhaa</label><select class="form-select" id="adj-p"></select></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="adj.type">Aina</label><select class="form-select" id="adj-t"><option value="add" data-t="adj.add">Ongeza (+)</option><option value="remove" data-t="adj.remove">Punguza (−)</option><option value="set" data-t="adj.set">Weka Idadi</option></select></div><div class="form-group"><label class="form-label" data-t="adj.qty">Idadi</label><input type="number" class="form-control" id="adj-q" min="0"/></div></div><div class="form-group"><label class="form-label" data-t="adj.reason">Sababu</label><input type="text" class="form-control" id="adj-r" placeholder="Hiari"/></div><button class="btn btn-primary w-full mt-2" onclick="saveAdj()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
+<div class="modal-overlay" id="m-adj"><div class="modal"><div class="modal-header"><h2 class="modal-title" data-t="modal.adj_stock">Rekebisha Stoki</h2><button class="modal-close" onclick="closeM('m-adj')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div id="adj-br-info" style="display:none;background:var(--bg-3);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);padding:7px 12px;font-size:12.5px;font-weight:600;color:var(--brand-light);margin-bottom:10px;"><i class="bi bi-building"></i> <span id="adj-br-name"></span></div><div class="form-group"><label class="form-label" data-t="adj.product">Bidhaa</label><select class="form-select" id="adj-p"></select></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="adj.type">Aina</label><select class="form-select" id="adj-t"><option value="add" data-t="adj.add">Ongeza (+)</option><option value="remove" data-t="adj.remove">Punguza (−)</option><option value="set" data-t="adj.set">Weka Idadi</option></select></div><div class="form-group"><label class="form-label" data-t="adj.qty">Idadi</label><input type="number" class="form-control" id="adj-q" min="0"/></div></div><div class="form-group"><label class="form-label" data-t="adj.reason">Sababu</label><input type="text" class="form-control" id="adj-r" placeholder="Hiari"/></div><button class="btn btn-primary w-full mt-2" onclick="saveAdj()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
 <!-- Stock Distribution Modal -->
 <div class="modal-overlay" id="m-dist"><div class="modal modal-xl">
@@ -1568,8 +1568,8 @@ textarea.form-control{resize:vertical;min-height:80px;}
   </div>
   <div class="modal-footer" style="gap:8px;">
     <button class="btn btn-ghost" onclick="closeM('m-mv')" data-t="btn.cancel">Funga</button>
-    <button class="btn btn-secondary" onclick="saveMovement('pending')"><i class="bi bi-floppy"></i> Hifadhi Rasimu</button>
-    <button class="btn btn-primary" onclick="saveMovement('sent')"><i class="bi bi-send"></i> Tuma Transfer</button>
+    <button class="btn btn-secondary" onclick="saveMovement('pending')"><i class="bi bi-floppy"></i> <span data-t="mv.save_draft">Hifadhi Rasimu</span></button>
+    <button class="btn btn-primary" onclick="saveMovement('sent')"><i class="bi bi-send"></i> <span data-t="mv.send">Tuma Transfer</span></button>
   </div>
 </div></div>
 
@@ -2538,7 +2538,7 @@ function goPg(pg,tab){document.querySelectorAll('.page').forEach(p=>p.classList.
 function authTab(t){['l','r'].forEach(x=>{document.getElementById('at'+x)?.classList.toggle('active',x===t);const f=document.getElementById('af'+x);if(f)f.style.display=x===t?'block':'none';});}
 const AT={'a-db':'Dashboard','a-tn':'Tenants','a-us':'Watumiaji','a-an':'Analytics','a-ac':'Audit Logs','a-se':'Sessions & Vifaa','a-st':'Mipangilio'};
 const TT={'t-db':'Dashboard','t-br':'Matawi ya Biashara','t-pr':'Bidhaa','t-st':'Stoki','t-sa':'Mauzo','t-pu':'Manunuzi','t-cu':'Wateja','t-cprof':'Wasifu wa Mteja','t-su':'Wasambazaji','t-sprof':'Wasifu wa Msambazaji','t-ex':'Matumizi','t-an':'Analytics','t-rp':'Ripoti','t-bs':'Biashara Yangu','t-vat':'VAT / Kodi','t-usr':'Watumiaji & Roles'};
-const FAB_MAP={'t-sa':openSaleM,'t-pr':openProdM,'t-pu':openPurchM,'t-cu':openCustM,'t-su':openSupM,'t-st':()=>openM('m-adj'),'t-ex':openExpM};
+const FAB_MAP={'t-sa':openSaleM,'t-pr':openProdM,'t-pu':openPurchM,'t-cu':openCustM,'t-su':openSupM,'t-st':()=>openAdjM(),'t-ex':openExpM};
 
 function aSec(el,id){
   document.querySelectorAll('#page-admin .section-panel').forEach(s=>s.classList.remove('active'));
@@ -3480,7 +3480,7 @@ function filterTb(inp,tbId){const q=inp.value.toLowerCase();document.querySelect
    STOCK
 ================================================================ */
 function renderStock(){
-  const stBrId=document.getElementById('st-br-f')?.value||'';
+  const stBrId=getEffectiveBranchFilter();
   const getStk=p=>stBrId?getBS(p.id,stBrId):n(p.stock);
   const low=DB.products.filter(p=>getStk(p)<=n(p.minStock));
   const zer=DB.products.filter(p=>getStk(p)===0);
@@ -3535,11 +3535,27 @@ function renderStock(){
     </tr>`;
   }).join(''));
 }
-function qAdj(pid){
+// Populate adj modal with branch-filtered stock and open it
+function _populateAdjModal(pid){
+  const stBrId=getEffectiveBranchFilter();
+  const br=stBrId?(DB.branches||[]).find(b=>b.id===stBrId):null;
+  // Branch info badge
+  const info=document.getElementById('adj-br-info');
+  const lbl=document.getElementById('adj-br-name');
+  if(br&&info&&lbl){info.style.display='';lbl.textContent='Branch: '+br.name;}
+  else if(info){info.style.display='none';}
+  // Populate dropdown with branch-filtered stock
   const sel=document.getElementById('adj-p');
-  sel.innerHTML=DB.products.map(p=>`<option value="${p.id}">${p.name} (${pStock(p)} ${p.unit||''})</option>`).join('');
-  sel.value=pid;
+  sel.innerHTML=DB.products.map(p=>`<option value="${p.id}">${p.name} (${stBrId?getBS(p.id,stBrId):n(p.stock)} ${p.unit||''})</option>`).join('');
+  if(pid) sel.value=pid;
   document.getElementById('adj-q').value='';
+}
+function openAdjM(pid){
+  _populateAdjModal(pid||null);
+  openM('m-adj');
+}
+function qAdj(pid){
+  _populateAdjModal(pid);
   openM('m-adj');
 }
 async function saveAdj(){
@@ -3547,7 +3563,7 @@ async function saveAdj(){
   const pid=gv('adj-p'),tp=gv('adj-t'),qty=n(gv('adj-q')),rsn=gv('adj-r');
   if(!pid||qty<=0){toast('error','Jaza taarifa');return;}
   const p=DB.products.find(x=>x.id===pid);if(!p)return;
-  const bId=cB?cB.id:null;
+  const bId=getEffectiveBranchFilter()||null;
   const old=getBS(pid,bId);
   if(tp==='set'){adjBS(pid,bId,qty-old);}
   else if(tp==='add'){adjBS(pid,bId,qty);}
@@ -3682,25 +3698,53 @@ function setStockTab(tab){
   if(tabStk){tabStk.style.borderColor=isStock?'var(--brand)':'';tabStk.style.color=isStock?'var(--brand-light)':'';}
   if(tabMv){tabMv.style.borderColor=!isStock?'var(--brand)':'';tabMv.style.color=!isStock?'var(--brand-light)':'';}
   if(isStock){
-    const brs=DB.branches||[];
+    const allBrs=DB.branches||[];
+    const myBrs=getMyBranches(); // 'all' or array of branch IDs
+    const allowedBrs=myBrs==='all'?allBrs:allBrs.filter(b=>myBrs.includes(b.id));
+    const canBrFeat=canSeeBranchFeatures();
+    const isOwner=!cU||cU.role==='tenant'||cU.role==='admin';
     const stBf=document.getElementById('st-br-f');
     const distBtn=document.getElementById('st-dist-btn');
-    if(brs.length>=1){
+    const mvTab=document.getElementById('st-tab-mv');
+    // Movements tab: hide if user has no movements permission
+    if(mvTab) mvTab.style.display=canBrFeat?'':'none';
+    if(allowedBrs.length>=1){
       if(stBf){
         const cur=stBf.value;
-        stBf.innerHTML='<option value="">Branches Zote</option>'+brs.map(b=>`<option value="${b.id}"${cur===b.id?' selected':''}>${b.name}</option>`).join('');
+        if(myBrs==='all'){
+          // Owner / all-branch access: full dropdown with "Branches Zote"
+          stBf.innerHTML='<option value="">'+t('br.all_branches')+'</option>'+allBrs.map(b=>`<option value="${b.id}"${cur===b.id?' selected':''}>${b.name}</option>`).join('');
+          stBf.disabled=false;stBf.style.opacity='';
+        }else if(allowedBrs.length===1){
+          // Single assigned branch: lock the dropdown, no "Zote" option
+          stBf.innerHTML=`<option value="${allowedBrs[0].id}">${allowedBrs[0].name}</option>`;
+          stBf.value=allowedBrs[0].id;
+          stBf.disabled=true;stBf.style.opacity='0.85';
+        }else{
+          // Multiple specific branches: no "Zote" option, default to first
+          const selId=allowedBrs.find(b=>b.id===cur)?cur:allowedBrs[0].id;
+          stBf.innerHTML=allowedBrs.map(b=>`<option value="${b.id}"${b.id===selId?' selected':''}>${b.name}</option>`).join('');
+          stBf.disabled=false;stBf.style.opacity='';
+        }
         stBf.style.display='';
       }
-      if(distBtn)distBtn.style.display='';
+      // Gawanya: owner always; staff only if has movements+add perm AND all-branch access
+      if(distBtn) distBtn.style.display=isOwner||(canBrFeat&&myBrs==='all'&&hasPerm('movements','add'))?'':'none';
     }else{
-      if(stBf)stBf.style.display='none';
-      if(distBtn)distBtn.style.display='none';
+      if(stBf){stBf.style.display='none';stBf.disabled=false;stBf.style.opacity='';}
+      if(distBtn) distBtn.style.display='none';
     }
     renderStock();
   }else{
-    // Populate movements branch filter
+    // Populate movements branch filter — restrict to user's allowed branches
+    const allBrs=DB.branches||[];
+    const myBrs=getMyBranches();
+    const allowedBrs=myBrs==='all'?allBrs:allBrs.filter(b=>myBrs.includes(b.id));
     const bf=document.getElementById('mv-bf');
-    if(bf){bf.innerHTML='<option value="">Branch Zote</option>'+(DB.branches||[]).map(b=>`<option value="${b.id}">${b.name}</option>`).join('');}
+    if(bf){
+      const allOpt=myBrs==='all'?'<option value="">Branch Zote</option>':'';
+      bf.innerHTML=allOpt+allowedBrs.map(b=>`<option value="${b.id}">${b.name}</option>`).join('');
+    }
     renderMovements();
   }
 }
@@ -3714,7 +3758,7 @@ function renderMovements(){
   if(sf) filtered=filtered.filter(m=>m.status===sf);
   if(bf) filtered=filtered.filter(m=>m.fromBranch===bf||m.toBranch===bf);
   filtered.sort((a,b)=>b.date>a.date?1:b.date<a.date?-1:0);
-  const SL={pending:'Rasimu',sent:'Imetumwa',approved:'Imekubaliwa',rejected:'Imekataliwa'};
+  const SL={pending:t('mv.pending'),sent:t('mv.sent'),approved:t('mv.approved'),rejected:t('mv.rejected')};
   const SC={pending:'warning',sent:'info',approved:'success',rejected:'danger'};
   pg(filtered,'mv-tb','mv-pg',sl=>sl.map(m=>{
     const fBr=(DB.branches||[]).find(b=>b.id===m.fromBranch);
@@ -3729,12 +3773,12 @@ function renderMovements(){
       <td>${fmtDate(m.date)}</td>
       <td>${fBr?fBr.name:'—'}</td>
       <td>${tBr?tBr.name:'—'}</td>
-      <td>${(m.items||[]).length} bidhaa</td>
+      <td>${(m.items||[]).length} ${t('mv.items_count')}</td>
       <td><span class="badge badge-${SC[m.status]||'neutral'}">${SL[m.status]||m.status}</span></td>
       <td style="white-space:nowrap;">
         <button class="btn btn-ghost btn-sm" onclick="viewMovement('${m.id}')"><i class="bi bi-eye"></i></button>
-        ${canSend?`<button class="btn btn-ghost btn-sm" title="Tuma" onclick="sendMovement('${m.id}')"><i class="bi bi-send" style="color:var(--brand-light);"></i></button>`:''}
-        ${canApprove?`<button class="btn btn-ghost btn-sm" title="Kubali" onclick="approveMovement('${m.id}')"><i class="bi bi-check-circle-fill" style="color:var(--brand-light);"></i></button><button class="btn btn-ghost btn-sm" title="Kataa" onclick="rejectMovement('${m.id}')"><i class="bi bi-x-circle-fill" style="color:var(--danger);"></i></button>`:''}
+        ${canSend?`<button class="btn btn-ghost btn-sm" title="${t('mv.send')}" onclick="sendMovement('${m.id}')"><i class="bi bi-send" style="color:var(--brand-light);"></i></button>`:''}
+        ${canApprove?`<button class="btn btn-ghost btn-sm" title="${t('mv.approve')}" onclick="approveMovement('${m.id}')"><i class="bi bi-check-circle-fill" style="color:var(--brand-light);"></i></button><button class="btn btn-ghost btn-sm" title="${t('mv.reject')}" onclick="rejectMovement('${m.id}')"><i class="bi bi-x-circle-fill" style="color:var(--danger);"></i></button>`:''}
         ${canEdit?`<button class="btn btn-ghost btn-sm" onclick="editMovement('${m.id}')"><i class="bi bi-pencil"></i></button>`:''}
         ${canDel?`<button class="btn btn-ghost btn-sm" onclick="confirmDelMovement('${m.id}')"><i class="bi bi-trash" style="color:var(--danger);"></i></button>`:''}
       </td></tr>`;
@@ -3746,7 +3790,7 @@ function openMovementM(){
   if((DB.branches||[]).length<2){toast('error','Unahitaji angalau branch 2 kufanya transfer');return;}
   mvRows=[{productId:'',productName:'',qty:1}];
   document.getElementById('mv-eid').value='';
-  document.getElementById('mv-mt').textContent='Transfer Mpya';
+  document.getElementById('mv-mt').textContent=t('mv.title');
   document.getElementById('mv-dt').value=td();
   document.getElementById('mv-notes').value='';
   document.getElementById('mv-err').innerHTML='';
@@ -3873,7 +3917,7 @@ function viewMovement(id){
   const mv=(DB.movements||[]).find(m=>m.id===id);if(!mv)return;
   const fBr=(DB.branches||[]).find(b=>b.id===mv.fromBranch);
   const tBr=(DB.branches||[]).find(b=>b.id===mv.toBranch);
-  const SL={pending:'Rasimu',sent:'Imetumwa',approved:'Imekubaliwa',rejected:'Imekataliwa'};
+  const SL={pending:t('mv.pending'),sent:t('mv.sent'),approved:t('mv.approved'),rejected:t('mv.rejected')};
   const SC={pending:'warning',sent:'info',approved:'success',rejected:'danger'};
   const itemsHtml=mv.items.map(r=>{const p=DB.products.find(x=>x.id===r.productId);return`<tr><td>${p?p.name:r.productName||r.productId}</td><td class="td-mono">${r.qty} ${p?.unit||''}</td></tr>`;}).join('');
   document.getElementById('mv-view-c').innerHTML=`
@@ -5218,9 +5262,14 @@ function restoreBatch(prod,qty){
 
 function renderBatchModal(pid){
   const p=DB.products.find(x=>x.id===pid);if(!p)return;
-  document.getElementById('bm-title').textContent=p.name+' — Batches';
+  const stBrId=getEffectiveBranchFilter();
+  const br=stBrId?(DB.branches||[]).find(b=>b.id===stBrId):null;
+  const branchStock=stBrId?getBS(p.id,stBrId):n(p.stock);
+  document.getElementById('bm-title').textContent=p.name+' — Batches'+(br?' ('+br.name+')':'');
   const batches=p.batches||[];
+  const brInfoHtml=br?`<div style="background:var(--bg-3);border:1.5px solid var(--border-2);border-radius:var(--radius-sm);padding:7px 12px;font-size:12.5px;font-weight:600;color:var(--brand-light);margin-bottom:10px;"><i class="bi bi-building"></i> Branch: ${br.name}</div>`:'';
   document.getElementById('bm-body').innerHTML=batches.length?`
+    ${brInfoHtml}
     <div class="table-wrap">
       <table class="data-table">
         <thead><tr><th>Batch No</th><th>Idadi</th><th>Tarehe Nunua</th><th>Expiry</th><th>Bei Kununua</th></tr></thead>
@@ -5234,8 +5283,8 @@ function renderBatchModal(pid){
       </table>
     </div>
     <div style="margin-top:12px;background:var(--bg-3);border-radius:var(--radius-sm);padding:12px;font-size:13px;display:flex;justify-content:space-between;">
-      <span>Jumla ya Stoki: <strong class="font-mono">${p.stock} ${p.unit||''}</strong></span>
-      <span>Thamani: <strong class="font-mono text-brand">TZS ${fmt(n(p.stock)*n(p.bp))}</strong></span>
+      <span>Jumla ya Stoki${br?' ('+br.name+')':''}: <strong class="font-mono">${branchStock} ${p.unit||''}</strong></span>
+      <span>Thamani: <strong class="font-mono text-brand">TZS ${fmt(branchStock*n(p.bp))}</strong></span>
     </div>`:ES('Hakuna batches — ununuzi wa kwanza utaunda batch');
   openM('m-batch');
 }
@@ -5436,7 +5485,7 @@ function expCustProf(expFmt){
       const body=pays.map(p=>[fmtDate(p.date),fmtTime(p.created||p.date),'TZS '+fmt(p.amount),p.method||'—','TZS '+fmt(p.debtAfter),p.note||'—']);
       doc_sections.push({head,body,title:'Malipo ('+pays.length+')',sub:'Jumla: TZS '+fmt(pays.reduce((a,p)=>a+n(p.amount),0))});
     }
-    _pdfWriteMulti(doc_sections,c.name+' — Ripoti',biz+'_'+name+'_'+td(),subtitle);
+    _pdfWriteMulti(doc_sections,'Ripoti ya Mteja',biz+'_'+name+'_'+td(),subtitle,c.name);
   }
 }
 
@@ -5488,36 +5537,110 @@ function expSupProf(expFmt){
       const body=pays.map(p=>[fmtDate(p.date),fmtTime(p.created||p.date),'TZS '+fmt(p.amount),p.method||'—','TZS '+fmt(p.debtAfter),p.note||'—']);
       doc_sections.push({head,body,title:'Malipo ('+pays.length+')',sub:'Jumla: TZS '+fmt(pays.reduce((a,p)=>a+n(p.amount),0))});
     }
-    _pdfWriteMulti(doc_sections,s.name+' — Ripoti',biz+'_'+name+'_'+td(),subtitle);
+    _pdfWriteMulti(doc_sections,'Ripoti ya Msambazaji',biz+'_'+name+'_'+td(),subtitle,s.name);
   }
 }
 
 // PDF multi-section writer (mauzo + malipo katika faili moja)
-function _pdfWriteMulti(sections,title,filename,subtitle){
+function _pdfWriteMulti(sections,title,filename,subtitle,entityName){
   if(!window.jspdf){toast('error','jsPDF haijaloadwa');return;}
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const biz=_expBiz();
-  let y=28;
-  // Header
-  doc.setFillColor(22,163,74);doc.rect(0,0,210,22,'F');
-  doc.setFontSize(13);doc.setTextColor(255,255,255);doc.setFont(undefined,'bold');
-  doc.text(biz,12,10);
-  doc.setFontSize(9.5);doc.setFont(undefined,'normal');
-  doc.text(title,12,17);
-  doc.setTextColor(100,100,100);doc.setFontSize(8);
-  doc.text((subtitle||'')+' · '+td(),12,26);
+  const green=[22,163,74], darkGreen=[15,110,50];
+  const W=210, M=14;
+
+  // ── Top header band ──────────────────────────────────────────
+  doc.setFillColor(...darkGreen);
+  doc.rect(0,0,W,30,'F');
+
+  // Business name (top-left)
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(15);doc.setFont(undefined,'bold');
+  doc.text(biz,M,12);
+
+  // Report type label (smaller, below biz name)
+  doc.setFontSize(9);doc.setFont(undefined,'normal');
+  doc.setTextColor(180,230,195);
+  doc.text(title,M,21);
+
+  // Print date (top-right)
+  doc.setFontSize(8);doc.setTextColor(200,240,210);
+  doc.text('Tarehe: '+fmtDate(td()),W-M,12,{align:'right'});
+
+  // ── Entity name band ─────────────────────────────────────────
+  doc.setFillColor(236,253,243);
+  doc.rect(0,30,W,18,'F');
+  doc.setDrawColor(...green);doc.setLineWidth(0.5);
+  doc.line(0,30,W,30);
+  doc.line(0,48,W,48);
+
+  // Left accent bar
+  doc.setFillColor(...green);
+  doc.rect(M,33,3,12,'F');
+
+  // Entity name (large, prominent)
+  doc.setFontSize(14);doc.setFont(undefined,'bold');
+  doc.setTextColor(15,80,40);
+  doc.text(entityName||'',M+7,41);
+
+  // Date range (right side of entity band)
+  const rangeParts=(subtitle||'').split('·');
+  const rangeText=rangeParts.length>1?rangeParts.slice(1).join('·').trim():subtitle||'';
+  doc.setFontSize(8);doc.setFont(undefined,'normal');
+  doc.setTextColor(80,130,100);
+  doc.text('Kipindi: '+rangeText,W-M,41,{align:'right'});
+
+  let y=56;
+
   sections.forEach((sec,si)=>{
-    if(si>0)y+=6;
-    doc.setFontSize(10);doc.setTextColor(22,163,74);doc.setFont(undefined,'bold');
-    doc.text(sec.title,12,y);
-    y+=2;
-    doc.autoTable({startY:y,head:[sec.head],body:sec.body,theme:'striped',styles:{fontSize:8,cellPadding:2},headStyles:{fillColor:[22,163,74],textColor:255,fontStyle:'bold'},margin:{left:10,right:10}});
-    y=doc.lastAutoTable.finalY+4;
-    doc.setFontSize(8.5);doc.setTextColor(60,60,60);doc.setFont(undefined,'normal');
-    doc.text(sec.sub||'',12,y);
-    y+=6;
+    if(si>0)y+=10;
+    if(y>255){doc.addPage();y=20;}
+
+    // Section title pill
+    doc.setFillColor(...green);
+    doc.roundedRect(M,y-5.5,55,8,2,2,'F');
+    doc.setFontSize(9.5);doc.setTextColor(255,255,255);doc.setFont(undefined,'bold');
+    doc.text(sec.title,M+4,y);
+    y+=5;
+
+    doc.autoTable({
+      startY:y,
+      head:[sec.head],
+      body:sec.body,
+      theme:'striped',
+      styles:{fontSize:8,cellPadding:2.8,textColor:[30,30,30]},
+      headStyles:{fillColor:green,textColor:255,fontStyle:'bold',fontSize:8.5},
+      alternateRowStyles:{fillColor:[245,252,248]},
+      tableLineColor:green,tableLineWidth:0.1,
+      margin:{left:M,right:M}
+    });
+
+    y=doc.lastAutoTable.finalY;
+
+    // Summary row
+    doc.setFillColor(220,245,230);
+    doc.rect(M,y,W-M*2,8,'F');
+    doc.setDrawColor(...green);doc.setLineWidth(0.2);
+    doc.rect(M,y,W-M*2,8,'S');
+    doc.setFontSize(8.5);doc.setTextColor(15,80,40);doc.setFont(undefined,'bold');
+    doc.text(sec.sub||'',M+3,y+5.5);
+    y+=14;
   });
+
+  // ── Footer (all pages) ───────────────────────────────────────
+  const pages=doc.getNumberOfPages();
+  for(let i=1;i<=pages;i++){
+    doc.setPage(i);
+    doc.setFillColor(245,248,246);
+    doc.rect(0,284,W,13,'F');
+    doc.setDrawColor(180,210,190);doc.setLineWidth(0.3);
+    doc.line(0,284,W,284);
+    doc.setTextColor(150,160,155);doc.setFontSize(7.5);doc.setFont(undefined,'normal');
+    doc.text(biz+' \u00b7 StokiPro \u00b7 '+fmtDate(td()),W/2,291,{align:'center'});
+    doc.text('Ukurasa '+i+'/'+pages,W-M,291,{align:'right'});
+  }
+
   doc.save(filename+'.pdf');
   toast('success','PDF imesaved: '+filename+'.pdf');
 }
@@ -6805,31 +6928,48 @@ function setBranch(branchId){
   if(sec && TSEC_LOADERS[sec.id]) TSEC_LOADERS[sec.id]();
 }
 
-// Restore last selected branch
+// Restore last selected branch — respects user's branch assignment
 function restoreBranch(){
   if(!cT) return;
-  const saved = localStorage.getItem('sp3-branch-'+cT.id);
-  if(saved && saved !== ''){
-    cB = DB.branches.find(b => b.id === saved) || null;
+  const myBrs = getMyBranches();
+  if(myBrs !== 'all' && myBrs.length >= 1){
+    // Restricted user: honour saved preference only if it's in their allowed list
+    const saved = localStorage.getItem('sp3-branch-'+cT.id);
+    const preferred = (saved && myBrs.includes(saved)) ? saved : myBrs[0];
+    cB = DB.branches.find(b => b.id === preferred) || null;
   } else {
-    cB = null;
+    const saved = localStorage.getItem('sp3-branch-'+cT.id);
+    cB = (saved && saved !== '') ? (DB.branches.find(b => b.id === saved) || null) : null;
   }
   updateBranchSelector();
 }
 
-// Update branch selector dropdown in topbar
+// Update branch selector dropdown in topbar — respects user's allowed branches
 function updateBranchSelector(){
   const sel = document.getElementById('branch-selector');
   if(!sel) return;
-  const branches = DB.branches.filter(b => b.status === 'active');
+  const allActive = DB.branches.filter(b => b.status === 'active');
+  const myBrs = getMyBranches();
+  const allowedBrs = myBrs === 'all' ? allActive : allActive.filter(b => myBrs.includes(b.id));
   const curId = cB ? cB.id : '';
-  sel.innerHTML = `
-    <option value="">🏢 Matawi Yote</option>
-    ${branches.map(b => `<option value="${b.id}" ${b.id===curId?'selected':''}>${b.isHQ?'🏠':''} ${b.name}</option>`).join('')}
-  `;
-  // Update topbar label
+  if(myBrs !== 'all' && allowedBrs.length === 1){
+    // Single assigned branch: lock selector, user cannot switch
+    sel.innerHTML = `<option value="${allowedBrs[0].id}">${allowedBrs[0].name}</option>`;
+    sel.value = allowedBrs[0].id;
+    sel.disabled = true;
+    sel.style.opacity = '0.85';
+  } else if(myBrs !== 'all'){
+    // Multiple specific branches: no "Zote" option
+    sel.disabled = false; sel.style.opacity = '';
+    sel.innerHTML = allowedBrs.map(b => `<option value="${b.id}" ${b.id===curId?'selected':''}>${b.isHQ?'🏠':''} ${b.name}</option>`).join('');
+  } else {
+    // Owner / all-branch access: full dropdown
+    sel.disabled = false; sel.style.opacity = '';
+    sel.innerHTML = `<option value="">🏢 ${t('common.all_branches')}</option>` +
+      allActive.map(b => `<option value="${b.id}" ${b.id===curId?'selected':''}>${b.isHQ?'🏠':''} ${b.name}</option>`).join('');
+  }
   const lbl = document.getElementById('branch-label');
-  if(lbl) lbl.textContent = cB ? cB.name : 'Matawi Yote';
+  if(lbl) lbl.textContent = cB ? cB.name : (myBrs==='all' ? 'Matawi Yote' : (allowedBrs[0]?.name||''));
 }
 
 /* ── BRANCHES CRUD ─────────────────────────────────────────── */
@@ -6915,21 +7055,28 @@ async function deleteBranch(id){
 
 function renderBranches(){
   loadFromLocal();
+  const isOwner = !cU || cU.role === 'tenant' || cU.role === 'admin';
+  const myBrs = getMyBranches();
+  // Show/hide "Tawi Jipya" button — owners only
+  const addBtn = document.querySelector('#t-br .section-hdr .btn-primary');
+  if(addBtn) addBtn.style.display = isOwner ? '' : 'none';
   // Update current branch indicator
   const brCur = document.getElementById('br-current');
   const brCurNm = document.getElementById('br-current-name');
   if(brCur){
-    if(cB){brCur.style.display='flex';if(brCurNm)brCurNm.textContent=cB.name;}
+    if(cB&&isOwner){brCur.style.display='flex';if(brCurNm)brCurNm.textContent=cB.name;}
     else{brCur.style.display='none';}
   }
-  const branches = [...DB.branches];
+  // Filter branches to only show user's allowed branches
+  const allBranches = [...DB.branches];
+  const branches = myBrs === 'all' ? allBranches : allBranches.filter(b => myBrs.includes(b.id));
   const wrap = document.getElementById('br-list');
   if(!wrap) return;
   if(!branches.length){
     wrap.innerHTML = `<div class="empty-state" style="padding:60px 20px">
       <span class="empty-icon">🏪</span>
-      <div class="empty-title">Hakuna matawi bado</div>
-      <div class="empty-sub">Bonyeza "+ Tawi Jipya" kuongeza</div>
+      <div class="empty-title">${isOwner?t('br.no_branch_title'):t('br.no_branch_title_user')}</div>
+      <div class="empty-sub">${isOwner?t('br.no_branch_sub'):t('br.no_branch_sub_user')}</div>
     </div>`;
     return;
   }
@@ -6939,6 +7086,14 @@ function renderBranches(){
     const todaySales = DB.sales.filter(s=>s.branchId===b.id&&s.date===td()).reduce((sum,s)=>sum+n(s.total),0);
     const typeIcon = b.type==='hq'?'🏠':b.type==='ghala'?'🏭':'🏪';
     const isActive = cB && cB.id===b.id;
+    const actionBtns = isOwner
+      ? `${isActive
+          ? `<span class="badge badge-success">${t('br.working')}</span>`
+          : `<button class="btn btn-primary btn-sm" onclick="setBranch('${b.id}')"><i class="bi bi-box-arrow-in-right"></i>${t('br.enter')}</button>`
+        }
+        <button class="btn btn-ghost btn-sm" onclick="openBranchM('${b.id}')"><i class="bi bi-pencil"></i></button>
+        ${!b.isHQ?`<button class="btn btn-danger btn-sm" onclick="deleteBranch('${b.id}')"><i class="bi bi-trash"></i></button>`:''}`
+      : `<span class="badge badge-brand" style="font-size:11px;"><i class="bi bi-shield-check"></i> ${t('br.my_branch_badge')}</span>`;
     return `
     <div class="card mb-3 ${isActive?'branch-active':''}">
       <div class="card-body">
@@ -6947,24 +7102,17 @@ function renderBranches(){
             <div style="width:44px;height:44px;border-radius:12px;background:${isActive?'var(--brand)':'var(--bg-3)'};display:flex;align-items:center;justify-content:center;font-size:20px">${typeIcon}</div>
             <div>
               <div style="font-size:15px;font-weight:800">${b.name} ${b.isHQ?'<span class="badge badge-brand">HQ</span>':''}</div>
-              <div class="td-muted" style="font-size:12px">${b.type==='ghala'?'Ghala':'Duka'} ${b.phone?' · '+b.phone:''}</div>
+              <div class="td-muted" style="font-size:12px">${b.type==='ghala'?t('br.type.warehouse'):t('br.type.shop')} ${b.phone?' · '+b.phone:''}</div>
               ${b.address?`<div style="font-size:11px;color:var(--text-3)">${b.address}</div>`:''}
             </div>
           </div>
-          <div class="flex gap-2">
-            ${isActive
-              ? `<span class="badge badge-success">✓ Inafanya kazi</span>`
-              : `<button class="btn btn-primary btn-sm" onclick="setBranch('${b.id}')"><i class="bi bi-box-arrow-in-right"></i>Ingia</button>`
-            }
-            <button class="btn btn-ghost btn-sm" onclick="openBranchM('${b.id}')"><i class="bi bi-pencil"></i></button>
-            ${!b.isHQ?`<button class="btn btn-danger btn-sm" onclick="deleteBranch('${b.id}')"><i class="bi bi-trash"></i></button>`:''}
-          </div>
+          <div class="flex gap-2">${actionBtns}</div>
         </div>
         <div class="grid grid-4" style="gap:10px">
           ${SC('Mauzo Leo','TZS '+fmt(todaySales),salesCount+' jumla','brand')}
           ${SC('Manunuzi',purchCount,'jumla','amber')}
           ${SC('Wateja',DB.customers.length,'wote','info')}
-          ${SC('Hali',b.status==='active'?'Hai':'Imesimama','','brand')}
+          ${SC(t('tbl.status'),b.status==='active'?t('br.status.active'):t('br.status.inactive'),'','brand')}
         </div>
       </div>
     </div>`;
@@ -7273,6 +7421,29 @@ const _i18n = {
     // Shared table headers
     'tbl.amount':'Kiasi','tbl.method':'Njia','tbl.debt_after':'Deni Baada','tbl.notes':'Kumbukumbu',
     'common.records':'rekodi',
+    // Movement statuses & labels
+    'mv.pending':'Rasimu','mv.sent':'Imetumwa','mv.approved':'Imekubaliwa','mv.rejected':'Imekataliwa',
+    'mv.all_status':'Hali Zote','mv.all_branches':'Branch Zote',
+    'mv.from':'Kutoka','mv.to':'Kwenda',
+    'mv.save_draft':'Hifadhi Rasimu','mv.send':'Tuma Transfer',
+    'mv.approve':'Kubali','mv.reject':'Kataa','mv.new':'Movement Mpya',
+    'mv.items_count':'bidhaa','mv.title':'Transfer Mpya',
+    // Branch
+    'br.type.shop':'Duka','br.type.warehouse':'Ghala',
+    'br.working':'✓ Inafanya kazi','br.enter':'Ingia',
+    'br.my_branch_badge':'Tawi Lako',
+    'br.no_branch_title':'Hakuna matawi bado','br.no_branch_sub':'Bonyeza "+ Tawi Jipya" kuongeza',
+    'br.no_branch_title_user':'Hujapewa tawi','br.no_branch_sub_user':'Wasiliana na msimamizi kukupa ufikiaji wa tawi',
+    'br.status.active':'Hai','br.status.inactive':'Imesimama',
+    'br.current_label':'Unafanya kazi kwenye:','br.show_all':'Onyesha zote',
+    'br.all_branches':'Branches Zote',
+    // Users & roles
+    'usr.status.active':'Amilifu','usr.status.inactive':'Amefungiwa',
+    'usr.all_branches':'Yote','usr.has_pin':'PIN imewekwa','usr.no_pin':'Hana PIN',
+    // Expenses
+    'exp.new':'Matumizi Mapya',
+    // Shared
+    'lbl.all_status':'Hali Zote','lbl.hq':'Makao Makuu',
   },
 
   en: {
@@ -7493,6 +7664,29 @@ const _i18n = {
     // Shared table headers
     'tbl.amount':'Amount','tbl.method':'Method','tbl.debt_after':'Debt After','tbl.notes':'Notes',
     'common.records':'records',
+    // Movement statuses & labels
+    'mv.pending':'Draft','mv.sent':'Sent','mv.approved':'Approved','mv.rejected':'Rejected',
+    'mv.all_status':'All Status','mv.all_branches':'All Branches',
+    'mv.from':'From','mv.to':'To',
+    'mv.save_draft':'Save Draft','mv.send':'Send Transfer',
+    'mv.approve':'Approve','mv.reject':'Reject','mv.new':'New Movement',
+    'mv.items_count':'items','mv.title':'New Transfer',
+    // Branch
+    'br.type.shop':'Shop','br.type.warehouse':'Warehouse',
+    'br.working':'✓ Working Here','br.enter':'Enter',
+    'br.my_branch_badge':'Your Branch',
+    'br.no_branch_title':'No branches yet','br.no_branch_sub':'Click "+ New Branch" to add',
+    'br.no_branch_title_user':'No branch assigned','br.no_branch_sub_user':'Contact admin to assign you a branch',
+    'br.status.active':'Active','br.status.inactive':'Inactive',
+    'br.current_label':'Currently working in:','br.show_all':'Show all',
+    'br.all_branches':'All Branches',
+    // Users & roles
+    'usr.status.active':'Active','usr.status.inactive':'Suspended',
+    'usr.all_branches':'All','usr.has_pin':'PIN set','usr.no_pin':'No PIN',
+    // Expenses
+    'exp.new':'New Expense',
+    // Shared
+    'lbl.all_status':'All Status','lbl.hq':'Headquarters',
   },
 
   t(key) {
@@ -7528,6 +7722,11 @@ const _i18n = {
       if(typeof viewCust==='function' && _curCustId && document.getElementById('t-cprof')?.classList.contains('active')) viewCust(_curCustId);
       if(typeof viewSup==='function' && _curSupId && document.getElementById('t-sprof')?.classList.contains('active')) viewSup(_curSupId);
       if(typeof genRep==='function' && document.getElementById('t-rp')?.classList.contains('active')) genRep();
+      if(typeof renderBranches==='function' && document.getElementById('t-br')?.classList.contains('active')) renderBranches();
+      if(typeof renderTUsers==='function' && document.getElementById('t-usr')?.classList.contains('active')){renderTUsers();renderRoles();}
+      if(typeof renderExps==='function' && document.getElementById('t-ex')?.classList.contains('active')) renderExps();
+      if(typeof loadTenAn==='function' && document.getElementById('t-an')?.classList.contains('active')) loadTenAn();
+      if(typeof renderMovements==='function' && document.getElementById('st-panel-mv')?.style.display!=='none' && document.getElementById('t-st')?.classList.contains('active')) renderMovements();
     } catch(e) {}
   },
 
@@ -7766,6 +7965,29 @@ function permGuard(module, action){
   toast('error','Huna ruhusa ya kufanya hii ('+module+')');
   return false;
 }
+// Returns tUser record for current logged-in staff user (null for owner/admin)
+function getMyTUser(){
+  if(!cU||cU.role==='tenant'||cU.role==='admin') return null;
+  return (DB.tUsers||[]).find(function(u){return u.username===cU.username;})||null;
+}
+// Returns 'all' or array of branch IDs this user is allowed to access
+function getMyBranches(){
+  var tu=getMyTUser();
+  if(!tu) return 'all';
+  if(!tu.branches||tu.branches[0]==='all') return 'all';
+  return tu.branches.filter(function(bid){return (DB.branches||[]).some(function(b){return b.id===bid;});});
+}
+// True if current user's role allows branch features (movements, gawanya)
+function canSeeBranchFeatures(){
+  if(!cU||cU.role==='tenant'||cU.role==='admin') return true;
+  return hasPerm('movements','view');
+}
+// Returns the effective branch ID to filter stock — respects user's assigned branch
+function getEffectiveBranchFilter(){
+  var myBrs=getMyBranches();
+  if(myBrs!=='all'&&myBrs.length===1) return myBrs[0]; // always locked to single branch
+  return document.getElementById('st-br-f')?.value||'';
+}
 
 // Show/hide sidebar links based on current user's permissions
 function applyNavPerms(){
@@ -7801,17 +8023,17 @@ function renderTUsers(){
     var roleColor = role ? role.color : 'neutral';
     var brLabel = '';
     if(!u.branches || u.branches[0] === 'all'){
-      brLabel = '<span class="badge badge-success">Yote</span>';
+      brLabel = '<span class="badge badge-success">'+t('usr.all_branches')+'</span>';
     } else {
       brLabel = u.branches.map(function(bid){
         var br = branches.find(function(b){ return b.id === bid; });
         return br ? ('<span class="badge badge-neutral" style="margin-right:2px;">'+br.name+'</span>') : '';
       }).join('');
     }
-    var pinDot = u.pin ? '<i class="bi bi-shield-check" style="color:var(--brand-light);" title="PIN imewekwa"></i>' : '<i class="bi bi-shield-x" style="color:var(--text-3);" title="Hana PIN"></i>';
+    var pinDot = u.pin ? '<i class="bi bi-shield-check" style="color:var(--brand-light);" title="'+t('usr.has_pin')+'"></i>' : '<i class="bi bi-shield-x" style="color:var(--text-3);" title="'+t('usr.no_pin')+'"></i>';
     var statusBadge = u.status === 'active'
-      ? '<span class="badge badge-success">Amilifu</span>'
-      : '<span class="badge badge-danger">Amefungiwa</span>';
+      ? '<span class="badge badge-success">'+t('usr.status.active')+'</span>'
+      : '<span class="badge badge-danger">'+t('usr.status.inactive')+'</span>';
     return '<tr>'
       +'<td class="td-muted td-mono">'+(i+1)+'</td>'
       +'<td class="td-name">'+u.name+'</td>'
