@@ -3569,7 +3569,7 @@ let mvRows=[];
 ================================================================ */
 function openDistModal(){
   const brs=DB.branches||[];
-  if(brs.length<2){toast('warning','Unahitaji branches 2+');return;}
+  if(brs.length<1){toast('warning','Ongeza branch kwanza');return;}
   const prods=DB.products.filter(p=>n(p.stock)>0);
   if(!prods.length){toast('warning','Hakuna bidhaa zenye stoki');return;}
 
@@ -3682,11 +3682,10 @@ function setStockTab(tab){
   if(tabStk){tabStk.style.borderColor=isStock?'var(--brand)':'';tabStk.style.color=isStock?'var(--brand-light)':'';}
   if(tabMv){tabMv.style.borderColor=!isStock?'var(--brand)':'';tabMv.style.color=!isStock?'var(--brand-light)':'';}
   if(isStock){
-    // Show branch filter + distribute button only if 2+ branches
     const brs=DB.branches||[];
     const stBf=document.getElementById('st-br-f');
     const distBtn=document.getElementById('st-dist-btn');
-    if(brs.length>=2){
+    if(brs.length>=1){
       if(stBf){
         const cur=stBf.value;
         stBf.innerHTML='<option value="">Branches Zote</option>'+brs.map(b=>`<option value="${b.id}"${cur===b.id?' selected':''}>${b.name}</option>`).join('');
