@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="sw" data-theme="dark">
+<html lang="sw" data-theme="light">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
@@ -749,7 +749,11 @@ textarea.form-control{resize:vertical;min-height:80px;}
           <div class="form-group"><label class="form-label" data-t="reg.username">Username *</label><input type="text" class="form-control" id="ru"/></div>
           <div class="form-group"><label class="form-label" data-t="reg.password">Nywila *</label><input type="password" class="form-control" id="rpw"/></div>
         </div>
-        <div class="form-group"><label class="form-label" data-t="reg.email">Barua Pepe</label><input type="email" class="form-control" id="re"/></div>
+        <div class="form-group">
+          <label class="form-label" data-t="reg.email">Barua Pepe</label>
+          <input type="email" class="form-control" id="re" onblur="checkRegEmail(this.value)"/>
+          <div id="re-err" style="display:none;color:var(--danger);font-size:12px;margin-top:5px;align-items:center;gap:5px;"><i class="bi bi-exclamation-circle-fill"></i><span id="re-err-msg"></span></div>
+        </div>
         <div style="display:none;">
           <input type="text" id="r-addr"/><input type="text" id="r-type"/>
           <input type="text" id="r-tin"/>
@@ -1828,7 +1832,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
    CONFIG
 ================================================================ */
 // const BACKEND='https://script.google.com/macros/s/AKfycbxmK3DCgbOxZs5d-ilR4JeDPrrnEfx2F8k6Si14uWawyp7OMZZua-layEzmyc5kubZT/exec';
-const BACKEND='https://script.google.com/macros/s/AKfycbwHm2i8kECaN1E7xFcRtnqXKHwv7D071PlzxlyJUQnNzTiUAPcukFORn5duUib5MpS3/exec';
+const BACKEND='https://script.google.com/macros/s/AKfycbxWQef6t99oWlGuQy2cSqsTiLF-5ZE5GCCsxXQfTQDle0HQOP5rf3EVA34_-8Yu4CoX/exec';
 const PS=15;
 
 /* ================================================================
@@ -2724,6 +2728,21 @@ async function doLogin(){
   }catch(e){showAE('Hitilafu: '+e.message);}
   finally{btn.innerHTML='<i class="bi bi-box-arrow-in-right"></i>Ingia';btn.disabled=false;}
 }
+// Real-time email check on blur
+async function checkRegEmail(email){
+  const errDiv=document.getElementById('re-err');
+  const errMsg=document.getElementById('re-err-msg');
+  if(!errDiv||!errMsg)return;
+  if(!email||!email.includes('@')){errDiv.style.display='none';return;}
+  errMsg.textContent=t('reg.email_checking');
+  errDiv.style.display='flex';
+  try{
+    const vr=await api({action:'check_email',email:email.trim()});
+    if(vr.exists){errMsg.textContent=t('reg.email_exists');errDiv.style.display='flex';}
+    else{errDiv.style.display='none';}
+  }catch(e){errDiv.style.display='none';}
+}
+
 async function doReg(){
   const btn=document.getElementById('reg-btn');
   if(btn&&btn.disabled)return;
@@ -2732,6 +2751,19 @@ async function doReg(){
   if(pw.length<6){toast('error','Nywila iwe herufi 6+');return;}
   let users=LS.getu('users');
   if(users.find(x=>x.username===ur)){toast('error','Username inatumika tayari');return;}
+  // Email uniqueness check (backend)
+  if(em&&em.includes('@')){
+    try{
+      const ec=await api({action:'check_email',email:em.trim()});
+      if(ec.exists){
+        const errDiv=document.getElementById('re-err');
+        const errMsg=document.getElementById('re-err-msg');
+        if(errDiv&&errMsg){errMsg.textContent=t('reg.email_exists');errDiv.style.display='flex';}
+        toast('error',t('reg.email_exists'));
+        return;
+      }
+    }catch(e){}
+  }
   // Kuzuia double-click
   if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner spinner-sm"></span> Inasajili...';}
   const tid='t_'+uid();
@@ -2762,6 +2794,7 @@ async function doReg(){
     document.getElementById('reg-form-body').style.display='block';
     if(btn){btn.disabled=false;btn.innerHTML='<i class="bi bi-person-plus"></i><span data-t="reg.submit">Sajili Biashara</span>';}
     ['rb','rn','ru','rpw','rph','re','r-addr','r-type','r-tin'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+    const reErr=document.getElementById('re-err');if(reErr)reErr.style.display='none';
     const cur=document.getElementById('r-cur');if(cur)cur.value='TZS';
     authTab('l');
     document.getElementById('lu').value=ur;
@@ -7184,7 +7217,7 @@ const gv=id=>document.getElementById(id)?.value?.trim()||'';
    START
 ================================================================ */
 window.addEventListener('DOMContentLoaded',()=>{
-  const th=localStorage.getItem('sp3-th')||'dark';
+  const th=localStorage.getItem('sp3-th')||'light';
   document.documentElement.setAttribute('data-theme',th);
   document.querySelectorAll('.theme-toggle').forEach(b=>b.innerHTML=th==='dark'?'<i class="bi bi-sun-fill"></i>':'<i class="bi bi-moon-stars-fill"></i>');
   // startAutoSync inaitwa ndani ya init() na doLogin()
@@ -7403,6 +7436,8 @@ const _i18n = {
     'reg.email':'Barua Pepe','reg.biz_address':'Anuani ya Biashara',
     'reg.biz_type':'Aina ya Biashara','reg.tin':'Nambari ya TIN',
     'reg.currency':'Sarafu','reg.submit':'Sajili Biashara','reg.back':'Nyumbani',
+    'reg.email_exists':'Barua pepe hii tayari imeshatumika — ingia au tumia nyingine',
+    'reg.email_checking':'Inaangalia...',
     // Customer profile
     'cprof.total_sales':'Mauzo Jumla','cprof.total_spent':'Kilichotumika',
     'cprof.current_debt':'Deni la Sasa','cprof.credit_limit':'Kikomo Mkopo',
@@ -7646,6 +7681,8 @@ const _i18n = {
     'reg.email':'Email','reg.biz_address':'Business Address',
     'reg.biz_type':'Business Type','reg.tin':'TIN Number',
     'reg.currency':'Currency','reg.submit':'Register Business','reg.back':'Home',
+    'reg.email_exists':'This email is already in use — please log in or use another',
+    'reg.email_checking':'Checking...',
     // Customer profile
     'cprof.total_sales':'Total Sales','cprof.total_spent':'Total Spent',
     'cprof.current_debt':'Current Debt','cprof.credit_limit':'Credit Limit',
