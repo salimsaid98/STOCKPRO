@@ -1827,7 +1827,8 @@ textarea.form-control{resize:vertical;min-height:80px;}
 /* ================================================================
    CONFIG
 ================================================================ */
-const BACKEND='https://script.google.com/macros/s/AKfycbxmK3DCgbOxZs5d-ilR4JeDPrrnEfx2F8k6Si14uWawyp7OMZZua-layEzmyc5kubZT/exec';
+// const BACKEND='https://script.google.com/macros/s/AKfycbxmK3DCgbOxZs5d-ilR4JeDPrrnEfx2F8k6Si14uWawyp7OMZZua-layEzmyc5kubZT/exec';
+const BACKEND='https://script.google.com/macros/s/AKfycbwHm2i8kECaN1E7xFcRtnqXKHwv7D071PlzxlyJUQnNzTiUAPcukFORn5duUib5MpS3/exec';
 const PS=15;
 
 /* ================================================================
@@ -2612,34 +2613,44 @@ async function handleGoogleCredential(response){
       if(btn){btn.disabled=false;btn.innerHTML='<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-3.59-13.46-8.83l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> Ingia na Google';}
       return;
     }
-    // Login iliyofanikiwa — tumia mtiririko sawa na doLogin()
+    // Login iliyofanikiwa
     const u=vr.user;
+    const isNew=vr.isNew===true;
+
+    // Hifadhi user kwenye local cache
     let users=LS.getu('users');
     const ui=users.findIndex(x=>x.id===u.id);
     if(ui>=0){users[ui]={...users[ui],...u};}else{users.push(u);}
     LS.setu('users',users);
+
     if(u.role==='tenant'||u.role==='staff'){
-      let tenants=LS.getu('tenants');
-      if(!tenants.length){const r=await api({action:'get_all',store:'tenants'});tenants=r.data||[];LS.setu('tenants',tenants);}
-      const ten=tenants.find(x=>x.id===u.tenantId);
+      let ten;
+      if(isNew&&vr.tenant){
+        // Account mpya — tenant imetoka backend moja kwa moja
+        ten=vr.tenant;
+        let tenants=LS.getu('tenants');
+        tenants.push(ten);
+        LS.setu('tenants',tenants);
+      }else{
+        // Account iliyopo — pata tenant kutoka cache au Sheets
+        let tenants=LS.getu('tenants');
+        if(!tenants.length){const r=await api({action:'get_all',store:'tenants'});tenants=r.data||[];LS.setu('tenants',tenants);}
+        ten=tenants.find(x=>x.id===u.tenantId);
+      }
       if(!ten||ten.status!=='active'){showAE('Biashara yako imezuiwa au haipo');return;}
       if(u.role==='staff'&&!u.fullname)u.fullname=u.name||u.username;
       cU=u;cT=ten;setSess(u,ten);
-      const hasLocal=LS.get(ten.id,'sales').length>0||LS.get(ten.id,'products').length>0;
-      if(!hasLocal){
-        if(btn){btn.innerHTML='<span class="spinner spinner-sm"></span> Inapakia data...';}
-        await pullFromSheets(ten.id);
-      }else{
-        setTimeout(()=>pullFromSheets(cT.id).then(()=>{loadFromLocal();
-          const sec=document.querySelector('#page-tenant .section-panel.active');
-          if(sec&&TSEC_LOADERS[sec.id])TSEC_LOADERS[sec.id]();
-          loadDash();
-        }),500);
-      }
+      if(btn){btn.innerHTML='<span class="spinner spinner-sm"></span> Inapakia data...';}
+      await pullFromSheets(ten.id);
       loadFromLocal();restoreBranch();applyNavPerms();
-      toast('success','Karibu! 👋','Umeingia kwa Google — '+(u.fullname||name));
+      if(isNew){
+        toast('success','Karibu StokiPro! 🎉','Akaunti yako mpya imeundwa — '+(u.fullname||name));
+      }else{
+        toast('success','Karibu! 👋','Umeingia kwa Google — '+(u.fullname||name));
+      }
       goPg('tenant');loadDash();startAutoSync();
-      logActivity('Ameingia kwa Google','Ingia');captureSession();
+      logActivity(isNew?'Akaunti mpya kwa Google':'Ameingia kwa Google','Ingia');
+      captureSession();
       setTimeout(()=>{migrateStockToBranches();},200);
     }else if(u.role==='admin'){
       goPg('admin');loadAdmDash();
