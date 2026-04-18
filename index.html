@@ -5484,8 +5484,14 @@ function expCustProf(expFmt){
   if(kind!=='all'&&type==='payments')pays=pays.filter(p=>(kind==='credit'?false:true));// payments don't have credit type
 
   const subtitle=`${c.name} · ${from||'—'} ~ ${to||'—'}`;
+  const debtInfo={label:t('cprof.current_debt'),amount:n(c.currentDebt),danger:n(c.currentDebt)>0};
   if(expFmt==='excel'){
     const rows=[];
+    // Debt summary header
+    rows.push(['📋 '+c.name]);
+    rows.push([t('cprof.current_debt'),n(c.currentDebt)>0?'TZS '+fmt(n(c.currentDebt)):'—']);
+    rows.push([t('cprof.total_spent'),'TZS '+fmt(n(c.totalSpent))]);
+    rows.push([]);
     if(type==='all'||type==='sales'){
       rows.push([]);
       rows.push(['📊 MAUZO ('+sales.length+')']);
@@ -5518,7 +5524,7 @@ function expCustProf(expFmt){
       const body=pays.map(p=>[fmtDate(p.date),fmtTime(p.created||p.date),'TZS '+fmt(p.amount),p.method||'—','TZS '+fmt(p.debtAfter),p.note||'—']);
       doc_sections.push({head,body,title:'Malipo ('+pays.length+')',sub:'Jumla: TZS '+fmt(pays.reduce((a,p)=>a+n(p.amount),0))});
     }
-    _pdfWriteMulti(doc_sections,'Ripoti ya Mteja',biz+'_'+name+'_'+td(),subtitle,c.name);
+    _pdfWriteMulti(doc_sections,'Ripoti ya Mteja',biz+'_'+name+'_'+td(),subtitle,c.name,debtInfo);
   }
 }
 
@@ -5536,8 +5542,14 @@ function expSupProf(expFmt){
   pays=_filterByRange(pays,from,to,'date');
 
   const subtitle=`${s.name} · ${from||'—'} ~ ${to||'—'}`;
+  const debtInfo={label:t('sprof.owes'),amount:n(s.currentDebt),danger:n(s.currentDebt)>0};
   if(expFmt==='excel'){
     const rows=[];
+    // Debt summary header
+    rows.push(['📋 '+s.name]);
+    rows.push([t('sprof.owes'),n(s.currentDebt)>0?'TZS '+fmt(n(s.currentDebt)):'—']);
+    rows.push([t('sprof.total_bought'),'TZS '+fmt(n(s.totalPurch))]);
+    rows.push([]);
     if(type==='all'||type==='purchases'){
       rows.push([]);
       rows.push(['🛒 MANUNUZI ('+purs.length+')']);
@@ -5570,61 +5582,76 @@ function expSupProf(expFmt){
       const body=pays.map(p=>[fmtDate(p.date),fmtTime(p.created||p.date),'TZS '+fmt(p.amount),p.method||'—','TZS '+fmt(p.debtAfter),p.note||'—']);
       doc_sections.push({head,body,title:'Malipo ('+pays.length+')',sub:'Jumla: TZS '+fmt(pays.reduce((a,p)=>a+n(p.amount),0))});
     }
-    _pdfWriteMulti(doc_sections,'Ripoti ya Msambazaji',biz+'_'+name+'_'+td(),subtitle,s.name);
+    _pdfWriteMulti(doc_sections,'Ripoti ya Msambazaji',biz+'_'+name+'_'+td(),subtitle,s.name,debtInfo);
   }
 }
 
 // PDF multi-section writer (mauzo + malipo katika faili moja)
-function _pdfWriteMulti(sections,title,filename,subtitle,entityName){
+function _pdfWriteMulti(sections,title,filename,subtitle,entityName,debtInfo){
   if(!window.jspdf){toast('error','jsPDF haijaloadwa');return;}
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const biz=_expBiz();
   const green=[22,163,74], darkGreen=[15,110,50];
+  const red=[220,38,38], redSoft=[254,226,226];
   const W=210, M=14;
 
   // ── Top header band ──────────────────────────────────────────
   doc.setFillColor(...darkGreen);
   doc.rect(0,0,W,30,'F');
 
-  // Business name (top-left)
   doc.setTextColor(255,255,255);
   doc.setFontSize(15);doc.setFont(undefined,'bold');
   doc.text(biz,M,12);
 
-  // Report type label (smaller, below biz name)
   doc.setFontSize(9);doc.setFont(undefined,'normal');
   doc.setTextColor(180,230,195);
   doc.text(title,M,21);
 
-  // Print date (top-right)
   doc.setFontSize(8);doc.setTextColor(200,240,210);
   doc.text('Tarehe: '+fmtDate(td()),W-M,12,{align:'right'});
 
-  // ── Entity name band ─────────────────────────────────────────
+  // ── Entity + Debt band ────────────────────────────────────────
+  const bandH = debtInfo ? 26 : 18;
   doc.setFillColor(236,253,243);
-  doc.rect(0,30,W,18,'F');
+  doc.rect(0,30,W,bandH,'F');
   doc.setDrawColor(...green);doc.setLineWidth(0.5);
   doc.line(0,30,W,30);
-  doc.line(0,48,W,48);
+  doc.line(0,30+bandH,W,30+bandH);
 
   // Left accent bar
   doc.setFillColor(...green);
-  doc.rect(M,33,3,12,'F');
+  doc.rect(M,33,3,bandH-6,'F');
 
-  // Entity name (large, prominent)
-  doc.setFontSize(14);doc.setFont(undefined,'bold');
+  // Entity name
+  doc.setFontSize(13);doc.setFont(undefined,'bold');
   doc.setTextColor(15,80,40);
-  doc.text(entityName||'',M+7,41);
+  doc.text(entityName||'',M+7,debtInfo?39:41);
 
-  // Date range (right side of entity band)
+  // Date range (top-right)
   const rangeParts=(subtitle||'').split('·');
   const rangeText=rangeParts.length>1?rangeParts.slice(1).join('·').trim():subtitle||'';
   doc.setFontSize(8);doc.setFont(undefined,'normal');
   doc.setTextColor(80,130,100);
-  doc.text('Kipindi: '+rangeText,W-M,41,{align:'right'});
+  doc.text('Kipindi: '+rangeText,W-M,debtInfo?36:41,{align:'right'});
 
-  let y=56;
+  // Debt info box (bottom-right of band)
+  if(debtInfo){
+    const hasDebt=n(debtInfo.amount)>0;
+    const dBg=hasDebt?redSoft:[220,245,230];
+    const dTxt=hasDebt?red:green;
+    const dLabel=(debtInfo.label||t('tbl.debt'))+': TZS '+fmt(n(debtInfo.amount));
+    // Debt badge box
+    doc.setFillColor(...dBg);
+    doc.roundedRect(W-M-62,30+bandH-12,62,9,2,2,'F');
+    doc.setDrawColor(...dTxt);doc.setLineWidth(0.3);
+    doc.roundedRect(W-M-62,30+bandH-12,62,9,2,2,'S');
+    doc.setFontSize(8.5);doc.setFont(undefined,'bold');
+    doc.setTextColor(...dTxt);
+    doc.text(dLabel,W-M-31,30+bandH-6.5,{align:'center'});
+  }
+
+  let y=30+bandH+8;
 
   sections.forEach((sec,si)=>{
     if(si>0)y+=10;
