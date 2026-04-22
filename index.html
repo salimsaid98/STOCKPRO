@@ -359,6 +359,12 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
 /* SALE ITEMS */
 .sale-item{background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;margin-bottom:8px;}
+/* Product search dropdown */
+.prod-search-wrap{position:relative;}
+.prod-drop{position:absolute;top:calc(100% + 2px);left:0;right:0;background:var(--bg-2);border:1px solid var(--border);border-radius:var(--radius-sm);max-height:200px;overflow-y:auto;z-index:1001;box-shadow:0 6px 18px rgba(0,0,0,0.18);}
+.prod-drop-item{padding:8px 12px;cursor:pointer;font-size:13px;color:var(--text-1);border-bottom:1px solid var(--border);}
+.prod-drop-item:last-child{border-bottom:none;}
+.prod-drop-item:hover,.prod-drop-item.highlighted{background:var(--brand-glow);color:var(--brand-light);}
 
 /* FILTER PILLS */
 .filter-pills{display:flex;gap:6px;flex-wrap:wrap;}
@@ -859,11 +865,14 @@ textarea.form-control{resize:vertical;min-height:80px;}
               <button class="btn btn-ghost w-full" onclick="syncNow('adm')"><i class="bi bi-cloud-upload"></i>Sync Sasa</button>
             </div></div>
             <div class="card"><div class="card-header"><h3><i class="bi bi-palette"></i> Mwonekano</h3></div><div class="card-body">
-              <div class="form-group"><label class="form-label">Theme</label>
+              <div class="form-group mb-3"><label class="form-label">Hali ya Mwanga</label>
                 <div class="flex gap-2 mt-2">
                   <button class="btn btn-ghost" onclick="setTheme('dark')" style="flex:1;"><i class="bi bi-moon-stars-fill"></i>Giza</button>
                   <button class="btn btn-ghost" onclick="setTheme('light')" style="flex:1;"><i class="bi bi-sun-fill"></i>Mwanga</button>
                 </div>
+              </div>
+              <div class="form-group"><label class="form-label" style="margin-bottom:10px;display:block;">Rangi ya Mfumo</label>
+                <div id="adm-theme-picker"></div>
               </div>
             </div></div>
             <!-- Developer Photo Card -->
@@ -1240,6 +1249,14 @@ textarea.form-control{resize:vertical;min-height:80px;}
             </div>
           </div>
 
+          <!-- Colour Theme -->
+          <div class="card mb-4">
+            <div class="card-header"><h3>🎨 Rangi ya Mfumo</h3></div>
+            <div class="card-body" id="theme-picker-card-body">
+              <!-- populated by renderThemePickerCard() -->
+            </div>
+          </div>
+
           <!-- Alerts -->
           <div class="card">
             <div class="card-header"><h3>🔔 Arifa za Email</h3></div>
@@ -1505,7 +1522,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
 <div class="modal-overlay" id="m-nu"><div class="modal"><div class="modal-header"><h2 class="modal-title">Mtumiaji Mpya</h2><button class="modal-close" onclick="closeM('m-nu')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="form-group"><label class="form-label">Jina Kamili *</label><input type="text" class="form-control" id="nu-n"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Username *</label><input type="text" class="form-control" id="nu-u"/></div><div class="form-group"><label class="form-label">Nywila *</label><input type="password" class="form-control" id="nu-pw"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Aina</label><select class="form-select" id="nu-rl"><option value="admin">Admin</option><option value="tenant">Tenant</option></select></div><div class="form-group"><label class="form-label">Biashara</label><select class="form-select" id="nu-ti"><option value="">—</option></select></div></div><button class="btn btn-primary w-full mt-2" onclick="addUser()"><i class="bi bi-check-lg"></i>Ongeza</button></div></div></div>
 
-<div class="modal-overlay" id="m-prod"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pm-t" data-t="modal.new_product">Bidhaa Mpya</h2><button class="modal-close" onclick="closeM('m-prod')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="p-eid"/><div class="input-row cols-2"><div><div class="form-group"><label class="form-label" data-t="prod.name">Jina la Bidhaa *</label><input type="text" class="form-control" id="p-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.cat">Kategoria</label><input type="text" class="form-control" id="p-ct" placeholder="Vyakula" list="p-ct-list"/><datalist id="p-ct-list"></datalist></div><div class="form-group"><label class="form-label" data-t="prod.unit">Kitengo</label><select class="form-select" id="p-un"><option value="pcs">pcs</option><option value="kg">kg</option><option value="g">g</option><option value="litre">litre</option><option value="ml">ml</option><option value="mfuko">mfuko</option><option value="krati">krati</option><option value="sanduku">sanduku</option><option value="dosi">dosi</option><option value="mita">mita</option></select></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.buy_price">Bei Kununua</label><input type="number" class="form-control" id="p-bp" oninput="calcMg()"/></div><div class="form-group"><label class="form-label" data-t="prod.sell_price">Bei Kuuza</label><input type="number" class="form-control" id="p-sp" oninput="calcMg()"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.stock">Stoki ya Awali</label><input type="number" class="form-control" id="p-st" placeholder="0"/></div><div class="form-group"><label class="form-label" data-t="prod.min_stock">Kiwango cha Chini</label><input type="number" class="form-control" id="p-ms" placeholder="5"/></div></div></div><div>
+<div class="modal-overlay" id="m-prod"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pm-t" data-t="modal.new_product">Bidhaa Mpya</h2><button class="modal-close" onclick="closeM('m-prod')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="p-eid"/><div class="input-row cols-2"><div><div class="form-group"><label class="form-label" data-t="prod.name">Jina la Bidhaa *</label><input type="text" class="form-control" id="p-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.cat">Kategoria</label><input type="text" class="form-control" id="p-ct" placeholder="Vyakula" list="p-ct-list"/><datalist id="p-ct-list"></datalist></div><div class="form-group"><label class="form-label" data-t="prod.unit">Kitengo</label><input type="text" class="form-control" id="p-un" list="p-un-list" placeholder="pcs, kg, litre..." autocomplete="off"/><datalist id="p-un-list"></datalist></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.buy_price">Bei Kununua</label><input type="number" class="form-control" id="p-bp" oninput="calcMg()"/></div><div class="form-group"><label class="form-label" data-t="prod.sell_price">Bei Kuuza</label><input type="number" class="form-control" id="p-sp" oninput="calcMg()"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="prod.stock">Stoki ya Awali</label><input type="number" class="form-control" id="p-st" placeholder="0"/></div><div class="form-group"><label class="form-label" data-t="prod.min_stock">Kiwango cha Chini</label><input type="number" class="form-control" id="p-ms" placeholder="5"/></div></div></div><div>
 <div class="prod-mode-toggle">
   <button class="prod-mode-btn active" id="pm-btn-manual" onclick="setProdMode('manual')"><i class="bi bi-pencil-square"></i>Kawaida</button>
   <button class="prod-mode-btn" id="pm-btn-advanced" onclick="setProdMode('advanced')"><i class="bi bi-qr-code-scan"></i>Advanced (QR)</button>
@@ -2116,34 +2133,48 @@ async function pullFromSheets(tid){
     const d=r.data;
     // Merge kila store — Sheets inabeba ukweli (source of truth kwa reload)
     // Lakini local wins kwa records mpya ambazo bado hazijaenda Sheets
+    const today=td();
     const merge=(store,arr,parseFn)=>{
-      if(!arr?.length)return;
+      if(arr===undefined||arr===null)return; // network failure — skip entirely
       const local=LS.get(tid,store);
-      const localIds=new Set(local.map(x=>x.id));
-      // Ongeza records kutoka Sheets ambazo hazipo local
+      const serverIds=new Set();
+      // Ongeza/sasisha records kutoka Sheets
       arr.forEach(item=>{
         const parsed=parseFn?parseFn(item):item;
+        serverIds.add(parsed.id);
         const localItem=local.find(x=>x.id===parsed.id);
         if(!localItem){
           // Mpya kutoka Sheets — hifadhi local
           LS.save(tid,store,parsed);
         }else{
           // Ipo zote — Sheets wins kwa deni na payments (reliable)
-          // Local wins kwa items/batches (tunahifadhi array kamili local)
+          // Local wins kwa items/batches na stock (local updates hutangulia bgSync)
           const merged={...parsed};
           if(Array.isArray(localItem.items)&&localItem.items.length>0){
-            merged.items=localItem.items;// Keep local items (complete)
+            merged.items=localItem.items;
           }
           if(Array.isArray(localItem.payments)&&localItem.payments.length>(parsed.payments?.length||0)){
-            merged.payments=localItem.payments;// Keep more complete payments
+            merged.payments=localItem.payments;
           }
-          // Batches — local wins kama ina zaidi (manunuzi mapya bado hawajaenda Sheets)
           const localBatches=Array.isArray(localItem.batches)?localItem.batches:[];
           const sheetsBatches=Array.isArray(parsed.batches)?parsed.batches:[];
           merged.batches=localBatches.length>=sheetsBatches.length?localBatches:sheetsBatches;
+          if(store==='products'&&localItem.stock!==undefined) merged.stock=localItem.stock;
           LS.save(tid,store,merged);
         }
       });
+      // Futa local records ambazo hazipo tena kwenye Sheets (zilifutwa kwenye device nyingine)
+      // Isipokuwa: record mpya iliyoundwa leo ambayo bado haijasync (bgSync inaweza kuchelewa)
+      if(serverIds.size>0||arr.length===0){
+        local.forEach(localItem=>{
+          if(serverIds.has(localItem.id)) return; // ipo Sheets — sawa
+          // Angalia tarehe ya kuunda — kama ni leo, huenda bado haijasync
+          const itemDate=(localItem.created||localItem.date||localItem.updatedAt||'').slice(0,10);
+          if(itemDate===today) return; // record mpya ya leo — hifadhi (huenda haijasync bado)
+          // Record ya zamani haipo Sheets = ilifutwa kwenye device nyingine
+          LS.del(tid,store,localItem.id);
+        });
+      }
     };
     merge('products',d.products,parseProduct);
     merge('sales',d.sales,parseSale);
@@ -2154,7 +2185,24 @@ async function pullFromSheets(tid){
     merge('tUsers',d.tUsers||[],x=>x);
     merge('roles',d.roles||[],x=>x);
     merge('expenses',d.expenses||[],x=>x);
-    merge('branchStock',d.branchStock||[],x=>x);
+    // branchStock: local wins for stock values (more current), but server drives adds/deletes
+    {
+      const localBS=LS.get(tid,'branchStock');
+      const serverBSIds=new Set((d.branchStock||[]).map(x=>x.id));
+      // Add entries from server not yet in local
+      (d.branchStock||[]).forEach(item=>{
+        if(!localBS.find(x=>x.id===item.id)) LS.save(tid,'branchStock',item);
+      });
+      // Remove local entries deleted on another device (updatedAt not today = not a fresh local change)
+      if(d.branchStock){
+        localBS.forEach(bs=>{
+          if(!serverBSIds.has(bs.id)){
+            const bsDate=(bs.updatedAt||'').slice(0,10);
+            if(bsDate!==today) LS.del(tid,'branchStock',bs.id);
+          }
+        });
+      }
+    }
     merge('movements',d.movements||[],parseMovement);
     if(d.settings){
       const _lb=(LS.get(tid,'biz')[0])||{};
@@ -2574,6 +2622,109 @@ function closeMore(){document.getElementById('more-dr').classList.remove('show')
 function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('sp3-th',t);document.querySelectorAll('.theme-toggle').forEach(b=>b.innerHTML=t==='dark'?'<i class="bi bi-sun-fill"></i>':'<i class="bi bi-moon-stars-fill"></i>');setTimeout(()=>{try{if(cU?.role==='tenant')renderTCharts();}catch(e){}},160);}
 function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
 const isDk=()=>document.documentElement.getAttribute('data-theme')==='dark';
+
+/* ── COLOUR THEMES ─────────────────────────────────────────────── */
+const THEME_PRESETS={
+  emerald:{label:'Emerald', brand:'#16a34a',light:'#22c55e',dark:'#15803d',glow:'rgba(22,163,74,0.18)'},
+  ocean:  {label:'Ocean',   brand:'#2563eb',light:'#3b82f6',dark:'#1d4ed8',glow:'rgba(37,99,235,0.18)'},
+  violet: {label:'Violet',  brand:'#7c3aed',light:'#8b5cf6',dark:'#6d28d9',glow:'rgba(124,58,237,0.18)'},
+  sunset: {label:'Sunset',  brand:'#ea580c',light:'#f97316',dark:'#c2410c',glow:'rgba(234,88,12,0.18)'},
+  rose:   {label:'Rose',    brand:'#e11d48',light:'#f43f5e',dark:'#be123c',glow:'rgba(225,29,72,0.18)'},
+  teal:   {label:'Teal',    brand:'#0d9488',light:'#14b8a6',dark:'#0f766e',glow:'rgba(13,148,136,0.18)'},
+  amber:  {label:'Amber',   brand:'#d97706',light:'#f59e0b',dark:'#b45309',glow:'rgba(217,119,6,0.18)'},
+  slate:  {label:'Slate',   brand:'#334155',light:'#475569',dark:'#1e293b',glow:'rgba(51,65,85,0.18)'},
+};
+
+function _applyBrandVars(brand,light,dark,glow){
+  const r=document.documentElement;
+  r.style.setProperty('--brand',brand);
+  r.style.setProperty('--brand-light',light);
+  r.style.setProperty('--brand-dark',dark);
+  r.style.setProperty('--brand-glow',glow);
+}
+function _hexToHsl(hex){
+  let r=parseInt(hex.slice(1,3),16)/255,g=parseInt(hex.slice(3,5),16)/255,b=parseInt(hex.slice(5,7),16)/255;
+  const max=Math.max(r,g,b),min=Math.min(r,g,b);
+  let h=0,s=0,l=(max+min)/2;
+  if(max!==min){const d=max-min;s=l>0.5?d/(2-max-min):d/(max+min);switch(max){case r:h=((g-b)/d+(g<b?6:0))/6;break;case g:h=((b-r)/d+2)/6;break;case b:h=((r-g)/d+4)/6;break;}}
+  return[Math.round(h*360),Math.round(s*100),Math.round(l*100)];
+}
+function _hslToHex(h,s,l){
+  s/=100;l/=100;const a=s*Math.min(l,1-l);
+  const f=n=>{const k=(n+h/30)%12;const c=l-a*Math.max(Math.min(k-3,9-k,1),-1);return Math.round(255*c).toString(16).padStart(2,'0');};
+  return'#'+f(0)+f(8)+f(4);
+}
+function _deriveFromHex(hex){
+  const[h,s,l]=_hexToHsl(hex);
+  const light=_hslToHex(h,Math.min(s+5,100),Math.min(l+13,88));
+  const dark=_hslToHex(h,s,Math.max(l-10,5));
+  const rv=parseInt(hex.slice(1,3),16),gv=parseInt(hex.slice(3,5),16),bv=parseInt(hex.slice(5,7),16);
+  return{brand:hex,light,dark,glow:`rgba(${rv},${gv},${bv},0.18)`};
+}
+
+function applyThemePreset(name){
+  const p=THEME_PRESETS[name];
+  if(!p)return;
+  _applyBrandVars(p.brand,p.light,p.dark,p.glow);
+  localStorage.setItem('sp3-theme-preset',name);
+  localStorage.removeItem('sp3-theme-color');
+  _saveThemeToBiz(name,null);
+  _updateThemePickerUI(name,null);
+}
+function applyCustomColor(hex){
+  if(!hex||hex.length<7)return;
+  const d=_deriveFromHex(hex);
+  _applyBrandVars(d.brand,d.light,d.dark,d.glow);
+  localStorage.setItem('sp3-theme-preset','custom');
+  localStorage.setItem('sp3-theme-color',hex);
+  _saveThemeToBiz('custom',hex);
+  _updateThemePickerUI('custom',hex);
+}
+function _saveThemeToBiz(preset,color){
+  if(!cT||!DB.biz)return;
+  DB.biz.themePreset=preset;
+  if(color)DB.biz.themeColor=color; else delete DB.biz.themeColor;
+  LS.set(cT.id,'biz',[DB.biz]);
+  api({action:'save_biz_settings',data:{...DB.biz,tenantId:cT.id}}).catch(()=>{});
+}
+function restoreTheme(){
+  // Try DB.biz first (cross-device), fall back to localStorage
+  const preset=(DB.biz?.themePreset)||localStorage.getItem('sp3-theme-preset')||'emerald';
+  const color=(DB.biz?.themeColor)||localStorage.getItem('sp3-theme-color')||null;
+  if(preset==='custom'&&color){const d=_deriveFromHex(color);_applyBrandVars(d.brand,d.light,d.dark,d.glow);}
+  else if(THEME_PRESETS[preset]){const p=THEME_PRESETS[preset];_applyBrandVars(p.brand,p.light,p.dark,p.glow);}
+  _updateThemePickerUI(preset,color);
+}
+function _updateThemePickerUI(preset,color){
+  // Update all theme pickers on page
+  document.querySelectorAll('.tp-swatch').forEach(sw=>{
+    const active=sw.dataset.preset===preset;
+    sw.style.outline=active?'3px solid var(--text-1)':'3px solid transparent';
+    sw.style.outlineOffset='2px';
+    sw.querySelector('.tp-check').style.display=active?'flex':'none';
+  });
+  const cp=document.getElementById('tp-custom-color');
+  if(cp)cp.value=color||(THEME_PRESETS[preset]?.brand||'#16a34a');
+  const ca=document.getElementById('tp-custom-active');
+  if(ca){ca.style.outline=preset==='custom'?'3px solid var(--text-1)':'3px solid transparent';ca.style.outlineOffset='2px';ca.querySelector('.tp-check').style.display=preset==='custom'?'flex':'none';}
+}
+function _themePkrHtml(idSuffix){
+  idSuffix=idSuffix||'';
+  const curPreset=localStorage.getItem('sp3-theme-preset')||'emerald';
+  const curColor=localStorage.getItem('sp3-theme-color')||'';
+  const swatches=Object.entries(THEME_PRESETS).map(([key,p])=>{
+    const active=curPreset===key;
+    return`<div class="tp-swatch" data-preset="${key}" title="${p.label}" onclick="applyThemePreset('${key}')" style="width:34px;height:34px;border-radius:50%;background:${p.brand};cursor:pointer;display:flex;align-items:center;justify-content:center;outline:${active?'3px solid var(--text-1)':'3px solid transparent'};outline-offset:2px;flex-shrink:0;transition:outline 0.15s;"><span class="tp-check" style="display:${active?'flex':'none'};color:#fff;font-size:14px;font-weight:900;">✓</span></div>`;
+  }).join('');
+  const customActive=curPreset==='custom';
+  const customHex=curColor||(THEME_PRESETS.emerald.brand);
+  return`<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px;">${swatches}</div>
+<div style="display:flex;align-items:center;gap:10px;background:var(--bg-3);border-radius:var(--radius-sm);padding:10px 14px;border:1.5px solid var(--border-2);">
+  <div id="tp-custom-active" class="tp-swatch" data-preset="custom" style="width:34px;height:34px;border-radius:50%;background:${customHex};flex-shrink:0;display:flex;align-items:center;justify-content:center;outline:${customActive?'3px solid var(--text-1)':'3px solid transparent'};outline-offset:2px;transition:outline 0.15s;"><span class="tp-check" style="display:${customActive?'flex':'none'};color:#fff;font-size:14px;font-weight:900;">✓</span></div>
+  <div style="flex:1;"><div style="font-size:12px;font-weight:700;margin-bottom:4px;color:var(--text-2);">Rangi Maalum</div>
+  <input type="color" id="tp-custom-color" value="${customHex}" style="width:100%;height:32px;border:1px solid var(--border-2);border-radius:6px;cursor:pointer;background:var(--bg-2);padding:2px 4px;" oninput="document.getElementById('tp-custom-active').style.background=this.value" onchange="applyCustomColor(this.value)"/></div>
+</div>`;
+}
 
 /* ================================================================
    AUTH
@@ -3380,7 +3531,8 @@ function renderProds(){
   }
   pg(rows,'pr-tb','pr-pg',sl=>sl.map(p=>{
     const mg=n(p.bp)>0?((n(p.sp)-n(p.bp))/n(p.bp)*100).toFixed(0):0;
-    const _st=pStock(p);
+    // Products tab shows total stock (p.stock = sum of all branches), consistent with edit form
+    const _st=n(p.stock);
     const hs=_st<=0?'danger':_st<=n(p.minStock)?'warning':'success';
     const nearExp=isExpiryOn()?getNearestExpiry(p):null;
     return`<tr>
@@ -3412,6 +3564,7 @@ function openProdM(){
   document.getElementById('p-exp-badge').innerHTML='';
   setProdMode('manual');
   populateCatDatalist();
+  populateUnitDatalist();
   openM('m-prod');
 }
 function editProd(id){
@@ -3456,12 +3609,14 @@ function editProd(id){
   calcMg();
   setProdMode('manual');
   populateCatDatalist();
+  populateUnitDatalist();
   openM('m-prod');
 }
 function calcMg(){const bp=n(gv('p-bp')),sp=n(gv('p-sp'));const el=document.getElementById('p-mg');if(bp>0&&sp>0){el.style.display='block';el.innerHTML=`Faida: <span class="font-mono font-bold" style="color:${sp-bp>=0?'var(--brand-light)':'var(--danger)'}">TZS ${fmt(sp-bp)} (${((sp-bp)/bp*100).toFixed(1)}%)</span>`;}else el.style.display='none';}
 async function saveProds(){
   const eid=gv('p-eid');
   if(!permGuard('products', eid?'edit':'add')) return;
+  const _oldProd=eid?DB.products.find(x=>x.id===eid):null; // capture before LS.save
   const prod={id:eid||uid(),tenantId:cT.id,name:gv('p-nm'),cat:gv('p-ct'),unit:gv('p-un')||'pcs',bp:n(gv('p-bp')),sp:n(gv('p-sp')),stock:n(gv('p-st')),minStock:n(gv('p-ms'))||5,desc:gv('p-dc'),barcode:gv('p-bc')};
   if(!prod.name){toast('error','Jaza jina la bidhaa');return;}
   // Kama bidhaa mpya na expiry tracking iko ON
@@ -3498,6 +3653,41 @@ async function saveProds(){
   if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner spinner-sm"></span> Inahifadhi...';}
   // Local kwanza — haraka
   LS.save(cT.id,'products',prod);
+  if(!DB.branchStock) DB.branchStock=[];
+  if(!eid){
+    // Bidhaa mpya: unda branchStock entry kwa branch ya sasa
+    if(n(prod.stock)>0 && cB && !DB.branchStock.find(s=>s.productId===prod.id&&s.branchId===cB.id)){
+      const bs={id:uid(),tenantId:cT.id,productId:prod.id,branchId:cB.id,stock:n(prod.stock),updatedAt:td()};
+      DB.branchStock.push(bs);
+      LS.save(cT.id,'branchStock',bs);
+      bgSync(cT.id,'branchStock',bs);
+    }
+  } else {
+    // Hariri bidhaa: kama stock imebadilika, apply delta kwa branchStock entries
+    const oldTotal=_oldProd?n(_oldProd.stock):0;
+    const newTotal=n(prod.stock);
+    const delta=newTotal-oldTotal;
+    if(delta!==0){
+      const entries=(DB.branchStock).filter(s=>s.productId===eid);
+      if(entries.length===0 && cB){
+        // Hakuna entries — unda ya branch ya sasa na total yote
+        const bs={id:uid(),tenantId:cT.id,productId:eid,branchId:cB.id,stock:Math.max(0,newTotal),updatedAt:td()};
+        DB.branchStock.push(bs);
+        LS.save(cT.id,'branchStock',bs);
+        bgSync(cT.id,'branchStock',bs);
+      } else if(entries.length===1){
+        // Branch moja tu — sasisha moja kwa moja
+        entries[0].stock=Math.max(0,n(entries[0].stock)+delta);
+        entries[0].updatedAt=td();
+        LS.save(cT.id,'branchStock',entries[0]);
+        bgSync(cT.id,'branchStock',entries[0]);
+      } else if(entries.length>1 && cB){
+        // Branches nyingi — apply delta kwa branch ya sasa tu
+        const cur=entries.find(s=>s.branchId===cB.id);
+        if(cur){cur.stock=Math.max(0,n(cur.stock)+delta);cur.updatedAt=td();LS.save(cT.id,'branchStock',cur);bgSync(cT.id,'branchStock',cur);}
+      }
+    }
+  }
   loadFromLocal();
   closeM('m-prod');
   toast('success',(eid?'Imeharirishwa':'Imeongezwa')+' ✅');
@@ -3995,7 +4185,18 @@ function getBS(productId, branchId){
   return bs?n(bs.stock):0;
 }
 // Display stock for product in current branch context
-function pStock(prod){ return getBS(prod.id, cB?cB.id:null); }
+function pStock(prod){
+  const brId=cB?cB.id:null;
+  if(!brId) return getBS(prod.id,null);
+  const val=getBS(prod.id,brId);
+  if(val>0) return val;
+  // Fallback: no entry for this branch yet — use p.stock if it's the only effective branch
+  const prodEntries=(DB.branchStock||[]).filter(s=>s.productId===prod.id);
+  if(prodEntries.length===0) return n(prod.stock); // no branchStock at all
+  const hasThisBranch=prodEntries.some(s=>s.branchId===brId);
+  if(!hasThisBranch&&prodEntries.length===1) return n(prod.stock); // migrated to HQ only, single branch context
+  return val;
+}
 
 // Adjust stock for a product in a branch (delta positive=add, negative=deduct)
 function adjBS(productId, branchId, delta){
@@ -4049,6 +4250,7 @@ function migrateStockToBranches(){
    SALES
 ================================================================ */
 async function openSaleM(){
+  loadFromLocal(); // refresh DB before building the modal
   sRows=[];
   document.getElementById('sl-dt').value=td();
   document.getElementById('sl-dis').value='0';
@@ -4088,7 +4290,7 @@ function renderSRows(){
     const fefoStatus=fefoExp?expiryStatus(fefoExp):null;
     return`<div class="sale-item">
       <div class="input-row" style="grid-template-columns:2fr 1fr 1.2fr auto auto;gap:8px;align-items:end;">
-        <div><label class="form-label" style="font-size:10.5px;">Bidhaa</label><select class="form-select" style="font-size:13px;padding:8px 28px 8px 10px;" onchange="onSS(${i},this.value)"><option value="">Chagua...</option>${DB.products.map(p=>`<option value="${p.id}" ${p.id===row.pid?'selected':''}>${p.name} (${pStock(p)})</option>`).join('')}</select></div>
+        <div><label class="form-label" style="font-size:10.5px;">Bidhaa</label><div class="prod-search-wrap"><input type="text" id="ps-inp-${i}" class="form-control" style="font-size:13px;padding:8px 10px;" placeholder="Tafuta bidhaa..." value="${row.pid&&prod?prod.name:''}" oninput="filterProdDrop(${i},this.value)" onfocus="showProdDrop(${i})" onblur="hideProdDrop(${i})" autocomplete="off"/><div id="ps-drop-${i}" class="prod-drop" style="display:none;"></div></div></div>
         <div><label class="form-label" style="font-size:10.5px;">Idadi</label><input type="number" class="form-control" style="font-size:13px;padding:8px;" value="${row.qty}" min="1" onchange="onSQ(${i},this.value)"/></div>
         <div><label class="form-label" style="font-size:10.5px;">Bei</label><input type="number" class="form-control" style="font-size:13px;padding:8px;" value="${row.price}" onchange="onSP(${i},this.value)"/></div>
         <div><label class="form-label" style="font-size:10.5px;">Jumla</label><div class="font-mono font-bold" style="color:var(--brand-light);padding:8px 4px;font-size:13px;">TZS ${fmt(row.total)}</div></div>
@@ -4103,6 +4305,16 @@ function renderSRows(){
   calcSale();
 }
 function onSS(i,pid){if(!pid){sRows[i]={pid:'',pname:'',qty:1,price:0,total:0};renderSRows();return;}const p=DB.products.find(x=>x.id===pid);if(p){sRows[i].pid=pid;sRows[i].pname=p.name;sRows[i].price=n(p.sp);sRows[i].total=sRows[i].qty*n(p.sp);}renderSRows();}
+function _prodDropHtml(i,query){
+  const q=(query||'').toLowerCase();
+  const list=q?DB.products.filter(p=>p.name.toLowerCase().includes(q)||String(p.barcode||'').toLowerCase().includes(q)):DB.products;
+  if(!list.length)return`<div class="prod-drop-item" style="color:var(--muted);pointer-events:none;">Haijapatikana</div>`;
+  return list.slice(0,50).map(p=>`<div class="prod-drop-item" data-pid="${p.id}" onmousedown="selectProdDrop(${i},'${p.id}',event)">${p.name}<span style="float:right;color:var(--muted);font-size:11px;">${pStock(p)} ${p.unit||''}</span></div>`).join('');
+}
+function showProdDrop(i){const d=document.getElementById('ps-drop-'+i);if(d){d.innerHTML=_prodDropHtml(i,document.getElementById('ps-inp-'+i)?.value||'');d.style.display='';}}
+function filterProdDrop(i,v){const d=document.getElementById('ps-drop-'+i);if(d){d.innerHTML=_prodDropHtml(i,v);d.style.display='';}}
+function hideProdDrop(i){setTimeout(()=>{const d=document.getElementById('ps-drop-'+i);if(d)d.style.display='none';},200);}
+function selectProdDrop(i,pid,e){if(e)e.preventDefault();const p=DB.products.find(x=>x.id===pid);const inp=document.getElementById('ps-inp-'+i);if(inp&&p)inp.value=p.name;const d=document.getElementById('ps-drop-'+i);if(d)d.style.display='none';onSS(i,pid);}
 function onSQ(i,v){sRows[i].qty=n(v)||1;sRows[i].total=sRows[i].qty*sRows[i].price;renderSRows();}
 function onSP(i,v){sRows[i].price=n(v)||0;sRows[i].total=sRows[i].qty*sRows[i].price;renderSRows();}
 function calcSale(){const sub=sRows.reduce((s,r)=>s+r.total,0);const dis=n(gv('sl-dis'));const tot=Math.max(0,sub-dis);const ss=document.getElementById('sl-sub');const st=document.getElementById('sl-tot');if(ss)ss.textContent='TZS '+fmt(sub);if(st)st.textContent='TZS '+fmt(tot);calcChg();}
@@ -5484,7 +5696,7 @@ function expCustProf(expFmt){
   if(kind!=='all'&&type==='payments')pays=pays.filter(p=>(kind==='credit'?false:true));// payments don't have credit type
 
   const subtitle=`${c.name} · ${from||'—'} ~ ${to||'—'}`;
-  const debtInfo={label:t('cprof.current_debt'),amount:n(c.currentDebt),danger:n(c.currentDebt)>0};
+  const debtInfo={label:t('cprof.current_debt'),amount:n(c.currentDebt),danger:n(c.currentDebt)>0,totalLabel:t('cprof.total_spent'),total:n(c.totalSpent)};
   if(expFmt==='excel'){
     const rows=[];
     // Debt summary header
@@ -5542,7 +5754,7 @@ function expSupProf(expFmt){
   pays=_filterByRange(pays,from,to,'date');
 
   const subtitle=`${s.name} · ${from||'—'} ~ ${to||'—'}`;
-  const debtInfo={label:t('sprof.owes'),amount:n(s.currentDebt),danger:n(s.currentDebt)>0};
+  const debtInfo={label:t('sprof.owes'),amount:n(s.currentDebt),danger:n(s.currentDebt)>0,totalLabel:t('sprof.total_bought'),total:n(s.totalPurch)};
   if(expFmt==='excel'){
     const rows=[];
     // Debt summary header
@@ -5652,6 +5864,45 @@ function _pdfWriteMulti(sections,title,filename,subtitle,entityName,debtInfo){
   }
 
   let y=30+bandH+8;
+
+  // ── Prominent summary cards ───────────────────────────────────
+  if(debtInfo){
+    const cardH=20, cardW=85, gap=8;
+    const x1=M, x2=M+cardW+gap;
+    const hasDebt=n(debtInfo.amount)>0;
+
+    // Debt card
+    const dBg=hasDebt?redSoft:[220,245,230];
+    const dTxt=hasDebt?red:green;
+    doc.setFillColor(...dBg);
+    doc.roundedRect(x1,y,cardW,cardH,3,3,'F');
+    doc.setDrawColor(...dTxt);doc.setLineWidth(0.4);
+    doc.roundedRect(x1,y,cardW,cardH,3,3,'S');
+    // Accent bar left
+    doc.setFillColor(...dTxt);
+    doc.roundedRect(x1,y,3,cardH,1.5,1.5,'F');
+    // Label
+    doc.setFontSize(8);doc.setFont(undefined,'normal');doc.setTextColor(...dTxt);
+    doc.text(debtInfo.label||'Deni',x1+7,y+7);
+    // Amount
+    doc.setFontSize(13);doc.setFont(undefined,'bold');
+    doc.text('TZS '+fmt(n(debtInfo.amount)),x1+7,y+15);
+
+    // Total card
+    const tBg=[235,240,255];const tTxt=[30,64,175];
+    doc.setFillColor(...tBg);
+    doc.roundedRect(x2,y,cardW,cardH,3,3,'F');
+    doc.setDrawColor(...tTxt);doc.setLineWidth(0.4);
+    doc.roundedRect(x2,y,cardW,cardH,3,3,'S');
+    doc.setFillColor(...tTxt);
+    doc.roundedRect(x2,y,3,cardH,1.5,1.5,'F');
+    doc.setFontSize(8);doc.setFont(undefined,'normal');doc.setTextColor(...tTxt);
+    doc.text(debtInfo.totalLabel||'Jumla',x2+7,y+7);
+    doc.setFontSize(13);doc.setFont(undefined,'bold');
+    doc.text('TZS '+fmt(n(debtInfo.total)),x2+7,y+15);
+
+    y+=cardH+10;
+  }
 
   sections.forEach((sec,si)=>{
     if(si>0)y+=10;
@@ -6330,6 +6581,9 @@ function loadBizSet(){
   _bizBanks=Array.isArray(b.bankAccounts)?b.bankAccounts:[];
   _bizMobile=Array.isArray(b.mobilePayments)?b.mobilePayments:[];
   renderBankRows();renderMobileRows();updateVatHint();updateVatStatus();
+  // Restore colour theme from biz settings (cross-device sync)
+  restoreTheme();
+  renderThemePickerCard();
   // Update profile card
   renderBizCard();
 }
@@ -6371,6 +6625,10 @@ function bizTab(n){
   }
 }
 
+function renderThemePickerCard(){
+  const el=document.getElementById('theme-picker-card-body');
+  if(el) el.innerHTML=_themePkrHtml('ten');
+}
 function renderBizCard(){
   const b=DB.biz||{};
   const name=b.bizName||cT?.name||'—';
@@ -7247,6 +7505,11 @@ window.addEventListener('DOMContentLoaded',()=>{
   const th=localStorage.getItem('sp3-th')||'light';
   document.documentElement.setAttribute('data-theme',th);
   document.querySelectorAll('.theme-toggle').forEach(b=>b.innerHTML=th==='dark'?'<i class="bi bi-sun-fill"></i>':'<i class="bi bi-moon-stars-fill"></i>');
+  // Rudisha rangi iliyohifadhiwa (localStorage, kabla ya login)
+  const sp=localStorage.getItem('sp3-theme-preset');
+  const sc=localStorage.getItem('sp3-theme-color');
+  if(sp==='custom'&&sc){const d=_deriveFromHex(sc);_applyBrandVars(d.brand,d.light,d.dark,d.glow);}
+  else if(sp&&THEME_PRESETS[sp]){const p=THEME_PRESETS[sp];_applyBrandVars(p.brand,p.light,p.dark,p.glow);}
   // startAutoSync inaitwa ndani ya init() na doLogin()
   init();
 });
@@ -7940,6 +8203,9 @@ function _applyAdmDevPhoto(src){
 }
 
 async function loadAdmSettings(){
+  // Render theme picker for admin
+  const ap=document.getElementById('adm-theme-picker');
+  if(ap) ap.innerHTML=_themePkrHtml('adm');
   // Pakia picha ya developer kwenye admin settings card
   var cached = localStorage.getItem('sp3-dev-photo-v2');
   if(cached) _applyAdmDevPhoto(cached);
@@ -8658,6 +8924,14 @@ function populateCatDatalist(){
   var cats = [];
   DB.products.forEach(function(p){ if(p.cat && cats.indexOf(p.cat)===-1) cats.push(p.cat); });
   dl.innerHTML = cats.map(function(c){ return '<option value="'+c+'">'; }).join('');
+}
+function populateUnitDatalist(){
+  var dl = document.getElementById('p-un-list');
+  if(!dl) return;
+  var defaults = ['pcs','kg','g','litre','ml','mfuko','krati','sanduku','dosi','mita','cm','mita ya mraba','tani','gramu','lita','chupa','mkoba'];
+  var custom = [];
+  (DB.products||[]).forEach(function(p){ if(p.unit && defaults.indexOf(p.unit)===-1 && custom.indexOf(p.unit)===-1) custom.push(p.unit); });
+  dl.innerHTML = defaults.concat(custom).map(function(u){ return '<option value="'+u+'">'; }).join('');
 }
 
 </script>
