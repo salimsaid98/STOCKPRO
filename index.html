@@ -66,6 +66,45 @@ input,select,textarea{font-family:var(--font);}
 .load-fill{height:100%;background:linear-gradient(90deg,var(--brand-dark),var(--brand-light));border-radius:99px;width:0%;transition:width 0.4s ease;}
 .load-msg{font-size:12.5px;color:var(--text-3);font-family:var(--mono);}
 
+/* ── SPOTLIGHT SEARCH ────────────────────────────────────────── */
+.spotlight-ov{position:fixed;inset:0;background:rgba(0,0,0,0.6);backdrop-filter:blur(6px);z-index:99998;display:none;align-items:flex-start;justify-content:center;padding-top:80px;}
+.spotlight-ov.open{display:flex;animation:fadeIn 0.15s ease;}
+.spotlight-ov.open .spotlight-box{animation:swalPop 0.2s cubic-bezier(0.34,1.56,0.64,1);}
+@media(max-width:640px){.spotlight-ov{padding-top:16px;padding-left:12px;padding-right:12px;}}
+.spotlight-box{width:100%;max-width:620px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:var(--radius-xl);box-shadow:0 24px 80px rgba(0,0,0,0.35);overflow:hidden;animation:swalPop 0.2s cubic-bezier(0.34,1.56,0.64,1);}
+.spotlight-input-wrap{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border);}
+.spotlight-input-wrap>i{font-size:18px;color:var(--text-3);flex-shrink:0;}
+.spotlight-input-wrap input{flex:1;border:none;background:transparent;font-size:16px;color:var(--text-1);outline:none;font-family:var(--font);}
+.spotlight-input-wrap kbd{font-size:11px;background:var(--bg-3);border:1px solid var(--border-2);border-radius:4px;padding:2px 7px;color:var(--text-3);flex-shrink:0;font-family:var(--mono);}
+.spotlight-results{max-height:400px;overflow-y:auto;padding:6px 0;}
+.spotlight-group-lbl{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);padding:10px 20px 4px;}
+.spotlight-item{display:flex;align-items:center;gap:12px;padding:10px 20px;cursor:pointer;transition:background 0.1s;}
+.spotlight-item:hover,.spotlight-item.sp-active{background:var(--bg-3);}
+.spotlight-item-ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.spotlight-item-main{flex:1;min-width:0;}
+.spotlight-item-name{font-size:13.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.spotlight-item-sub{font-size:11.5px;color:var(--text-3);}
+.spotlight-item-val{font-size:13px;font-weight:800;font-family:var(--mono);flex-shrink:0;color:var(--brand-light);}
+.spotlight-empty{text-align:center;padding:36px 20px;color:var(--text-3);}
+.spotlight-empty i{font-size:32px;display:block;margin-bottom:10px;opacity:0.4;}
+.spotlight-footer{display:flex;gap:16px;padding:10px 20px;border-top:1px solid var(--border);background:var(--bg-3);}
+.spotlight-footer span{font-size:11px;color:var(--text-3);display:flex;align-items:center;gap:4px;}
+.spotlight-footer kbd{font-size:10px;background:var(--bg-2);border:1px solid var(--border-2);border-radius:3px;padding:1px 5px;color:var(--text-2);font-family:var(--mono);}
+/* ── ADVANCED FILTER PANEL ───────────────────────────────────── */
+.afp{background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin-bottom:14px;display:none;}
+.afp.open{display:block;animation:heroUp 0.2s ease both;}
+.afp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:12px;}
+.afp-field label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-3);display:block;margin-bottom:4px;}
+.afp-field .form-control,.afp-field .form-select{font-size:12.5px;padding:7px 10px;height:34px;}
+.afp-pills-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.afp-pills-row .afp-lbl{font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;white-space:nowrap;}
+.afp-footer{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.afp-active-count{font-size:12px;color:var(--text-2);}
+.afp-btn-wrap{position:relative;display:inline-flex;align-items:center;}
+.afp-badge{position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;background:var(--brand);color:#fff;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;line-height:1;}
+.afp-badge.show{display:flex;}
+@media(max-width:640px){.afp-grid{grid-template-columns:1fr 1fr;}}
+
 /* ── SWEET ALERT ─────────────────────────────────────────────── */
 .swal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(5px);z-index:99999;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.15s ease;}
 .swal-box{background:var(--bg-2);border-radius:var(--radius-lg);padding:36px 28px 28px;max-width:400px;width:92%;box-shadow:0 24px 64px rgba(0,0,0,0.3);text-align:center;animation:swalPop 0.28s cubic-bezier(0.34,1.56,0.64,1);}
@@ -716,6 +755,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
   .content{padding:10px;}
   .topbar{padding:0 12px;}
   .sync-status{display:none;}
+  .d-mob-none{display:none!important;}
   /* ── Grids → single column ── */
   .grid-2,.grid-3,.grid-4{grid-template-columns:1fr!important;}
   .input-row.cols-2,.input-row.cols-3{grid-template-columns:1fr!important;}
@@ -842,6 +882,25 @@ textarea.form-control{resize:vertical;min-height:80px;}
 </style>
 </head>
 <body>
+
+<!-- ── SPOTLIGHT SEARCH OVERLAY ── -->
+<div class="spotlight-ov" id="spotlight-ov">
+  <div class="spotlight-box">
+    <div class="spotlight-input-wrap">
+      <i class="bi bi-search"></i>
+      <input id="spotlight-q" type="text" placeholder="Tafuta bidhaa, mauzo, wateja, wasambazaji..." autocomplete="off" oninput="runSpotlight(this.value)"/>
+      <button onclick="_closeSpotlightForced()" style="background:none;border:1px solid var(--border-2);border-radius:5px;color:var(--text-3);font-size:11px;padding:2px 7px;cursor:pointer;font-family:var(--mono);flex-shrink:0;">ESC</button>
+    </div>
+    <div id="spotlight-results" class="spotlight-results">
+      <div class="spotlight-empty"><i class="bi bi-search"></i>Andika kutafuta kote mara moja...</div>
+    </div>
+    <div class="spotlight-footer">
+      <span><kbd>↑</kbd><kbd>↓</kbd> Sogeza</span>
+      <span><kbd>↵</kbd> Fungua</span>
+      <span><kbd>ESC</kbd> Funga</span>
+    </div>
+  </div>
+</div>
 
 <div id="load-screen">
   <div class="load-brand">
@@ -1527,6 +1586,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
           </div>
         </div>
         <div class="topbar-right">
+          <button class="btn btn-ghost btn-sm" onclick="openSpotlight()" title="Tafuta (Ctrl+K)" style="gap:6px;color:var(--text-2);border-color:var(--border-2);"><i class="bi bi-search" style="font-size:14px;"></i><span style="font-size:11.5px;color:var(--text-3);font-family:var(--mono);" class="d-mob-none">Ctrl+K</span></button>
           <div class="sync-status"><span class="sync-dot" id="t-sd"></span><span id="t-ss" data-t="common.online">Online</span></div>
           <button class="btn btn-ghost btn-sm lang-toggle" onclick="toggleLang()" style="font-size:12px;font-weight:700;padding:6px 10px;"><span style="font-size:13px;">🇬🇧</span> EN</button>
           <button class="theme-toggle" onclick="toggleTheme()" id="tt-t"><i class="bi bi-moon-stars-fill"></i></button>
@@ -1603,7 +1663,29 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
         
         <div class="section-panel" id="t-pr">
-          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.products">Bidhaa</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="pr-q" oninput="filterTb(this,'pr-tb')" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div><select class="form-select" id="pr-cf" onchange="renderProds()" style="width:130px;"><option value="" data-t="common.categories">Kategoria Zote</option></select><button class="btn btn-ghost btn-sm" onclick="openPrintLabels()" title="Chapisha Labels za QR"><i class="bi bi-qr-code" style="color:var(--brand-light);"></i> Labels</button><button class="btn btn-primary btn-sm" onclick="openProdM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button></div></div>
+          <div class="section-hdr">
+            <div class="section-hdr-title" data-t="sec.products">Bidhaa</div>
+            <div class="section-hdr-actions">
+              <div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="pr-q" oninput="renderProds()" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div>
+              <select class="form-select" id="pr-cf" onchange="renderProds()" style="width:130px;"><option value="" data-t="common.categories">Kategoria Zote</option></select>
+              <div class="afp-btn-wrap"><button class="btn btn-ghost btn-sm" onclick="toggleAFP('pr')" title="Filters za Kina"><i class="bi bi-funnel-fill"></i> Filter</button><span class="afp-badge" id="afp-pr-badge">0</span></div>
+              <button class="btn btn-ghost btn-sm" onclick="openPrintLabels()" title="Chapisha Labels za QR"><i class="bi bi-qr-code" style="color:var(--brand-light);"></i> Labels</button>
+              <button class="btn btn-primary btn-sm" onclick="openProdM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button>
+            </div>
+          </div>
+          <!-- Advanced filter panel: Products -->
+          <div class="afp" id="afp-pr">
+            <div class="afp-grid">
+              <div class="afp-field"><label>Bei ya Kuuza Min</label><input type="number" class="form-control" id="af-pr-smin" placeholder="0" oninput="renderProds()"/></div>
+              <div class="afp-field"><label>Bei ya Kuuza Max</label><input type="number" class="form-control" id="af-pr-smax" placeholder="Yote" oninput="renderProds()"/></div>
+              <div class="afp-field"><label>Hali ya Stoki</label><select class="form-select" id="af-pr-stock" onchange="renderProds()"><option value="">Zote</option><option value="ok">Ipo ✅</option><option value="low">Inakwisha ⚠️</option><option value="out">Imeisha 🔴</option></select></div>
+              <div class="afp-field"><label>Margin</label><select class="form-select" id="af-pr-mg" onchange="renderProds()"><option value="">Zote</option><option value="good">Nzuri (≥20%)</option><option value="low">Chini (&lt;20%)</option></select></div>
+            </div>
+            <div class="afp-footer">
+              <span class="afp-active-count" id="afp-pr-count"></span>
+              <button class="btn btn-ghost btn-sm" onclick="clearAFP('pr')"><i class="bi bi-x-circle"></i> Futa Filters</button>
+            </div>
+          </div>
           <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.product">Bidhaa</th><th data-t="tbl.category">Kat.</th><th data-t="tbl.buy_price">Kununua</th><th data-t="tbl.sell_price">Kuuza</th><th data-t="tbl.stock">Stoki</th><th data-t="tbl.margin">Margin</th><th data-t="tbl.status">Hali</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="pr-tb"></tbody></table></div><div id="pr-pg" class="pg-bar"></div></div>
         </div>
 
@@ -1643,7 +1725,31 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
         
         <div class="section-panel" id="t-sa">
-          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.sales">Mauzo</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="sa-srch" oninput="renderSales()" data-tp="common.search" placeholder="Tafuta ref, mteja..." style="width:180px;"/></div><div class="filter-pills"><button class="filter-pill active" id="sf-a" onclick="setSF('all',this)" data-t="btn.all">Zote</button><button class="filter-pill" id="sf-c" onclick="setSF('cash',this)"><i class="bi bi-cash-coin"></i><span data-t="btn.cash">Taslimu</span></button><button class="filter-pill" id="sf-k" onclick="setSF('credit',this)"><i class="bi bi-clock-history"></i><span data-t="btn.credit">Mkopo</span></button></div><button class="btn btn-primary btn-sm" onclick="openSaleM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button><button class="btn btn-ghost btn-sm" onclick="expExcel('sales')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button><button class="btn btn-ghost btn-sm" onclick="expPDF('sales')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button></div></div>
+          <div class="section-hdr">
+            <div class="section-hdr-title" data-t="sec.sales">Mauzo</div>
+            <div class="section-hdr-actions">
+              <div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="sa-srch" oninput="renderSales()" data-tp="common.search" placeholder="Tafuta ref, mteja..." style="width:180px;"/></div>
+              <div class="filter-pills"><button class="filter-pill active" id="sf-a" onclick="setSF('all',this)" data-t="btn.all">Zote</button><button class="filter-pill" id="sf-c" onclick="setSF('cash',this)"><i class="bi bi-cash-coin"></i><span data-t="btn.cash">Taslimu</span></button><button class="filter-pill" id="sf-k" onclick="setSF('credit',this)"><i class="bi bi-clock-history"></i><span data-t="btn.credit">Mkopo</span></button></div>
+              <div class="afp-btn-wrap"><button class="btn btn-ghost btn-sm" onclick="toggleAFP('sa')" title="Filters za Kina"><i class="bi bi-funnel-fill"></i> Filter</button><span class="afp-badge" id="afp-sa-badge">0</span></div>
+              <button class="btn btn-primary btn-sm" onclick="openSaleM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button>
+              <button class="btn btn-ghost btn-sm" onclick="expExcel('sales')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button>
+              <button class="btn btn-ghost btn-sm" onclick="expPDF('sales')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button>
+            </div>
+          </div>
+          <!-- Advanced filter panel: Sales -->
+          <div class="afp" id="afp-sa">
+            <div class="afp-grid">
+              <div class="afp-field"><label>Tarehe Kutoka</label><input type="date" class="form-control" id="af-sa-d1" oninput="renderSales()"/></div>
+              <div class="afp-field"><label>Tarehe Hadi</label><input type="date" class="form-control" id="af-sa-d2" oninput="renderSales()"/></div>
+              <div class="afp-field"><label>Kiasi Min (TZS)</label><input type="number" class="form-control" id="af-sa-amin" placeholder="0" oninput="renderSales()"/></div>
+              <div class="afp-field"><label>Kiasi Max (TZS)</label><input type="number" class="form-control" id="af-sa-amax" placeholder="Yote" oninput="renderSales()"/></div>
+              <div class="afp-field"><label>Mteja (Jina)</label><input type="text" class="form-control" id="af-sa-cust" placeholder="Jina la mteja..." oninput="renderSales()"/></div>
+            </div>
+            <div class="afp-footer">
+              <span class="afp-active-count" id="afp-sa-count"></span>
+              <button class="btn btn-ghost btn-sm" onclick="clearAFP('sa')"><i class="bi bi-x-circle"></i> Futa Filters</button>
+            </div>
+          </div>
           <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.ref">Ref</th><th data-t="tbl.date">Tarehe</th><th data-t="tbl.customer">Mteja</th><th data-t="tbl.items">Bidhaa</th><th data-t="tbl.total">Jumla</th><th data-t="tbl.payment">Malipo</th><th data-t="tbl.type">Aina</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="sa-tb"></tbody></table></div><div id="sa-pg" class="pg-bar"></div></div>
         </div>
 
@@ -1740,7 +1846,29 @@ textarea.form-control{resize:vertical;min-height:80px;}
         </div>
 
         <div class="section-panel" id="t-cu">
-          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.customers">Wateja</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="cu-q" oninput="filterTb(this,'cu-tb')" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div><button class="btn btn-primary btn-sm" onclick="openCustM()"><i class="bi bi-person-plus"></i><span data-t="btn.new">Mpya</span></button><button class="btn btn-ghost btn-sm" onclick="expExcel('customers')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button><button class="btn btn-ghost btn-sm" onclick="expPDF('customers')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button></div></div>
+          <div class="section-hdr">
+            <div class="section-hdr-title" data-t="sec.customers">Wateja</div>
+            <div class="section-hdr-actions">
+              <div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="cu-q" oninput="renderCusts()" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div>
+              <div class="afp-btn-wrap"><button class="btn btn-ghost btn-sm" onclick="toggleAFP('cu')" title="Filters za Kina"><i class="bi bi-funnel-fill"></i> Filter</button><span class="afp-badge" id="afp-cu-badge">0</span></div>
+              <button class="btn btn-primary btn-sm" onclick="openCustM()"><i class="bi bi-person-plus"></i><span data-t="btn.new">Mpya</span></button>
+              <button class="btn btn-ghost btn-sm" onclick="expExcel('customers')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button>
+              <button class="btn btn-ghost btn-sm" onclick="expPDF('customers')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button>
+            </div>
+          </div>
+          <!-- Advanced filter panel: Customers -->
+          <div class="afp" id="afp-cu">
+            <div class="afp-grid">
+              <div class="afp-field"><label>Kundi</label><select class="form-select" id="af-cu-grp" onchange="renderCusts()"><option value="">Zote</option><option value="VIP">VIP 🌟</option><option value="Jumla">Jumla</option><option value="Kawaida">Kawaida</option></select></div>
+              <div class="afp-field"><label>Hali ya Deni</label><select class="form-select" id="af-cu-debt" onchange="renderCusts()"><option value="">Zote</option><option value="has">Ana Deni 🔴</option><option value="none">Hana Deni ✅</option></select></div>
+              <div class="afp-field"><label>Mauzo (Idadi) Min</label><input type="number" class="form-control" id="af-cu-smin" placeholder="0" oninput="renderCusts()"/></div>
+              <div class="afp-field"><label>Mwisho Kununua</label><select class="form-select" id="af-cu-last" onchange="renderCusts()"><option value="">Wakati Wowote</option><option value="7">Siku 7 zilizopita</option><option value="30">Siku 30 zilizopita</option><option value="90">Siku 90 zilizopita</option></select></div>
+            </div>
+            <div class="afp-footer">
+              <span class="afp-active-count" id="afp-cu-count"></span>
+              <button class="btn btn-ghost btn-sm" onclick="clearAFP('cu')"><i class="bi bi-x-circle"></i> Futa Filters</button>
+            </div>
+          </div>
           <div id="cu-alerts" class="mb-3"></div>
           <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.no">#</th><th data-t="tbl.name">Jina</th><th data-t="tbl.phone">Simu</th><th data-t="tbl.group">Kundi</th><th data-t="nav.sales">Mauzo</th><th data-t="tbl.debt">Deni</th><th data-t="tbl.last">Mwisho</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="cu-tb"></tbody></table></div><div id="cu-pg" class="pg-bar"></div></div>
         </div>
@@ -1753,7 +1881,27 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
         
         <div class="section-panel" id="t-su">
-          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.suppliers">Wasambazaji</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="su-q" oninput="renderSups()" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div><button class="btn btn-primary btn-sm" onclick="openSupM()"><i class="bi bi-truck"></i><span data-t="btn.new">Mpya</span></button><button class="btn btn-ghost btn-sm" onclick="expExcel('suppliers')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button><button class="btn btn-ghost btn-sm" onclick="expPDF('suppliers')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button></div></div>
+          <div class="section-hdr">
+            <div class="section-hdr-title" data-t="sec.suppliers">Wasambazaji</div>
+            <div class="section-hdr-actions">
+              <div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="su-q" oninput="renderSups()" data-tp="common.search" placeholder="Tafuta..." style="width:160px;"/></div>
+              <div class="afp-btn-wrap"><button class="btn btn-ghost btn-sm" onclick="toggleAFP('su')" title="Filters za Kina"><i class="bi bi-funnel-fill"></i> Filter</button><span class="afp-badge" id="afp-su-badge">0</span></div>
+              <button class="btn btn-primary btn-sm" onclick="openSupM()"><i class="bi bi-truck"></i><span data-t="btn.new">Mpya</span></button>
+              <button class="btn btn-ghost btn-sm" onclick="expExcel('suppliers')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button>
+              <button class="btn btn-ghost btn-sm" onclick="expPDF('suppliers')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button>
+            </div>
+          </div>
+          <!-- Advanced filter panel: Suppliers -->
+          <div class="afp" id="afp-su">
+            <div class="afp-grid">
+              <div class="afp-field"><label>Hali ya Deni</label><select class="form-select" id="af-su-debt" onchange="renderSups()"><option value="">Zote</option><option value="has">Ana Deni 🔴</option><option value="none">Hana Deni ✅</option></select></div>
+              <div class="afp-field"><label>Manunuzi Min (TZS)</label><input type="number" class="form-control" id="af-su-pmin" placeholder="0" oninput="renderSups()"/></div>
+            </div>
+            <div class="afp-footer">
+              <span class="afp-active-count" id="afp-su-count"></span>
+              <button class="btn btn-ghost btn-sm" onclick="clearAFP('su')"><i class="bi bi-x-circle"></i> Futa Filters</button>
+            </div>
+          </div>
           <div id="su-alerts" class="mb-3"></div>
           <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.no">#</th><th data-t="tbl.name">Jina</th><th data-t="tbl.phone">Simu</th><th data-t="nav.products">Bidhaa</th><th data-t="nav.purchases">Manunuzi</th><th data-t="tbl.debt">Deni</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="su-tb"></tbody></table></div><div id="su-pg" class="pg-bar"></div></div>
         </div>
@@ -1897,7 +2045,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
             <div class="card" style="background:linear-gradient(135deg,var(--surface),var(--bg-3));border:1.5px solid var(--border-2);">
               <div class="card-body">
                 <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
-                  <div id="biz-avatar" style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--brand-dark),var(--brand-light));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;flex-shrink:0;">B</div>
+                  <div id="biz-avatar" style="width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,var(--brand-dark),var(--brand-light));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;color:#fff;flex-shrink:0;overflow:hidden;"><img id="biz-logo-preview-card" src="" style="width:100%;height:100%;object-fit:contain;display:none;" alt="Logo"/><span id="biz-avatar-letter">B</span></div>
                   <div>
                     <div id="biz-card-name" style="font-size:18px;font-weight:800;">—</div>
                     <div id="biz-card-type" style="font-size:12.5px;color:var(--text-2);">—</div>
@@ -1916,6 +2064,46 @@ textarea.form-control{resize:vertical;min-height:80px;}
               <div class="card-header"><h3>💳 Njia za Malipo</h3></div>
               <div class="card-body" id="biz-card-payments">
                 <div style="text-align:center;padding:24px;color:var(--text-3);font-size:13px;"><i class="bi bi-credit-card" style="font-size:28px;display:block;margin-bottom:8px;opacity:0.4;"></i>Bonyeza "Hariri Taarifa" kuongeza benki na simu</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Logo Upload Card -->
+          <div class="card mb-4">
+            <div class="card-header">
+              <h3 style="display:flex;align-items:center;gap:8px;"><i class="bi bi-image-fill" style="color:var(--brand-light);"></i> Logo ya Biashara</h3>
+              <span style="font-size:12px;color:var(--text-3);">Itatumika kwenye Invoice, LPO, na Ripoti zote</span>
+            </div>
+            <div class="card-body">
+              <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+                <!-- Preview box -->
+                <div style="flex-shrink:0;text-align:center;">
+                  <div id="biz-logo-wrap" style="width:100px;height:100px;border-radius:var(--radius);border:2px dashed var(--border-2);display:flex;align-items:center;justify-content:center;background:var(--bg-3);overflow:hidden;position:relative;cursor:pointer;" onclick="document.getElementById('biz-logo-input').click()">
+                    <img id="biz-logo-preview" src="" alt="Logo" style="width:100%;height:100%;object-fit:contain;display:none;"/>
+                    <div id="biz-logo-ph" style="text-align:center;color:var(--text-3);">
+                      <i class="bi bi-building" style="font-size:28px;display:block;margin-bottom:4px;"></i>
+                      <span style="font-size:11px;">Default</span>
+                    </div>
+                    <!-- Hover overlay -->
+                    <div style="position:absolute;inset:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;border-radius:inherit;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0">
+                      <i class="bi bi-camera-fill" style="color:#fff;font-size:22px;"></i>
+                    </div>
+                  </div>
+                  <div style="font-size:11px;color:var(--text-3);margin-top:6px;">Bonyeza kubadilisha</div>
+                </div>
+                <!-- Controls -->
+                <div style="flex:1;min-width:200px;">
+                  <p style="font-size:13px;color:var(--text-2);margin-bottom:12px;line-height:1.6;">Pakia logo ya PNG au JPG. Itaonekana kwenye kona ya juu kushoto ya kila hati inayochapishwa — Invoice, LPO, Quote, na Ripoti.</p>
+                  <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+                    <input type="file" id="biz-logo-input" accept="image/png,image/jpeg,image/jpg,image/webp" style="display:none;" onchange="uploadBizLogo(event)"/>
+                    <button class="btn btn-primary btn-sm" onclick="document.getElementById('biz-logo-input').click()"><i class="bi bi-upload"></i> Pakia Logo</button>
+                    <button class="btn btn-ghost btn-sm" id="biz-logo-remove-btn" onclick="removeBizLogo()" style="display:none;color:var(--danger);"><i class="bi bi-trash"></i> Ondoa</button>
+                  </div>
+                  <div id="biz-logo-status" style="margin-top:10px;font-size:12.5px;"></div>
+                  <div style="margin-top:10px;font-size:11.5px;color:var(--text-3);">
+                    <i class="bi bi-info-circle"></i> Ukubwa bora: 300×300px hadi 500×500px · PNG yenye background nyeupe au ya wazi
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -3388,7 +3576,7 @@ const TSEC_LOADERS={
   't-pr':renderProds,'t-st':()=>{renderStock();setStockTab('stock');},'t-sa':renderSales,'t-pu':()=>{setPuTab('man');},'t-ret':()=>{setRetTab('all');},'t-qt':()=>{setQtTab('all');},
   't-cu':renderCusts,'t-su':renderSups,'t-an':loadTenAn,'t-rp':initRep,'t-db':loadDash,
   't-ex':renderExps,
-  't-bs':()=>{loadFromLocal();loadBizSet();renderBizCard();},
+  't-bs':()=>{loadFromLocal();loadBizSet();renderBizCard();loadBizLogo();},
   't-vat':loadTaxReport,
   't-br':renderBranches,
   't-ac':loadTenActivity,
@@ -4317,6 +4505,7 @@ async function testBackend(){const b=document.getElementById('sh-res');b.innerHT
 function loadDash(){
   if(!cU||!cT)return;
   try{loadFromLocal();}catch(e){console.error('loadFromLocal:',e);return;}// Reload kutoka LS
+  loadBizLogo(); // ensure logo is in DB.biz before any PDF renders
   const h=new Date().getHours();
   const badge=document.getElementById('t-hero-badge');
   if(badge)badge.textContent=h<12?'🌅':h<17?'☀️':'🌙';
@@ -5472,7 +5661,8 @@ function showInv(sale){
   <div class="invoice-paper">
     <div class="invoice-header">
       <div>
-        <div class="invoice-logo">📦 ${biz.bizName||cT.name}</div>
+        ${biz.bizLogo?`<img src="${biz.bizLogo}" style="height:48px;max-width:160px;object-fit:contain;display:block;margin-bottom:4px;" alt="Logo"/>`:''}
+        <div class="invoice-logo">${biz.bizName||cT.name}</div>
         ${biz.bizAddress?`<div style="font-size:12px;color:#666;margin-top:3px;">${biz.bizAddress}</div>`:''}
         ${biz.bizPhone||cT.phone?`<div style="font-size:12px;color:#666;">${biz.bizPhone||cT.phone}</div>`:''}
         ${biz.bizEmail?`<div style="font-size:12px;color:#666;">${biz.bizEmail}</div>`:''}
@@ -5540,6 +5730,104 @@ function showInv(sale){
   openM('m-inv');
 }
 
+/* ================================================================
+   BIZ LOGO — Upload, Storage, Apply
+================================================================ */
+function uploadBizLogo(e){
+  const file=e.target.files[0];if(!file)return;
+  const status=document.getElementById('biz-logo-status');
+  if(file.size>2*1024*1024){toast('error','Picha kubwa sana — max 2MB');return;}
+  if(status)status.innerHTML='<span style="color:var(--text-2)"><span class="spinner spinner-sm" style="width:10px;height:10px;border-width:2px;display:inline-block;"></span> Inapakia...</span>';
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const raw=ev.target.result;
+    // Resize to max 400×400 before storing
+    const img=new Image();
+    img.onload=function(){
+      const MAX=400;
+      const scale=Math.min(1,MAX/Math.max(img.width,img.height));
+      const canvas=document.createElement('canvas');
+      canvas.width=Math.round(img.width*scale);
+      canvas.height=Math.round(img.height*scale);
+      canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);
+      const b64=canvas.toDataURL('image/png',0.92);
+      _applyBizLogo(b64);
+      if(DB.biz)DB.biz.bizLogo=b64;
+      localStorage.setItem('sp3-biz-logo-'+(cT?.id||''),b64);
+      // Sync to backend
+      api({action:'save',store:'biz',data:{...(DB.biz||{}),bizLogo:b64}}).catch(()=>{});
+      if(status)status.innerHTML='<span style="color:var(--brand)"><i class="bi bi-check-circle-fill"></i> Logo imehifadhiwa ✅</span>';
+      toast('success','Logo imehifadhiwa');
+    };
+    img.src=raw;
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+
+function removeBizLogo(){
+  _applyBizLogo('');
+  if(DB.biz)DB.biz.bizLogo='';
+  localStorage.removeItem('sp3-biz-logo-'+(cT?.id||''));
+  api({action:'save',store:'biz',data:{...(DB.biz||{}),bizLogo:''}}).catch(()=>{});
+  const status=document.getElementById('biz-logo-status');
+  if(status)status.innerHTML='<span style="color:var(--text-3)">Logo imeondolewa</span>';
+  toast('info','Logo imeondolewa');
+}
+
+function _applyBizLogo(src){
+  // Main preview in settings card
+  const prev=document.getElementById('biz-logo-preview');
+  const ph=document.getElementById('biz-logo-ph');
+  const removeBtn=document.getElementById('biz-logo-remove-btn');
+  if(prev&&ph){
+    if(src){prev.src=src;prev.style.display='block';ph.style.display='none';}
+    else{prev.src='';prev.style.display='none';ph.style.display='block';}
+  }
+  if(removeBtn)removeBtn.style.display=src?'inline-flex':'none';
+  // Profile card avatar
+  const cardImg=document.getElementById('biz-logo-preview-card');
+  const cardLetter=document.getElementById('biz-avatar-letter');
+  if(cardImg&&cardLetter){
+    if(src){cardImg.src=src;cardImg.style.display='block';cardLetter.style.display='none';}
+    else{cardImg.src='';cardImg.style.display='none';cardLetter.style.display='block';}
+  }
+}
+
+function loadBizLogo(){
+  const cached=localStorage.getItem('sp3-biz-logo-'+(cT?.id||''));
+  if(cached){_applyBizLogo(cached);if(DB.biz)DB.biz.bizLogo=cached;}
+}
+
+/* ── PDF company header helper (used by all PDFs) ── */
+function _pdfCompanyHeader(doc, biz, ML, W){
+  const S=v=>String(v==null?'':v);
+  const green=[22,163,74];
+  const logo=biz.bizLogo||'';
+  let y=20;
+  let nameX=ML;
+
+  if(logo){
+    try{
+      doc.addImage(logo,'PNG',ML,12,17,17);
+      nameX=ML+21; // shift text right of logo
+    }catch(e){}
+  }
+
+  doc.setFontSize(logo?15:20);doc.setFont('helvetica','bold');doc.setTextColor(...green);
+  doc.text(S(biz.bizName||cT?.name||''),nameX,y);y+=6;
+  doc.setFontSize(8.5);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
+  const addr=biz.bizAddress||biz.addr||'';
+  const phone=biz.bizPhone||biz.phone||cT?.phone||'';
+  const email=biz.bizEmail||biz.email||'';
+  if(addr){doc.text(S(addr),nameX,y);y+=4;}
+  if(phone){doc.text(S(phone),nameX,y);y+=4;}
+  if(email){doc.text(S(email),nameX,y);y+=4;}
+  if(biz.tinNumber){doc.text('TIN: '+S(biz.tinNumber),nameX,y);y+=4;}
+  if(biz.vatRegNo){doc.text('VRN: '+S(biz.vatRegNo),nameX,y);y+=4;}
+  return Math.max(y, logo?50:50);
+}
+
 function downloadInvPDF(){
   const sale=window._currentInv; if(!sale)return;
   const biz=DB.biz||{};
@@ -5551,31 +5839,22 @@ function downloadInvPDF(){
   const mobiles=Array.isArray(biz.mobilePayments)?biz.mobilePayments.filter(m=>m.number):[];
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({unit:'mm',format:'a4'});
-  const W=210; let y=20;
-  // Brand color
+  const W=210,ML=14;
   const green=[22,163,74];
-  const S=v=>String(v==null?'':v); // lazima string — Sheets inarudisha numbers
-  // Header — Business name
-  doc.setFontSize(20);doc.setFont('helvetica','bold');doc.setTextColor(...green);
-  doc.text(S(biz.bizName||cT.name),14,y); y+=7;
-  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
-  if(biz.bizAddress){doc.text(S(biz.bizAddress),14,y);y+=5;}
-  if(biz.bizPhone||cT.phone){doc.text(S(biz.bizPhone||cT.phone),14,y);y+=5;}
-  if(biz.bizEmail){doc.text(S(biz.bizEmail),14,y);y+=5;}
-  if(biz.tinNumber){doc.text('TIN: '+S(biz.tinNumber),14,y);y+=5;}
-  if(biz.vatRegNo){doc.text('VRN: '+S(biz.vatRegNo),14,y);y+=5;}
+  const S=v=>String(v==null?'':v);
+  // Company header (with logo if set)
+  let y=_pdfCompanyHeader(doc,biz,ML,W);
   // Right side — Invoice number
   doc.setFontSize(22);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
-  doc.text(pT('inv_title'),W-14,22,{align:'right'});
+  doc.text(pT('inv_title'),W-ML,22,{align:'right'});
   doc.setFontSize(13);doc.setTextColor(80,80,80);
-  doc.text(S(sale.ref),W-14,30,{align:'right'});
-  doc.setFontSize(9);doc.text(S(fmtDate(sale.date)),W-14,36,{align:'right'});
-  // Status badge text
+  doc.text(S(sale.ref),W-ML,30,{align:'right'});
+  doc.setFontSize(9);doc.text(S(fmtDate(sale.date)),W-ML,36,{align:'right'});
   doc.setFontSize(9);doc.setTextColor(isCredit?220:22,isCredit?38:163,isCredit?38:74);
-  doc.text(isCredit?pT('credit_badge'):pT('cash_badge'),W-14,43,{align:'right'});
+  doc.text(isCredit?pT('credit_badge'):pT('cash_badge'),W-ML,43,{align:'right'});
   // Divider
-  y=Math.max(y,50); doc.setDrawColor(...green);doc.setLineWidth(0.8);
-  doc.line(14,y,W-14,y); y+=8;
+  doc.setDrawColor(...green);doc.setLineWidth(0.8);
+  doc.line(ML,y,W-ML,y); y+=8;
   // Customer + Payment
   doc.setFontSize(8);doc.setTextColor(100,100,100);doc.setFont('helvetica','bold');
   doc.text(pT('customer'),14,y); doc.text(pT('pay_method'),W/2,y);y+=5;
@@ -7903,7 +8182,7 @@ function renderThemePickerCard(){
 function renderBizCard(){
   const b=DB.biz||{};
   const name=b.bizName||cT?.name||'—';
-  const av=document.getElementById('biz-avatar');if(av)av.textContent=name[0]?.toUpperCase()||'B';
+  const avLetter=document.getElementById('biz-avatar-letter');if(avLetter)avLetter.textContent=name[0]?.toUpperCase()||'B';
   const set=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v||'—';};
   set('biz-card-name',name);
   set('biz-card-type',(b.bizType||'')+(b.currency?' · '+b.currency:''));
@@ -8526,19 +8805,14 @@ function _buildLPOPdf(pur,sig1,sig2){
   const biz=DB.biz||{};
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({unit:'mm',format:'a4'});
-  const W=210,ML=14,PH=297; let y=20;
+  const W=210,ML=14,PH=297;
   const green=[22,163,74];
   const S=v=>String(v==null?'':v);
 
-  // ── Company header (left) — same as invoice ──────────────
-  doc.setFontSize(20);doc.setFont('helvetica','bold');doc.setTextColor(...green);
-  doc.text(S(biz.bizName||cT?.name||'StokiPro'),ML,y);y+=7;
-  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
-  if(biz.addr||biz.bizAddress){doc.text(S(biz.addr||biz.bizAddress),ML,y);y+=5;}
-  if(biz.phone||biz.bizPhone){doc.text(S(biz.phone||biz.bizPhone),ML,y);y+=5;}
-  if(biz.email||biz.bizEmail){doc.text(S(biz.email||biz.bizEmail),ML,y);y+=5;}
+  // ── Company header (with logo if set) ────────────────────
+  let y=_pdfCompanyHeader(doc,biz,ML,W);
 
-  // ── Document title (right) — like "INVOICE" on invoice ───
+  // ── Document title (right) ────────────────────────────────
   doc.setFontSize(22);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
   doc.text(pur._title||pT('lpo_title'),W-ML,22,{align:'right'});
   doc.setFontSize(11);doc.setTextColor(80,80,80);
@@ -8550,7 +8824,6 @@ function _buildLPOPdf(pur,sig1,sig2){
   }
 
   // ── Green divider line ────────────────────────────────────
-  y=Math.max(y,50);
   doc.setDrawColor(...green);doc.setLineWidth(0.8);
   doc.line(ML,y,W-ML,y);y+=8;
 
@@ -9337,10 +9610,12 @@ function _buildCreditNotePdf(ret){
   doc.setFont('helvetica','bold');doc.setFontSize(10);
   doc.text('Kutoka:',ML,y);doc.text('Kwa:',W/2,y);
   doc.setFont('helvetica','normal');doc.setFontSize(9);y+=5;
-  doc.text(biz.bizName||cT.name,ML,y);
+  if(biz.bizLogo){try{doc.addImage(biz.bizLogo,'PNG',ML,y-1,11,11);}catch(e){}}
+  const fromX=biz.bizLogo?ML+13:ML;
+  doc.text(biz.bizName||cT.name,fromX,y);
   doc.text(ret.custName||'Mteja',W/2,y);
-  if(biz.bizPhone||cT.phone){y+=4;doc.text(String(biz.bizPhone||cT.phone||''),ML,y);}
-  y+=4;doc.text('Inahusu: '+(ret.sourceRef||''),ML,y);y+=10;
+  if(biz.bizPhone||cT.phone){y+=4;doc.text(String(biz.bizPhone||cT.phone||''),fromX,y);}
+  y+=4;doc.text('Inahusu: '+(ret.sourceRef||''),fromX,y);y+=10;
 
   // Items table
   const retItems=Array.isArray(ret.items)?ret.items:[];
@@ -9728,10 +10003,12 @@ function _buildQuotePdf(qt){
   doc.setFont('helvetica','bold');doc.setFontSize(10);
   doc.text('Kutoka:',ML,y);doc.text('Kwa:',W/2,y);
   doc.setFont('helvetica','normal');doc.setFontSize(9);y+=5;
-  doc.text(biz.bizName||cT.name,ML,y);
+  if(biz.bizLogo){try{doc.addImage(biz.bizLogo,'PNG',ML,y-1,11,11);}catch(e){}}
+  const qtFromX=biz.bizLogo?ML+13:ML;
+  doc.text(biz.bizName||cT.name,qtFromX,y);
   doc.text(qt.custName||'Mteja',W/2,y);
-  if(biz.bizPhone||cT.phone){y+=4;doc.text(String(biz.bizPhone||cT.phone||''),ML,y);}
-  if(biz.bizEmail||cT.email){y+=4;doc.text(String(biz.bizEmail||cT.email||''),ML,y);}
+  if(biz.bizPhone||cT.phone){y+=4;doc.text(String(biz.bizPhone||cT.phone||''),qtFromX,y);}
+  if(biz.bizEmail||cT.email){y+=4;doc.text(String(biz.bizEmail||cT.email||''),qtFromX,y);}
   y+=10;
 
   const qtItems=Array.isArray(qt.items)?qt.items:[];
@@ -10716,6 +10993,346 @@ async function submitFeedback(){
     errEl.style.display='block';
   }
 }
+
+/* ================================================================
+   SPOTLIGHT SEARCH
+================================================================ */
+let _spItems=[],_spIdx=0,_spTimer=null,_spBackdropHandler=null;
+
+function openSpotlight(){
+  const ov=document.getElementById('spotlight-ov');
+  if(!ov)return;
+  ov.classList.add('open');
+  const inp=document.getElementById('spotlight-q');
+  if(inp){inp.value='';setTimeout(()=>inp.focus(),80);}
+  document.getElementById('spotlight-results').innerHTML='<div class="spotlight-empty"><i class="bi bi-search"></i>Andika kutafuta kote mara moja...</div>';
+  _spItems=[];_spIdx=0;
+  // Backdrop click — attach fresh each open to avoid stale refs
+  if(_spBackdropHandler)ov.removeEventListener('click',_spBackdropHandler);
+  _spBackdropHandler=function(e){if(e.target===ov)_closeSpotlightForced();};
+  ov.addEventListener('click',_spBackdropHandler);
+}
+
+function _closeSpotlightForced(){
+  const ov=document.getElementById('spotlight-ov');
+  if(!ov)return;
+  ov.classList.remove('open');
+  if(_spBackdropHandler){ov.removeEventListener('click',_spBackdropHandler);_spBackdropHandler=null;}
+}
+
+function runSpotlight(q){
+  clearTimeout(_spTimer);
+  _spTimer=setTimeout(()=>_doSpotlight(q),140);
+}
+
+function _spHL(text,q){
+  if(!text)return '';
+  const i=text.toLowerCase().indexOf(q.toLowerCase());
+  if(i<0)return text;
+  return text.slice(0,i)+'<mark style="background:rgba(22,163,74,0.25);color:inherit;border-radius:2px;padding:0 2px;">'+text.slice(i,i+q.length)+'</mark>'+text.slice(i+q.length);
+}
+
+function _doSpotlight(q){
+  const el=document.getElementById('spotlight-results');
+  q=(q||'').trim();
+  if(!q){el.innerHTML='<div class="spotlight-empty"><i class="bi bi-search"></i>Andika kutafuta kote mara moja...</div>';_spItems=[];return;}
+  if(q.length<2){el.innerHTML='<div class="spotlight-empty"><i class="bi bi-search"></i>Andika angalau herufi 2...</div>';return;}
+  const ql=q.toLowerCase();
+  const res=[];
+  const cur=(DB.biz||{}).currency||'TZS';
+
+  // Bidhaa
+  (DB.products||[]).filter(p=>(p.name+' '+(p.barcode||'')+' '+(p.cat||'')).toLowerCase().includes(ql)).slice(0,5).forEach(p=>{
+    const st=n(p.stock);const hs=st<=0?'Imeisha':st<=n(p.minStock)?'Inakwisha':'Ipo';
+    res.push({g:'Bidhaa',ic:'bi-box-seam',ibg:'rgba(96,165,250,0.15)',icl:'#60a5fa',
+      name:p.name,sub:`${p.cat||'—'} · Stoki: ${st} ${p.unit||''} · ${hs}`,
+      val:`${cur} ${fmt(p.sp)}`,
+      act:()=>{_closeSpotlightForced();tSec(null,'t-pr');}});
+  });
+
+  // Mauzo
+  (DB.sales||[]).filter(s=>(s.ref+' '+(s.custName||'')+' '+(s.date||'')).toLowerCase().includes(ql)).slice(0,5).forEach(s=>{
+    res.push({g:'Mauzo',ic:'bi-receipt',ibg:'rgba(74,222,128,0.15)',icl:'#4ade80',
+      name:s.ref,sub:`${s.custName||'Mteja'} · ${fmtDate(s.date)}`,
+      val:`${cur} ${fmt(s.total)}`,
+      act:()=>{_closeSpotlightForced();tSec(null,'t-sa');}});
+  });
+
+  // Wateja
+  (DB.customers||[]).filter(c=>(c.name+' '+(c.phone||'')+' '+(c.email||'')).toLowerCase().includes(ql)).slice(0,5).forEach(c=>{
+    const debt=n(c.currentDebt);
+    res.push({g:'Wateja',ic:'bi-person-fill',ibg:'rgba(192,132,252,0.15)',icl:'#c084fc',
+      name:c.name,sub:`${c.phone||'—'} · ${c.group||'Kawaida'}`,
+      val:debt>0?`Deni: ${cur} ${fmt(debt)}`:'',
+      act:()=>{_closeSpotlightForced();tSec(null,'t-cu');}});
+  });
+
+  // Wasambazaji
+  (DB.suppliers||[]).filter(s=>(s.name+' '+(s.phone||'')).toLowerCase().includes(ql)).slice(0,4).forEach(s=>{
+    const debt=n(s.currentDebt);
+    res.push({g:'Wasambazaji',ic:'bi-truck',ibg:'rgba(251,191,36,0.15)',icl:'#fbbf24',
+      name:s.name,sub:`${s.phone||'—'}`,
+      val:debt>0?`Deni: ${cur} ${fmt(debt)}`:'',
+      act:()=>{_closeSpotlightForced();tSec(null,'t-su');}});
+  });
+
+  // Matumizi
+  (DB.expenses||[]).filter(e=>((e.description||e.desc||'')+' '+(e.category||'')).toLowerCase().includes(ql)).slice(0,4).forEach(e=>{
+    res.push({g:'Matumizi',ic:'bi-cash-stack',ibg:'rgba(239,68,68,0.15)',icl:'#f87171',
+      name:e.description||e.desc||'—',sub:`${e.category||'—'} · ${fmtDate(e.date)}`,
+      val:`${cur} ${fmt(e.amount)}`,
+      act:()=>{_closeSpotlightForced();tSec(null,'t-ex');}});
+  });
+
+  // Manunuzi
+  (DB.purchases||[]).filter(p=>((p.ref||'')+' '+(p.supName||'')).toLowerCase().includes(ql)).slice(0,4).forEach(p=>{
+    res.push({g:'Manunuzi',ic:'bi-cart-fill',ibg:'rgba(34,211,238,0.15)',icl:'#22d3ee',
+      name:p.ref||'—',sub:`${p.supName||'Msambazaji'} · ${fmtDate(p.date)}`,
+      val:`${cur} ${fmt(p.total)}`,
+      act:()=>{_closeSpotlightForced();tSec(null,'t-pu');}});
+  });
+
+  _spItems=res;_spIdx=0;
+
+  if(!res.length){
+    el.innerHTML=`<div class="spotlight-empty"><i class="bi bi-search"></i>Hakuna matokeo kwa "<strong>${q}</strong>"</div>`;
+    return;
+  }
+
+  const grouped={};
+  res.forEach(r=>{if(!grouped[r.g])grouped[r.g]=[];grouped[r.g].push(r);});
+
+  let html='';
+  let globalIdx=0;
+  Object.entries(grouped).forEach(([grp,items])=>{
+    html+=`<div class="spotlight-group-lbl">${grp}</div>`;
+    items.forEach(it=>{
+      const idx=globalIdx++;
+      html+=`<div class="spotlight-item${idx===0?' sp-active':''}" data-sp-idx="${idx}" onclick="_spRun(${idx})">
+        <div class="spotlight-item-ic" style="background:${it.ibg};color:${it.icl};"><i class="bi ${it.ic}"></i></div>
+        <div class="spotlight-item-main">
+          <div class="spotlight-item-name">${_spHL(it.name,q)}</div>
+          ${it.sub?`<div class="spotlight-item-sub">${it.sub}</div>`:''}
+        </div>
+        ${it.val?`<div class="spotlight-item-val">${it.val}</div>`:''}
+      </div>`;
+    });
+  });
+  el.innerHTML=html;
+}
+
+function _spRun(i){
+  const it=_spItems[i];
+  if(it?.act)it.act();
+}
+
+function _spMoveSel(dir){
+  const items=document.querySelectorAll('#spotlight-results .spotlight-item');
+  if(!items.length)return;
+  items[_spIdx]?.classList.remove('sp-active');
+  _spIdx=Math.max(0,Math.min(_spItems.length-1,_spIdx+dir));
+  items[_spIdx]?.classList.add('sp-active');
+  items[_spIdx]?.scrollIntoView({block:'nearest'});
+}
+
+document.addEventListener('keydown',function(e){
+  // Ctrl+K / Cmd+K — open spotlight from anywhere
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){
+    e.preventDefault();
+    e.stopPropagation();
+    openSpotlight();
+    return;
+  }
+  const ov=document.getElementById('spotlight-ov');
+  if(!ov||!ov.classList.contains('open'))return;
+  // Spotlight is open — handle navigation keys
+  if(e.key==='Escape'){
+    e.preventDefault();
+    _closeSpotlightForced();
+    return;
+  }
+  if(e.key==='ArrowDown'){e.preventDefault();_spMoveSel(1);return;}
+  if(e.key==='ArrowUp'){e.preventDefault();_spMoveSel(-1);return;}
+  if(e.key==='Enter'){
+    e.preventDefault();
+    const act=document.querySelector('#spotlight-results .sp-active');
+    if(act)act.click();
+    return;
+  }
+},true); // capture:true — runs before other handlers
+
+/* ================================================================
+   ADVANCED FILTER PANELS
+================================================================ */
+function toggleAFP(sec){
+  const el=document.getElementById('afp-'+sec);
+  if(!el)return;
+  el.classList.toggle('open');
+}
+
+function clearAFP(sec){
+  const el=document.getElementById('afp-'+sec);
+  if(!el)return;
+  el.querySelectorAll('input,select').forEach(inp=>{inp.value='';});
+  _afpUpdateBadge(sec,0);
+  const countEl=document.getElementById('afp-'+sec+'-count');
+  if(countEl)countEl.textContent='';
+  // Trigger re-render
+  const renders={sa:renderSales,pr:renderProds,cu:renderCusts,su:renderSups};
+  if(renders[sec])renders[sec]();
+}
+
+function _afpUpdateBadge(sec,count){
+  const badge=document.getElementById('afp-'+sec+'-badge');
+  if(!badge)return;
+  badge.textContent=count;
+  badge.classList.toggle('show',count>0);
+}
+
+function _afpCount(sec){
+  const el=document.getElementById('afp-'+sec);
+  if(!el)return 0;
+  let c=0;
+  el.querySelectorAll('input').forEach(inp=>{if(inp.value.trim())c++;});
+  el.querySelectorAll('select').forEach(sel=>{if(sel.value)c++;});
+  return c;
+}
+
+function _afpShowCount(sec,shown,total){
+  const countEl=document.getElementById('afp-'+sec+'-count');
+  if(countEl)countEl.textContent=shown<total?`Inaonyesha ${shown} kati ya ${total}`:'';
+}
+
+/* ── Extend renderSales with AFP ── */
+renderSales=function(){
+  _tblLoad('sa-tb',8);
+  let rows=filterByBranch([...DB.sales]);
+  if(SF==='cash')rows=rows.filter(s=>s.creditType!=='credit');
+  if(SF==='credit')rows=rows.filter(s=>s.creditType==='credit');
+  const sq=(gv('sa-srch')||'').toLowerCase();
+  if(sq)rows=rows.filter(s=>(s.ref+s.custName+s.date).toLowerCase().includes(sq));
+  // AFP filters
+  const d1=gv('af-sa-d1')||'';const d2=gv('af-sa-d2')||'';
+  const amin=gv('af-sa-amin')||'';const amax=gv('af-sa-amax')||'';
+  const cust=(gv('af-sa-cust')||'').toLowerCase();
+  if(d1)rows=rows.filter(s=>(s.date||'')>=d1);
+  if(d2)rows=rows.filter(s=>(s.date||'')<=d2);
+  if(amin)rows=rows.filter(s=>n(s.total)>=n(amin));
+  if(amax)rows=rows.filter(s=>n(s.total)<=n(amax));
+  if(cust)rows=rows.filter(s=>(s.custName||'').toLowerCase().includes(cust));
+  const total=filterByBranch([...DB.sales]).length;
+  const active=_afpCount('sa');
+  _afpUpdateBadge('sa',active);
+  _afpShowCount('sa',rows.length,total);
+  pg(rows,'sa-tb','sa-pg',sl=>sl.map(s=>{
+    const items=Array.isArray(s.items)?s.items:[];
+    const pay=cleanPayment(s.payment);
+    return`<tr>
+    <td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${s.ref}</td>
+    <td class="td-muted">${fmtDate(s.date)}</td>
+    <td class="td-name">${s.custName||'—'}</td>
+    <td class="td-muted">${items.length} bidhaa</td>
+    <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(s.total)}</td>
+    <td><span class="badge badge-neutral">${pay}</span></td>
+    <td><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></td>
+    <td class="td-actions">
+      <button class="btn btn-ghost btn-sm" title="Invoice" onclick="showInv(DB.sales.find(x=>x.id==='${s.id}'))"><i class="bi bi-eye"></i></button>
+      ${s.creditType==='credit'?`<button class="btn btn-ghost btn-sm" title="Pokea Malipo" style="color:var(--brand-light);" onclick="openRecvPay('${s.id}')"><i class="bi bi-cash-coin"></i></button>`:''}
+      <button class="btn btn-danger btn-sm" onclick="openSaleDet('${s.id}')"><i class="bi bi-trash"></i></button>
+    </td></tr>`;
+  }).join(''));
+};
+
+/* ── Extend renderProds with AFP ── */
+renderProds=function(){
+  _tblLoad('pr-tb',8);
+  const cat=gv('pr-cf');
+  const cats=[...new Set(DB.products.map(p=>p.cat).filter(Boolean))];
+  const cf=document.getElementById('pr-cf');if(cf){const cur2=cf.value;cf.innerHTML='<option value="">Kategoria Zote</option>'+cats.map(c=>`<option value="${c}" ${c===cur2?'selected':''}>${c}</option>`).join('');}
+  const q=(gv('pr-q')||'').toLowerCase();
+  let rows=[...DB.products];
+  if(cat)rows=rows.filter(p=>p.cat===cat);
+  if(q)rows=rows.filter(p=>(p.name+p.cat+p.barcode).toLowerCase().includes(q));
+  // AFP filters
+  const smin=gv('af-pr-smin')||'';const smax=gv('af-pr-smax')||'';
+  const stf=gv('af-pr-stock')||'';const mgf=gv('af-pr-mg')||'';
+  if(smin)rows=rows.filter(p=>n(p.sp)>=n(smin));
+  if(smax)rows=rows.filter(p=>n(p.sp)<=n(smax));
+  if(stf==='ok')rows=rows.filter(p=>n(p.stock)>n(p.minStock));
+  else if(stf==='low')rows=rows.filter(p=>n(p.stock)>0&&n(p.stock)<=n(p.minStock));
+  else if(stf==='out')rows=rows.filter(p=>n(p.stock)<=0);
+  if(mgf==='good')rows=rows.filter(p=>n(p.bp)>0&&((n(p.sp)-n(p.bp))/n(p.bp)*100)>=20);
+  else if(mgf==='low')rows=rows.filter(p=>n(p.bp)>0&&((n(p.sp)-n(p.bp))/n(p.bp)*100)<20);
+  const active=_afpCount('pr');
+  _afpUpdateBadge('pr',active);
+  _afpShowCount('pr',rows.length,DB.products.length);
+  const prTh=document.querySelector('#t-pr .data-table thead tr');
+  if(prTh){prTh.innerHTML=`<th data-t="tbl.product">Bidhaa</th><th data-t="tbl.category">Kat.</th><th data-t="tbl.buy_price">Kununua</th><th data-t="tbl.sell_price">Kuuza</th><th data-t="tbl.stock">Stoki</th><th data-t="tbl.margin">Margin %</th><th>Faida/Kipande</th><th data-t="tbl.status">Hali</th>${isExpiryOn()?'<th>Expire</th>':''}<th data-t="tbl.actions">Vitendo</th>`;}
+  pg(rows,'pr-tb','pr-pg',sl=>sl.map(p=>{
+    const mg=n(p.bp)>0?((n(p.sp)-n(p.bp))/n(p.bp)*100).toFixed(0):0;
+    const _st=n(p.stock);const hs=_st<=0?'danger':_st<=n(p.minStock)?'warning':'success';
+    const nearExp=isExpiryOn()?getNearestExpiry(p):null;
+    return`<tr>
+      <td><div class="td-name">${p.name}</div><div style="font-size:10.5px;color:var(--text-3);">${p.barcode||''}</div></td>
+      <td><span class="badge badge-neutral">${p.cat||'—'}</span></td>
+      <td class="td-mono td-muted">TZS ${fmt(p.bp)}</td>
+      <td class="td-mono" style="color:var(--brand-light);">TZS ${fmt(p.sp)}</td>
+      <td class="td-mono font-bold">${_st} <span class="td-muted">${p.unit||''}</span></td>
+      <td><span class="badge badge-${mg>=20?'success':mg>0?'warning':'danger'}">${mg}%</span></td>
+      <td class="td-mono" style="color:${n(p.sp)>n(p.bp)?'var(--brand-light)':n(p.sp)<n(p.bp)?'var(--danger)':'var(--text-3)'};">TZS ${fmt(n(p.sp)-n(p.bp))}</td>
+      <td><span class="badge badge-${hs}">${_st<=0?'Imeisha':_st<=n(p.minStock)?'Inakwisha':'Ipo'}</span></td>
+      ${isExpiryOn()?`<td>${nearExp?expiryBadge(nearExp):`<span style="color:var(--text-3);font-size:11px;">—</span>`}</td>`:''}
+      <td class="td-actions">
+        <button class="btn btn-ghost btn-sm" onclick="editProd('${p.id}')"><i class="bi bi-pencil"></i></button>
+        ${isExpiryOn()&&p.batches?.length?`<button class="btn btn-ghost btn-sm" onclick="renderBatchModal('${p.id}')" title="Batches"><i class="bi bi-layers-half" style="color:var(--warning);"></i></button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="delProd('${p.id}')"><i class="bi bi-trash"></i></button>
+      </td></tr>`;
+  }).join(''));
+};
+
+/* ── Extend renderCusts with AFP ── */
+renderCusts=function(){
+  _tblLoad('cu-tb',8);
+  const debts=DB.customers.filter(c=>n(c.currentDebt)>0);
+  document.getElementById('cu-alerts').innerHTML=debts.length?`<div class="alert alert-danger"><i class="bi bi-currency-exchange" style="font-size:16px;"></i><span>Wateja <strong>${debts.length}</strong> wana madeni: <strong>TZS ${fmt(debts.reduce((s,c)=>s+n(c.currentDebt),0))}</strong></span></div>`:'';
+  const q=(gv('cu-q')||'').toLowerCase();
+  let rows=[...DB.customers];
+  if(q)rows=rows.filter(c=>(c.name+c.phone).toLowerCase().includes(q));
+  // AFP filters
+  const grpf=gv('af-cu-grp')||'';
+  const debtf=gv('af-cu-debt')||'';
+  const sminf=gv('af-cu-smin')||'';
+  const lastf=gv('af-cu-last')||'';
+  if(grpf)rows=rows.filter(c=>(c.group||'Kawaida')===grpf);
+  if(debtf==='has')rows=rows.filter(c=>n(c.currentDebt)>0);
+  else if(debtf==='none')rows=rows.filter(c=>n(c.currentDebt)<=0);
+  if(sminf)rows=rows.filter(c=>(c.salesCount||0)>=n(sminf));
+  if(lastf){const cutoff=dAgo(n(lastf));rows=rows.filter(c=>c.lastSale&&c.lastSale>=cutoff);}
+  const active=_afpCount('cu');
+  _afpUpdateBadge('cu',active);
+  _afpShowCount('cu',rows.length,DB.customers.length);
+  pg(rows,'cu-tb','cu-pg',sl=>sl.map((c,i)=>`<tr><td class="td-mono td-muted">${i+1}</td><td><div class="flex items-center gap-2"><div style="width:30px;height:30px;border-radius:50%;background:${c.group==='VIP'?'linear-gradient(135deg,#d97706,#f59e0b)':c.group==='Jumla'?'linear-gradient(135deg,#1d4ed8,#3b82f6)':'linear-gradient(135deg,var(--brand-dark),var(--brand-light))'};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;">${c.name[0]}</div><div class="td-name">${c.name}</div></div></td><td class="td-mono td-muted">${c.phone||'—'}</td><td><span class="badge badge-${c.group==='VIP'?'warning':c.group==='Jumla'?'info':'neutral'}">${c.group||'Kawaida'}</span></td><td class="td-mono">${c.salesCount||0}</td><td class="td-mono ${n(c.currentDebt)>0?'text-danger':''}">${n(c.currentDebt)>0?'TZS '+fmt(c.currentDebt):'<span class="text-success">0</span>'}</td><td class="td-muted" style="font-size:11.5px;">${fmtDate(c.lastSale)||'—'}</td><td class="td-actions"><button class="btn btn-ghost btn-sm" onclick="viewCust('${c.id}')"><i class="bi bi-eye"></i></button><button class="btn btn-ghost btn-sm" onclick="editCust('${c.id}')"><i class="bi bi-pencil"></i></button>${hasPerm('customers','delete')?`<button class="btn btn-ghost btn-sm" style="color:var(--danger);" onclick="deleteCust('${c.id}')"><i class="bi bi-trash"></i></button>`:''}</td></tr>`).join(''));
+};
+
+/* ── Extend renderSups with AFP ── */
+renderSups=function(){
+  _tblLoad('su-tb',7);
+  const debts=DB.suppliers.filter(s=>n(s.currentDebt)>0);
+  document.getElementById('su-alerts').innerHTML=debts.length?`<div class="alert alert-warning"><i class="bi bi-truck" style="font-size:16px;"></i><span>Wasambazaji <strong>${debts.length}</strong> wana madeni: <strong>TZS ${fmt(debts.reduce((s,x)=>s+n(x.currentDebt),0))}</strong></span></div>`:'';
+  const suQ=(gv('su-q')||'').toLowerCase();
+  let rows=[...DB.suppliers];
+  if(suQ)rows=rows.filter(s=>(s.name+s.phone+(s.prods||'')).toLowerCase().includes(suQ));
+  // AFP filters
+  const debtf=gv('af-su-debt')||'';
+  const pminf=gv('af-su-pmin')||'';
+  if(debtf==='has')rows=rows.filter(s=>n(s.currentDebt)>0);
+  else if(debtf==='none')rows=rows.filter(s=>n(s.currentDebt)<=0);
+  if(pminf)rows=rows.filter(s=>n(s.totalPurch||0)>=n(pminf));
+  const active=_afpCount('su');
+  _afpUpdateBadge('su',active);
+  _afpShowCount('su',rows.length,DB.suppliers.length);
+  pg(rows,'su-tb','su-pg',sl=>sl.map((s,i)=>`<tr><td class="td-mono td-muted">${i+1}</td><td class="td-name">${s.name}</td><td class="td-mono td-muted">${s.phone||'—'}</td><td class="td-muted">${s.prods||'—'}</td><td class="td-mono">TZS ${fmt(s.totalPurch||0)}</td><td class="td-mono ${n(s.currentDebt)>0?'text-danger':''}">${n(s.currentDebt)>0?'TZS '+fmt(s.currentDebt):'<span class="text-success">0</span>'}</td><td class="td-actions"><button class="btn btn-ghost btn-sm" onclick="viewSup('${s.id}')"><i class="bi bi-eye"></i></button><button class="btn btn-ghost btn-sm" onclick="editSup('${s.id}')"><i class="bi bi-pencil"></i></button>${hasPerm('suppliers','delete')?`<button class="btn btn-ghost btn-sm" style="color:var(--danger);" onclick="deleteSup('${s.id}')"><i class="bi bi-trash"></i></button>`:''}</td></tr>`).join(''));
+};
 
 // ── Developer photo ────────────────────────────────────────────
 // Pakia picha kutoka backend kwa visitors wote
