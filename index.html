@@ -59,6 +59,24 @@ input,select,textarea{font-family:var(--font);}
 .load-fill{height:100%;background:linear-gradient(90deg,var(--brand-dark),var(--brand-light));border-radius:99px;width:0%;transition:width 0.4s ease;}
 .load-msg{font-size:12.5px;color:var(--text-3);font-family:var(--mono);}
 
+/* ── SWEET ALERT ─────────────────────────────────────────────── */
+.swal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(5px);z-index:99999;display:flex;align-items:center;justify-content:center;animation:fadeIn 0.15s ease;}
+.swal-box{background:var(--bg-2);border-radius:var(--radius-lg);padding:36px 28px 28px;max-width:400px;width:92%;box-shadow:0 24px 64px rgba(0,0,0,0.3);text-align:center;animation:swalPop 0.28s cubic-bezier(0.34,1.56,0.64,1);}
+.swal-ico{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 18px;}
+.swal-ttl{font-size:18px;font-weight:800;color:var(--text-1);margin-bottom:8px;line-height:1.3;}
+.swal-txt{font-size:13.5px;color:var(--text-2);line-height:1.65;margin-bottom:26px;}
+.swal-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.swal-btns .btn{min-width:120px;padding:10px 20px;font-size:14px;}
+@keyframes swalPop{from{transform:scale(0.72) translateY(20px);opacity:0;}to{transform:scale(1) translateY(0);opacity:1;}}
+
+/* ── TABLE LOADING SKELETON ──────────────────────────────────── */
+.tbl-spin-row td{text-align:center;padding:40px 12px!important;border:none!important;}
+.tbl-spin-inner{display:inline-flex;flex-direction:column;align-items:center;gap:10px;}
+.tbl-spin-inner .spinner{width:30px;height:30px;border-width:3px;}
+.tbl-spin-lbl{font-size:12px;color:var(--text-3);font-family:var(--mono);}
+.skel-cell{height:14px;border-radius:6px;background:linear-gradient(90deg,var(--bg-3) 25%,var(--bg-4) 50%,var(--bg-3) 75%);background-size:200% 100%;animation:skelShimmer 1.5s infinite;}
+@keyframes skelShimmer{0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
 /* PAGES */
 .page{display:none;min-height:100vh;}.page.active{display:block;}
 
@@ -1038,8 +1056,43 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
         
         <div class="section-panel" id="t-pu">
-          <div class="section-hdr"><div class="section-hdr-title" data-t="sec.purchases">Manunuzi</div><div class="section-hdr-actions"><div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="pu-srch" oninput="renderPurchs()" data-tp="common.search" placeholder="Tafuta ref, msambazaji..." style="width:190px;"/></div><div class="filter-pills"><button class="filter-pill active" id="pf-a" onclick="setPF('all',this)" data-t="btn.all">Zote</button><button class="filter-pill" id="pf-c" onclick="setPF('cash',this)"><i class="bi bi-cash-coin"></i><span data-t="btn.cash">Taslimu</span></button><button class="filter-pill" id="pf-k" onclick="setPF('credit',this)"><i class="bi bi-clock-history"></i><span data-t="btn.credit">Mkopo</span></button></div><button class="btn btn-primary btn-sm" onclick="openPurchM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button><button class="btn btn-ghost btn-sm" onclick="expExcel('purchases')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button><button class="btn btn-ghost btn-sm" onclick="expPDF('purchases')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button></div></div>
-          <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.ref">Ref</th><th data-t="tbl.date">Tarehe</th><th data-t="tbl.supplier">Msambazaji</th><th data-t="tbl.items">Bidhaa</th><th data-t="tbl.total">Jumla</th><th data-t="tbl.payment">Malipo</th><th data-t="tbl.type">Aina</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="pu-tb"></tbody></table></div><div id="pu-pg" class="pg-bar"></div></div>
+          <!-- Header with sub-tabs -->
+          <div class="section-hdr" style="flex-wrap:wrap;gap:8px;">
+            <div class="section-hdr-title" data-t="sec.purchases">Manunuzi</div>
+            <div class="section-hdr-actions" style="flex-wrap:wrap;gap:8px;">
+              <div style="display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+                <button id="pu-tab-lpo" onclick="setPuTab('lpo')" style="border-radius:0;border:none;padding:5px 14px;font-size:12px;font-weight:700;background:var(--bg-3);color:var(--text-2);cursor:pointer;"><i class="bi bi-file-earmark-text"></i> LPO</button>
+                <button id="pu-tab-man" onclick="setPuTab('man')" style="border-radius:0;border:none;padding:5px 14px;font-size:12px;font-weight:700;background:var(--brand);color:#fff;cursor:pointer;"><i class="bi bi-cart-plus"></i> Manunuzi</button>
+              </div>
+              <!-- LPO tab actions -->
+              <div id="pu-act-lpo" style="display:none;align-items:center;gap:8px;flex-wrap:wrap;">
+                <div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="lpo-srch" oninput="renderLPOs()" placeholder="Tafuta LPO..." style="width:160px;"/></div>
+                <div class="filter-pills">
+                  <button class="filter-pill active" id="lpof-a" onclick="setLPOF('all',this)">Zote</button>
+                  <button class="filter-pill" id="lpof-p" onclick="setLPOF('pending',this)"><i class="bi bi-hourglass-split"></i> Pending</button>
+                  <button class="filter-pill" id="lpof-t" onclick="setLPOF('partial',this)"><i class="bi bi-pie-chart-fill"></i> Partial</button>
+                  <button class="filter-pill" id="lpof-r" onclick="setLPOF('received',this)"><i class="bi bi-check-circle"></i> Received</button>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="openLPONew()"><i class="bi bi-plus-lg"></i> Tengeneza LPO</button>
+              </div>
+              <!-- Manunuzi tab actions -->
+              <div id="pu-act-man" style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+                <div class="search-box"><i class="bi bi-search search-icon"></i><input type="text" class="form-control" id="pu-srch" oninput="renderPurchs()" data-tp="common.search" placeholder="Tafuta ref, msambazaji..." style="width:190px;"/></div>
+                <div class="filter-pills"><button class="filter-pill active" id="pf-a" onclick="setPF('all',this)" data-t="btn.all">Zote</button><button class="filter-pill" id="pf-c" onclick="setPF('cash',this)"><i class="bi bi-cash-coin"></i><span data-t="btn.cash">Taslimu</span></button><button class="filter-pill" id="pf-k" onclick="setPF('credit',this)"><i class="bi bi-clock-history"></i><span data-t="btn.credit">Mkopo</span></button></div>
+                <button class="btn btn-primary btn-sm" onclick="openPurchM()"><i class="bi bi-plus-lg"></i><span data-t="btn.new">Mpya</span></button>
+                <button class="btn btn-ghost btn-sm" onclick="expExcel('purchases')" title="Export Excel"><i class="bi bi-file-earmark-spreadsheet" style="color:#1d6f42;font-size:15px;"></i></button>
+                <button class="btn btn-ghost btn-sm" onclick="expPDF('purchases')" title="Export PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;font-size:15px;"></i></button>
+              </div>
+            </div>
+          </div>
+          <!-- LPO pane -->
+          <div id="pu-pane-lpo" style="display:none;">
+            <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th>Ref</th><th>Kichwa</th><th>Msambazaji</th><th>Tarehe</th><th>Vitu</th><th>Jumla</th><th>Hali</th><th>Vitendo</th></tr></thead><tbody id="lpo-tb"></tbody></table></div><div id="lpo-pg" class="pg-bar"></div></div>
+          </div>
+          <!-- Manunuzi pane -->
+          <div id="pu-pane-man">
+            <div class="card"><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.ref">Ref</th><th data-t="tbl.date">Tarehe</th><th data-t="tbl.supplier">Msambazaji</th><th data-t="tbl.items">Bidhaa</th><th data-t="tbl.total">Jumla</th><th data-t="tbl.payment">Malipo</th><th data-t="tbl.type">Aina</th><th data-t="tbl.actions">Vitendo</th></tr></thead><tbody id="pu-tb"></tbody></table></div><div id="pu-pg" class="pg-bar"></div></div>
+          </div>
         </div>
 
         
@@ -1125,8 +1178,16 @@ textarea.form-control{resize:vertical;min-height:80px;}
           <div class="card mt-4" id="pl-card">
             <div class="card-header" style="justify-content:space-between;">
               <h3 style="display:flex;align-items:center;gap:8px;"><i class="bi bi-graph-up-arrow" style="color:var(--brand-light);"></i> Faida &amp; Hasara (P&amp;L)</h3>
-              <div style="display:flex;gap:6px;align-items:center;">
+              <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
                 <button class="btn btn-ghost btn-sm" onclick="genPL()"><i class="bi bi-arrow-clockwise"></i> <span data-t="rp.generate">Tengeneza</span></button>
+                <div style="display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+                  <button id="pl-fmt-stmt" class="btn btn-sm" style="border-radius:0;border:none;padding:4px 10px;font-size:12px;background:var(--brand);color:#fff;" onclick="setPLFmt('statement')"><i class="bi bi-file-text"></i> Statement</button>
+                  <button id="pl-fmt-vis" class="btn btn-sm" style="border-radius:0;border:none;padding:4px 10px;font-size:12px;background:var(--bg-3);color:var(--text-2);" onclick="setPLFmt('visual')"><i class="bi bi-grid-1x2"></i> Visual</button>
+                </div>
+                <div style="display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;" title="Lugha ya PDF">
+                  <button class="pdf-lang-btn btn btn-sm" data-lang="sw" style="border-radius:0;border:none;padding:4px 9px;font-size:11px;font-weight:700;background:var(--brand);color:#fff;" onclick="setPdfLang('sw')">SW</button>
+                  <button class="pdf-lang-btn btn btn-sm" data-lang="en" style="border-radius:0;border:none;padding:4px 9px;font-size:11px;font-weight:700;background:var(--bg-3);color:var(--text-2);" onclick="setPdfLang('en')">EN</button>
+                </div>
                 <button class="btn btn-ghost btn-sm" onclick="printPL()" title="Chapisha P&L"><i class="bi bi-printer" style="color:var(--brand-light);"></i></button>
                 <button class="btn btn-ghost btn-sm" onclick="exportPLPDF()" title="Pakua PDF"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;"></i></button>
               </div>
@@ -1613,7 +1674,65 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
 <div class="modal-overlay" id="m-pp"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" id="pp-title" data-t="pp.modal_title">Uchambuzi wa Bidhaa</h2><button class="modal-close" onclick="closeM('m-pp')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="grid grid-3 mb-4" id="pp-stats"></div><div class="chart-card mb-3"><div class="chart-header"><span class="chart-title" data-t="pp.monthly_chart">Faida kwa Mwezi (Miezi 12)</span></div><div class="chart-body"><canvas id="ch-pp" height="220"></canvas></div></div><div class="table-wrap"><table class="data-table"><thead><tr><th data-t="tbl.month">Mwezi</th><th data-t="pp.th_qty">Idadi</th><th data-t="pp.th_rev">Mapato</th><th data-t="pp.th_cost">Gharama</th><th data-t="pp.th_profit">Faida</th><th>Margin %</th></tr></thead><tbody id="pp-tb"></tbody></table></div></div></div></div>
 
-<div class="modal-overlay" id="m-pur"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" data-t="modal.new_purchase">Ununuzi Mpya</h2><button class="modal-close" onclick="closeM('m-pur')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-2 mb-3"><div class="form-group"><label class="form-label" data-t="purch.supplier">Msambazaji</label><select class="form-select" id="pu-su"></select></div><div class="form-group"><label class="form-label" data-t="purch.date">Tarehe</label><input type="date" class="form-control" id="pu-dt"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;" data-t="purch.add_item">Bidhaa Zilizununuliwa</label><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="openScannerForPurch()"><i class="bi bi-qr-code-scan"></i>Scan</button><button class="btn btn-ghost btn-sm" onclick="addPRow()"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div></div><div id="pu-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px;" class="flex justify-between"><span class="font-extrabold" data-t="sale.total">JUMLA:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="pu-tot">TZS 0</span></div><div class="input-row cols-2 mt-3"><div class="form-group"><label class="form-label" data-t="purch.payment">Aina ya Malipo</label><select class="form-select" id="pu-pay"><option data-t="pay.cash">Taslimu</option><option data-t="pay.mpesa">M-Pesa</option><option data-t="pay.bank">Benki</option><option value="Mkopo" data-t="pay.credit">Mkopo</option></select></div><div class="form-group"><label class="form-label" data-t="purch.paid">Kilicholipwa</label><input type="number" class="form-control" id="pu-pd" placeholder="0"/></div></div><button class="btn btn-primary w-full mt-2" onclick="savePurch()"><i class="bi bi-check-circle"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
+<!-- LPO Signature Prompt Modal -->
+<div class="modal-overlay" id="m-lpo-sig"><div class="modal" style="max-width:420px;"><div class="modal-header"><h2 class="modal-title"><i class="bi bi-pen" style="color:var(--brand-light);margin-right:6px;"></i>Saini ya LPO <span style="font-size:12px;font-weight:400;color:var(--text-3);">(Hiari)</span></h2><div style="display:flex;align-items:center;gap:8px;"><div style="display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;" title="Lugha ya PDF"><button class="pdf-lang-btn btn btn-sm" data-lang="sw" style="border-radius:0;border:none;padding:3px 8px;font-size:11px;font-weight:700;background:var(--brand);color:#fff;" onclick="setPdfLang('sw')">SW</button><button class="pdf-lang-btn btn btn-sm" data-lang="en" style="border-radius:0;border:none;padding:3px 8px;font-size:11px;font-weight:700;background:var(--bg-3);color:var(--text-2);" onclick="setPdfLang('en')">EN</button></div><button class="modal-close" onclick="closeM('m-lpo-sig')"><i class="bi bi-x-lg"></i></button></div></div><div class="modal-body"><p style="font-size:12.5px;color:var(--text-2);margin-bottom:16px;">Weka majina ya saini dijitali kwenye LPO. Unaweza kuruka hatua hii.</p><div class="form-group"><label class="form-label">Imeandaliwa na (Prepared by)</label><input type="text" class="form-control" id="lpo-sig1" placeholder="e.g. John Mwangi — Manunuzi"/></div><div class="form-group"><label class="form-label">Imeidhinishwa na (Authorized by)</label><input type="text" class="form-control" id="lpo-sig2" placeholder="e.g. Mary Kamau — Meneja"/></div><div class="flex gap-2 mt-3"><button class="btn btn-ghost" style="flex:1;" onclick="_lpoGenWithSig(false)"><i class="bi bi-skip-forward"></i> Ruka Saini</button><button class="btn btn-primary" style="flex:1;" onclick="_lpoGenWithSig(true)"><i class="bi bi-file-earmark-arrow-down"></i> Tengeneza LPO</button></div></div></div></div>
+
+<!-- ══ LPO Create/Edit Modal ══════════════════════════════════════ -->
+<div class="modal-overlay" id="m-lpo-new"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title"><i class="bi bi-file-earmark-text" style="color:var(--brand-light);margin-right:6px;"></i><span id="lpo-modal-title">Tengeneza LPO</span></h2><button class="modal-close" onclick="closeM('m-lpo-new')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body">
+  <!-- Document title -->
+  <div class="form-group mb-3"><label class="form-label" style="font-size:11px;color:var(--text-3);">Kichwa cha Hati (Document Title)</label><input type="text" class="form-control" id="lpo-title" placeholder="e.g. LOCAL PURCHASE ORDER, Proforma Invoice..."/></div>
+  <!-- Supplier + Date -->
+  <div class="input-row cols-2 mb-2">
+    <div class="form-group"><label class="form-label">Msambazaji</label><select class="form-select" id="lpo-sup" onchange="onLPOSupChange()"><option value="">— Chagua —</option></select></div>
+    <div class="form-group"><label class="form-label">Tarehe</label><input type="date" class="form-control" id="lpo-date"/></div>
+  </div>
+  <!-- Manual supplier override -->
+  <div id="lpo-sup-manual" style="display:none;" class="input-row cols-2 mb-2">
+    <div class="form-group"><label class="form-label">Jina la Msambazaji</label><input type="text" class="form-control" id="lpo-sup-name" placeholder="Jina kamili"/></div>
+    <div class="form-group"><label class="form-label">Simu (hiari)</label><input type="text" class="form-control" id="lpo-sup-phone" placeholder="e.g. 0712 345 678"/></div>
+  </div>
+  <!-- Items -->
+  <div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;">Bidhaa / Vitu</label><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="lpoAddCatalog()"><i class="bi bi-box"></i> Catalog</button><button class="btn btn-ghost btn-sm" onclick="lpoAddManual()"><i class="bi bi-pencil"></i> Manual</button></div></div>
+  <div id="lpo-rows" class="mb-3"></div>
+  <div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px;" class="flex justify-between mb-3"><span class="font-extrabold">JUMLA:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="lpo-tot">TZS 0</span></div>
+  <!-- Payment + Notes -->
+  <div class="input-row cols-2 mb-3">
+    <div class="form-group"><label class="form-label">Njia ya Malipo</label><select class="form-select" id="lpo-pay"><option>Taslimu</option><option>M-Pesa</option><option>Benki</option><option value="Mkopo">Mkopo</option></select></div>
+    <div class="form-group"><label class="form-label">Maelezo / Maagizo (hiari)</label><input type="text" class="form-control" id="lpo-notes" placeholder="Maagizo maalum..."/></div>
+  </div>
+  <!-- Language + Signature -->
+  <div class="flex gap-3 mb-2" style="flex-wrap:wrap;align-items:center;">
+    <div style="font-size:12px;color:var(--text-3);">Lugha ya PDF:</div>
+    <div style="display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;">
+      <button class="pdf-lang-btn btn btn-sm" data-lang="sw" style="border-radius:0;border:none;padding:3px 8px;font-size:11px;font-weight:700;background:var(--brand);color:#fff;" onclick="setPdfLang('sw')">SW</button>
+      <button class="pdf-lang-btn btn btn-sm" data-lang="en" style="border-radius:0;border:none;padding:3px 8px;font-size:11px;font-weight:700;background:var(--bg-3);color:var(--text-2);" onclick="setPdfLang('en')">EN</button>
+    </div>
+    <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;color:var(--text-2);margin-left:auto;"><input type="checkbox" id="lpo-want-sig" style="accent-color:var(--brand);" onchange="document.getElementById('lpo-sig-fields').style.display=this.checked?'':'none'"/> Ongeza Saini dijitali</label>
+  </div>
+  <!-- Signature fields -->
+  <div id="lpo-sig-fields" style="display:none;" class="input-row cols-2 mb-3">
+    <div class="form-group"><label class="form-label" style="font-size:11px;">Imeandaliwa na</label><input type="text" class="form-control" id="lpo-sig1-new" placeholder="e.g. John Mwangi — Manunuzi"/></div>
+    <div class="form-group"><label class="form-label" style="font-size:11px;">Imeidhinishwa na</label><input type="text" class="form-control" id="lpo-sig2-new" placeholder="e.g. Mary Kamau — Meneja"/></div>
+  </div>
+  <!-- Buttons -->
+  <div class="flex gap-2">
+    <button class="btn btn-ghost" style="flex:1;" onclick="saveLPO(false)"><i class="bi bi-floppy"></i> Hifadhi tu</button>
+    <button class="btn btn-primary" style="flex:1;" onclick="saveLPO(true)"><i class="bi bi-file-earmark-arrow-down"></i> Hifadhi & PDF</button>
+  </div>
+</div></div></div>
+
+<!-- ══ LPO Receive Modal ══════════════════════════════════════════ -->
+<div class="modal-overlay" id="m-lpo-recv"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title"><i class="bi bi-inbox-fill" style="color:var(--brand-light);margin-right:6px;"></i>Pokea Bidhaa</h2><button class="modal-close" onclick="closeM('m-lpo-recv')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body">
+  <div id="lpo-recv-info" class="mb-3" style="background:var(--bg-3);border-radius:var(--radius-sm);padding:12px;font-size:13px;color:var(--text-2);"></div>
+  <div id="lpo-recv-rows" class="mb-3"></div>
+  <div class="input-row cols-2 mb-3">
+    <div class="form-group"><label class="form-label">Njia ya Malipo</label><select class="form-select" id="lpo-recv-pay"><option>Taslimu</option><option>M-Pesa</option><option>Benki</option><option value="Mkopo">Mkopo</option></select></div>
+    <div class="form-group"><label class="form-label">Kilicholipwa</label><input type="number" class="form-control" id="lpo-recv-paid" placeholder="0"/></div>
+  </div>
+  <button class="btn btn-primary" style="width:100%;" onclick="confirmReceiveLPO()"><i class="bi bi-check-circle"></i> Thibitisha Kupokea</button>
+</div></div></div>
+
+<div class="modal-overlay" id="m-pur"><div class="modal modal-lg"><div class="modal-header"><h2 class="modal-title" data-t="modal.new_purchase">Ununuzi Mpya</h2><button class="modal-close" onclick="closeM('m-pur')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><div class="input-row cols-2 mb-3"><div class="form-group"><label class="form-label" data-t="purch.supplier">Msambazaji</label><select class="form-select" id="pu-su"></select></div><div class="form-group"><label class="form-label" data-t="purch.date">Tarehe</label><input type="date" class="form-control" id="pu-dt"/></div></div><div class="flex justify-between items-center mb-2"><label class="form-label" style="font-size:13px;font-weight:700;margin:0;" data-t="purch.add_item">Bidhaa Zilizununuliwa</label><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="openScannerForPurch()"><i class="bi bi-qr-code-scan"></i>Scan</button><button class="btn btn-ghost btn-sm" onclick="addPRow()"><i class="bi bi-plus-lg"></i><span data-t="btn.add">Ongeza</span></button></div></div><div id="pu-rows" class="mb-3"></div><div style="background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-lg);padding:13px;" class="flex justify-between"><span class="font-extrabold" data-t="sale.total">JUMLA:</span><span class="font-mono font-extrabold" style="color:var(--brand-light);" id="pu-tot">TZS 0</span></div><div class="input-row cols-2 mt-3"><div class="form-group"><label class="form-label" data-t="purch.payment">Aina ya Malipo</label><select class="form-select" id="pu-pay"><option data-t="pay.cash">Taslimu</option><option data-t="pay.mpesa">M-Pesa</option><option data-t="pay.bank">Benki</option><option value="Mkopo" data-t="pay.credit">Mkopo</option></select></div><div class="form-group"><label class="form-label" data-t="purch.paid">Kilicholipwa</label><input type="number" class="form-control" id="pu-pd" placeholder="0"/></div></div><div class="form-group mt-3"><label class="form-label" style="font-size:11px;color:var(--text-3);">Maelezo / Maagizo ya Utoaji <span style="opacity:.6;">(LPO Notes — hiari)</span></label><textarea class="form-control" id="pu-notes" rows="2" placeholder="e.g. Tuma bidhaa ofisini, lango la nyuma. Lipa baada ya kupokea." style="font-size:12.5px;resize:vertical;"></textarea></div><div class="flex gap-2 mt-2"><button class="btn btn-ghost" style="flex:0 0 auto;border-color:var(--brand);" onclick="genLPO(null)" title="Pakua LPO (kabla ya kuhifadhi)"><i class="bi bi-file-earmark-text" style="color:#2563eb;"></i> LPO</button><button class="btn btn-primary" style="flex:1;" onclick="savePurch()"><i class="bi bi-check-circle"></i><span data-t="btn.save">Hifadhi Ununuzi</span></button></div></div></div></div>
 
 <div class="modal-overlay" id="m-cust"><div class="modal"><div class="modal-header"><h2 class="modal-title" id="cm-t" data-t="modal.new_customer">Mteja Mpya</h2><button class="modal-close" onclick="closeM('m-cust')"><i class="bi bi-x-lg"></i></button></div><div class="modal-body"><input type="hidden" id="c-eid"/><div class="form-group"><label class="form-label" data-t="cust.name">Jina Kamili *</label><input type="text" class="form-control" id="c-nm"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.phone">Simu</label><input type="text" class="form-control" id="c-ph"/></div><div class="form-group"><label class="form-label" data-t="cust.email">Barua Pepe</label><input type="email" class="form-control" id="c-em"/></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.address">Anuani</label><input type="text" class="form-control" id="c-ad"/></div><div class="form-group"><label class="form-label" data-t="cust.group">Kundi</label><select class="form-select" id="c-gr"><option>Kawaida</option><option>VIP</option><option>Jumla</option></select></div></div><div class="input-row cols-2"><div class="form-group"><label class="form-label">Nambari ya TIN <span style="color:var(--text-3);font-size:11px;">(Hiari)</span></label><input type="text" class="form-control" id="c-tin" placeholder="e.g. 100-XXX-XXX"/></div><div class="form-group"><label class="form-label">Siku za Malipo (Mkopo) <span style="color:var(--text-3);font-size:11px;">(Hiari)</span></label><input type="number" class="form-control" id="c-days" placeholder="e.g. 30" min="1"/></div></div><div class="form-group" id="c-ob-row"><label class="form-label">Deni la Awali (Opening Balance) <span style="color:var(--text-3);font-size:11px;">(Hiari — deni alilolikuja nalo)</span></label><input type="number" class="form-control" id="c-ob" placeholder="0" min="0"/></div><div class="input-row cols-2"><div class="form-group"><label class="form-label" data-t="cust.credit_limit">Kikomo cha Mkopo (TZS)</label><input type="number" class="form-control" id="c-cl" placeholder="0"/></div><div class="form-group"><label class="form-label" data-t="cust.notes">Maelezo</label><input type="text" class="form-control" id="c-nt"/></div></div><button class="btn btn-primary w-full mt-2" onclick="saveCust()"><i class="bi bi-check-lg"></i><span data-t="btn.save">Hifadhi</span></button></div></div></div>
 
@@ -1849,7 +1968,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
    CONFIG
 ================================================================ */
 // const BACKEND='https://script.google.com/macros/s/AKfycbxmK3DCgbOxZs5d-ilR4JeDPrrnEfx2F8k6Si14uWawyp7OMZZua-layEzmyc5kubZT/exec';
-const BACKEND='https://script.google.com/macros/s/AKfycbxWQef6t99oWlGuQy2cSqsTiLF-5ZE5GCCsxXQfTQDle0HQOP5rf3EVA34_-8Yu4CoX/exec';
+const BACKEND='https://script.google.com/macros/s/AKfycbwmmnHs-Kewx2gIijNjFHwukfDyKi1ipQ4JsJWy-JAP16VzRQe9NLbCYKw7v3lQ4VzC/exec';
 const PS=15;
 
 /* ================================================================
@@ -2204,6 +2323,7 @@ async function pullFromSheets(tid){
       }
     }
     merge('movements',d.movements||[],parseMovement);
+    merge('lpos',d.lpos||[],x=>x);
     if(d.settings){
       const _lb=(LS.get(tid,'biz')[0])||{};
       const _sb=d.settings;
@@ -2527,6 +2647,7 @@ function loadFromLocal(){
   DB.expenses=LS.get(tid,'expenses');
   DB.branchStock=LS.get(tid,'branchStock');
   DB.movements=LS.get(tid,'movements').map(parseMovement);
+  DB.lpos=LS.get(tid,'lpos').sort((a,b)=>b.date>a.date?1:b.date<a.date?-1:0);
   const _rb=(LS.get(tid,'biz')[0])||{};
   DB.biz=(function(b){
     if(!b||typeof b!=='object')return{};const r={...b};
@@ -2541,10 +2662,10 @@ function loadFromLocal(){
 }
 
 // DB cache (in-memory, loaded from LS)
-const DB={products:[],sales:[],purchases:[],customers:[],suppliers:[],biz:{},branches:[],tUsers:[],roles:[],expenses:[],branchStock:[],movements:[]};
+const DB={products:[],sales:[],purchases:[],customers:[],suppliers:[],biz:{},branches:[],tUsers:[],roles:[],expenses:[],branchStock:[],movements:[],lpos:[]};
 
 const TSEC_LOADERS={
-  't-pr':renderProds,'t-st':()=>{renderStock();setStockTab('stock');},'t-sa':renderSales,'t-pu':renderPurchs,
+  't-pr':renderProds,'t-st':()=>{renderStock();setStockTab('stock');},'t-sa':renderSales,'t-pu':()=>{setPuTab('man');},
   't-cu':renderCusts,'t-su':renderSups,'t-an':loadTenAn,'t-rp':initRep,'t-db':loadDash,
   't-ex':renderExps,
   't-bs':()=>{loadFromLocal();loadBizSet();renderBizCard();},
@@ -2590,7 +2711,7 @@ function goPg(pg,tab){document.querySelectorAll('.page').forEach(p=>p.classList.
 function authTab(t){['l','r'].forEach(x=>{document.getElementById('at'+x)?.classList.toggle('active',x===t);const f=document.getElementById('af'+x);if(f)f.style.display=x===t?'block':'none';});}
 const AT={'a-db':'Dashboard','a-tn':'Tenants','a-us':'Watumiaji','a-an':'Analytics','a-ac':'Audit Logs','a-se':'Sessions & Vifaa','a-st':'Mipangilio'};
 const TT={'t-db':'Dashboard','t-br':'Matawi ya Biashara','t-pr':'Bidhaa','t-st':'Stoki','t-sa':'Mauzo','t-pu':'Manunuzi','t-cu':'Wateja','t-cprof':'Wasifu wa Mteja','t-su':'Wasambazaji','t-sprof':'Wasifu wa Msambazaji','t-ex':'Matumizi','t-an':'Analytics','t-rp':'Ripoti','t-bs':'Biashara Yangu','t-vat':'VAT / Kodi','t-usr':'Watumiaji & Roles'};
-const FAB_MAP={'t-sa':openSaleM,'t-pr':openProdM,'t-pu':openPurchM,'t-cu':openCustM,'t-su':openSupM,'t-st':()=>openAdjM(),'t-ex':openExpM};
+const FAB_MAP={'t-sa':openSaleM,'t-pr':openProdM,'t-pu':()=>{const isLPO=document.getElementById('pu-pane-lpo').style.display!=='none';if(isLPO)openLPONew();else openPurchM();},'t-cu':openCustM,'t-su':openSupM,'t-st':()=>openAdjM(),'t-ex':openExpM};
 
 function aSec(el,id){
   document.querySelectorAll('#page-admin .section-panel').forEach(s=>s.classList.remove('active'));
@@ -2622,6 +2743,58 @@ function closeMore(){document.getElementById('more-dr').classList.remove('show')
 function setTheme(t){document.documentElement.setAttribute('data-theme',t);localStorage.setItem('sp3-th',t);document.querySelectorAll('.theme-toggle').forEach(b=>b.innerHTML=t==='dark'?'<i class="bi bi-sun-fill"></i>':'<i class="bi bi-moon-stars-fill"></i>');setTimeout(()=>{try{if(cU?.role==='tenant')renderTCharts();}catch(e){}},160);}
 function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
 const isDk=()=>document.documentElement.getAttribute('data-theme')==='dark';
+
+/* ── SWEET ALERT ─────────────────────────────────────────────── */
+const _swal={
+  _el:null,
+  _IC:{
+    success:{bg:'rgba(22,163,74,0.15)',clr:'var(--brand)',ic:'bi-check-circle-fill'},
+    error:  {bg:'rgba(239,68,68,0.15)',clr:'var(--danger)',ic:'bi-x-circle-fill'},
+    warning:{bg:'rgba(249,115,22,0.15)',clr:'var(--warning)',ic:'bi-exclamation-triangle-fill'},
+    info:   {bg:'rgba(59,130,246,0.15)',clr:'var(--info)',ic:'bi-info-circle-fill'},
+    confirm:{bg:'rgba(100,116,139,0.12)',clr:'var(--text-2)',ic:'bi-question-circle-fill'},
+  },
+  show({icon='info',title='',text='',confirmText='Sawa',cancelText=null,onConfirm=null,onCancel=null,timer=0,dangerous=false}){
+    if(this._el){this._el.remove();this._el=null;}
+    const s=this._IC[icon]||this._IC.info;
+    const cc=dangerous?'btn-danger':'btn-primary';
+    const ov=document.createElement('div');ov.className='swal-ov';
+    ov.innerHTML=`<div class="swal-box">
+      <div class="swal-ico" style="background:${s.bg};color:${s.clr};"><i class="bi ${s.ic}"></i></div>
+      ${title?`<div class="swal-ttl">${title}</div>`:''}
+      ${text?`<div class="swal-txt">${text}</div>`:''}
+      <div class="swal-btns">
+        ${cancelText?`<button class="btn btn-ghost" id="sw-cc">${cancelText}</button>`:''}
+        <button class="btn ${cc}" id="sw-ok">${confirmText}</button>
+      </div></div>`;
+    document.body.appendChild(ov);this._el=ov;
+    const close=(ok)=>{
+      ov.style.opacity='0';ov.style.transition='opacity 0.15s';
+      setTimeout(()=>{if(ov.parentNode)ov.remove();if(this._el===ov)this._el=null;},150);
+      if(ok&&onConfirm)onConfirm();
+      if(!ok&&onCancel)onCancel();
+    };
+    ov.querySelector('#sw-ok').onclick=()=>close(true);
+    const ce=ov.querySelector('#sw-cc');if(ce)ce.onclick=()=>close(false);
+    ov.addEventListener('mousedown',e=>{if(e.target===ov)close(false);});
+    if(timer>0)setTimeout(()=>{if(ov.parentNode)close(true);},timer);
+    setTimeout(()=>ov.querySelector('#sw-ok')?.focus(),60);
+  },
+  success(title,text='',timer=2400){this.show({icon:'success',title,text,confirmText:'Sawa',timer});},
+  error(title,text=''){this.show({icon:'error',title,text,confirmText:'Sawa'});},
+  warning(title,text=''){this.show({icon:'warning',title,text,confirmText:'Sawa'});},
+  confirm(title,text,onConfirm,opts={}){
+    this.show({icon:'confirm',title,text,confirmText:opts.ok||'Ndio, Endelea',cancelText:opts.cancel||'Ghairi',onConfirm,dangerous:opts.dangerous||false});
+  },
+};
+
+/* ── TABLE LOADING ────────────────────────────────────────────── */
+function _tblLoad(tbId,cols=8){
+  const tb=document.getElementById(tbId);
+  if(!tb)return;
+  const skelRow=`<tr><td style="padding:6px;"><div class="skel-cell" style="width:${55+Math.random()*30}%;"></div></td></tr>`;
+  tb.innerHTML=`<tr class="tbl-spin-row"><td colspan="${cols}"><div class="tbl-spin-inner"><div class="spinner"></div><span class="tbl-spin-lbl">Inapakia...</span></div></td></tr>`;
+}
 
 /* ── COLOUR THEMES ─────────────────────────────────────────────── */
 const THEME_PRESETS={
@@ -3040,7 +3213,7 @@ async function changePwFn(){
     const u=users.find(x=>x.id===cU.id);
     // Passwords hazihifadhiwi local kwa security
     LS.setu('users',users);
-    setTimeout(()=>{closeM('m-chpw');toast('success','Nywila imebadilishwa ✅');},1500);
+    setTimeout(()=>{closeM('m-chpw');_swal.success('Nywila imebadilishwa ✅');},1500);
   }else{showMsg('error',r.error||'Imeshindwa');}
 }
 
@@ -3326,10 +3499,10 @@ function renderSessionTable(){
     </tr>`;
   }).join('')||`<tr><td colspan="8"><div style="text-align:center;padding:28px;color:var(--text-3);font-size:13px;"><i class="bi bi-shield-check" style="font-size:28px;display:block;margin-bottom:8px;opacity:0.4;"></i>Hakuna rekodi za sessions</div></td></tr>`);
 }
-async function addTenant(){const bz=gv('nt-b'),nm=gv('nt-n'),ur=gv('nt-u'),pw=gv('nt-pw'),ph=gv('nt-ph'),em=gv('nt-em');if(!bz||!nm||!ur||!pw){toast('error','Jaza taarifa zote');return;}const tid='t_'+uid();const ten={id:tid,name:bz,owner:ur,phone:ph,email:em,type:'Nyingine',status:'active',created:td()};const usr2={id:'u_'+uid(),username:ur,password:pw,fullname:nm,phone:ph,email:em,role:'tenant',tenantId:tid,status:'active'};const tenants=LS.getu('tenants');tenants.push(ten);LS.setu('tenants',tenants);const users=LS.getu('users');users.push(usr2);LS.setu('users',users);api({action:'save',store:'tenants',data:ten});api({action:'save',store:'users',data:usr2});closeM('m-nt');toast('success','Tenant ameongezwa!');await loadAdmDash();renderAdmTn();}
-async function addUser(){const nm=gv('nu-n'),ur=gv('nu-u'),pw=gv('nu-pw'),rl=gv('nu-rl'),ti=gv('nu-ti');if(!nm||!ur||!pw){toast('error','Jaza taarifa');return;}const u={id:'u_'+uid(),username:ur,password:pw,fullname:nm,role:rl,tenantId:ti||'',status:'active'};const users=LS.getu('users');users.push(u);LS.setu('users',users);api({action:'save',store:'users',data:u});closeM('m-nu');toast('success','Mtumiaji ameongezwa!');renderAdmUs();}
+async function addTenant(){const bz=gv('nt-b'),nm=gv('nt-n'),ur=gv('nt-u'),pw=gv('nt-pw'),ph=gv('nt-ph'),em=gv('nt-em');if(!bz||!nm||!ur||!pw){toast('error','Jaza taarifa zote');return;}const tid='t_'+uid();const ten={id:tid,name:bz,owner:ur,phone:ph,email:em,type:'Nyingine',status:'active',created:td()};const usr2={id:'u_'+uid(),username:ur,password:pw,fullname:nm,phone:ph,email:em,role:'tenant',tenantId:tid,status:'active'};const tenants=LS.getu('tenants');tenants.push(ten);LS.setu('tenants',tenants);const users=LS.getu('users');users.push(usr2);LS.setu('users',users);api({action:'save',store:'tenants',data:ten});api({action:'save',store:'users',data:usr2});closeM('m-nt');_swal.success('Tenant ameongezwa!');await loadAdmDash();renderAdmTn();}
+async function addUser(){const nm=gv('nu-n'),ur=gv('nu-u'),pw=gv('nu-pw'),rl=gv('nu-rl'),ti=gv('nu-ti');if(!nm||!ur||!pw){toast('error','Jaza taarifa');return;}const u={id:'u_'+uid(),username:ur,password:pw,fullname:nm,role:rl,tenantId:ti||'',status:'active'};const users=LS.getu('users');users.push(u);LS.setu('users',users);api({action:'save',store:'users',data:u});closeM('m-nu');_swal.success('Mtumiaji ameongezwa!');renderAdmUs();}
 async function togTn(id,cur){const tenants=LS.getu('tenants');const t=tenants.find(x=>x.id===id);if(!t)return;t.status=cur==='active'?'suspended':'active';LS.setu('tenants',tenants);api({action:'save',store:'tenants',data:t});toast('info','Hali imebadilishwa');renderAdmTn();}
-async function delTn(id){if(!confirm('Futa biashara hii?'))return;const tenants=LS.getu('tenants').filter(x=>x.id!==id);LS.setu('tenants',tenants);api({action:'delete',store:'tenants',id});toast('info','Imefutwa');renderAdmTn();}
+function delTn(id){_swal.confirm('Futa Biashara','Biashara hii itafutwa kabisa kwenye mfumo.',()=>{const tenants=LS.getu('tenants').filter(x=>x.id!==id);LS.setu('tenants',tenants);api({action:'delete',store:'tenants',id});_swal.success('Imefutwa');renderAdmTn();},{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});}
 async function togUs(id,cur){const users=LS.getu('users');const u=users.find(x=>x.id===id);if(!u)return;u.status=cur==='active'?'suspended':'active';LS.setu('users',users);api({action:'save',store:'users',data:u});toast('info','Hali imebadilishwa');renderAdmUs();}
 async function testBackend(){const b=document.getElementById('sh-res');b.innerHTML='<div class="alert alert-info"><i class="bi bi-hourglass-split"></i><span>Inajaribu...</span></div>';try{const r=await api({action:'ping'});b.innerHTML=r.success||r.message?'<div class="alert alert-success"><i class="bi bi-check-circle-fill"></i><span>'+(r.message||'Imeunganika!')+'</span></div>':'<div class="alert alert-danger"><i class="bi bi-x-circle"></i><span>Imeshindwa</span></div>';}catch(e){b.innerHTML='<div class="alert alert-danger"><i class="bi bi-x-circle"></i><span>'+e.message+'</span></div>';}}
 
@@ -3517,6 +3690,7 @@ function renderTCharts(){
    PRODUCTS
 ================================================================ */
 function renderProds(){
+  _tblLoad('pr-tb',8);
   const cat=gv('pr-cf');
   const cats=[...new Set(DB.products.map(p=>p.cat).filter(Boolean))];
   const cf=document.getElementById('pr-cf');if(cf){const cur=cf.value;cf.innerHTML='<option value="">Kategoria Zote</option>'+cats.map(c=>`<option value="${c}" ${c===cur?'selected':''}>${c}</option>`).join('');}
@@ -3690,19 +3864,20 @@ async function saveProds(){
   }
   loadFromLocal();
   closeM('m-prod');
-  toast('success',(eid?'Imeharirishwa':'Imeongezwa')+' ✅');
+  _swal.success((eid?'Imeharirishwa':'Imeongezwa')+' ✅','Bidhaa imehifadhiwa');
   renderProds();loadDash();
   if(btn){btn.disabled=false;btn.innerHTML='<i class="bi bi-check-lg"></i>Hifadhi Bidhaa';}
   bgSync(cT.id,'products',prod);
   logActivity((eid?'Hariri':'Ongeza')+' Bidhaa: '+prod.name,'Bidhaa');
 }
-async function delProd(id){if(!permGuard('products','delete'))return;if(!confirm('Futa bidhaa hii?'))return;LS.del(cT.id,'products',id);loadFromLocal();renderProds();loadDash();toast('info','Bidhaa imefutwa');bgDel('products',id);}
+function delProd(id){if(!permGuard('products','delete'))return;_swal.confirm('Futa Bidhaa','Je, una uhakika? Bidhaa hii itafutwa kabisa.',()=>{LS.del(cT.id,'products',id);loadFromLocal();renderProds();loadDash();_swal.success('Imefutwa','Bidhaa imefutwa');bgDel('products',id);},{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});}
 function filterTb(inp,tbId){const q=inp.value.toLowerCase();document.querySelectorAll('#'+tbId+' tr').forEach(tr=>{tr.style.display=tr.textContent.toLowerCase().includes(q)?'':''});}
 
 /* ================================================================
    STOCK
 ================================================================ */
 function renderStock(){
+  _tblLoad('st-tb',9);
   const stBrId=getEffectiveBranchFilter();
   const getStk=p=>stBrId?getBS(p.id,stBrId):n(p.stock);
   const low=DB.products.filter(p=>getStk(p)<=n(p.minStock));
@@ -3792,7 +3967,7 @@ async function saveAdj(){
   else if(tp==='add'){adjBS(pid,bId,qty);}
   else{adjBS(pid,bId,-qty);}
   loadFromLocal();
-  closeM('m-adj');toast('success','Stoki imesasishwa ✅');renderStock();loadDash();
+  closeM('m-adj');_swal.success('Stoki imesasishwa ✅');renderStock();loadDash();
   const adjLabel={add:'Ongeza',remove:'Punguza',set:'Weka'}[tp]||tp;
   const newVal=getBS(pid,bId);
   logActivity(adjLabel+' Stoki: '+p.name+' ('+old+'→'+newVal+')'+(rsn?' — '+rsn:''),'Stoki');
@@ -3905,7 +4080,7 @@ function saveDistribution(){
 
   loadFromLocal();
   closeM('m-dist');
-  toast('success',`Stoki imegawanywa kwa branches ${brs.length} ✅`);
+  _swal.success('Stoki Imegawanywa ✅',`Imegawanywa kwa branches ${brs.length}`);
   renderStock();loadDash();
   logActivity('Gawanya Stoki kwa branches '+brs.map(b=>b.name).join(', '),'Stoki');
 }
@@ -3973,6 +4148,7 @@ function setStockTab(tab){
 }
 
 function renderMovements(){
+  _tblLoad('mv-tb',7);
   loadFromLocal();
   const mvs=DB.movements||[];
   const sf=document.getElementById('mv-sf')?.value||'';
@@ -4080,7 +4256,7 @@ async function saveMovement(status){
   }
   LS.save(cT.id,'movements',mv);bgSync(cT.id,'movements',mv);
   loadFromLocal();closeM('m-mv');
-  toast('success','Transfer '+(status==='sent'?'imetumwa':'imehifadhiwa')+' ✅ ('+mv.ref+')');
+  _swal.success('Transfer '+(status==='sent'?'Imetumwa':'Imehifadhiwa')+' ✅',mv.ref);
   renderMovements();
   logActivity('Movement: '+mv.ref+(status==='sent'?' — Imetumwa':''),'Movements');
 }
@@ -4105,23 +4281,25 @@ function sendMovement(id){
     const avail=getBS(r.productId,mv.fromBranch);
     if(avail<r.qty){const p=DB.products.find(x=>x.id===r.productId);toast('error','Stoki ya "'+(p?p.name:r.productId)+'" haitoshi (Ipo: '+avail+')');return;}
   }
-  if(!confirm('Tuma transfer '+mv.ref+'?\nStoki ya branch ya kutoka itapunguzwa papo hapo.'))return;
-  mv.items.forEach(r=>{adjBS(r.productId,mv.fromBranch,-r.qty);});
-  mv.status='sent';
-  LS.save(cT.id,'movements',mv);bgSync(cT.id,'movements',mv);
-  loadFromLocal();toast('success','Transfer imetumwa ✅');renderMovements();
+  _swal.confirm('Tuma Transfer','Stoki ya branch ya kutoka itapunguzwa papo hapo.',()=>{
+    mv.items.forEach(r=>{adjBS(r.productId,mv.fromBranch,-r.qty);});
+    mv.status='sent';
+    LS.save(cT.id,'movements',mv);bgSync(cT.id,'movements',mv);
+    loadFromLocal();_swal.success('Imetumwa','Transfer '+mv.ref+' imetumwa ✅');renderMovements();
+  },{ok:'Ndio, Tuma',cancel:'Ghairi'});
 }
 
 function approveMovement(id){
   if(!permGuard('movements','approve'))return;
   const mv=(DB.movements||[]).find(m=>m.id===id);
   if(!mv||mv.status!=='sent'){toast('error','Transfer hii haiwezi kukubaliwa');return;}
-  if(!confirm('Kubali transfer '+mv.ref+'?\nStoki ya branch ya kupokea itaongezeka.'))return;
-  mv.items.forEach(r=>{adjBS(r.productId,mv.toBranch,r.qty);});
-  mv.status='approved';mv.approvedBy=cU?.username||'';mv.approvedAt=tStr();
-  LS.save(cT.id,'movements',mv);bgSync(cT.id,'movements',mv);
-  loadFromLocal();toast('success','Transfer imekubaliwa ✅');renderMovements();
-  logActivity('Approve Movement: '+mv.ref,'Movements');
+  _swal.confirm('Kubali Transfer','Stoki ya branch ya kupokea itaongezeka.',()=>{
+    mv.items.forEach(r=>{adjBS(r.productId,mv.toBranch,r.qty);});
+    mv.status='approved';mv.approvedBy=cU?.username||'';mv.approvedAt=tStr();
+    LS.save(cT.id,'movements',mv);bgSync(cT.id,'movements',mv);
+    loadFromLocal();_swal.success('Imekubaliwa','Transfer '+mv.ref+' imekubaliwa ✅');renderMovements();
+    logActivity('Approve Movement: '+mv.ref,'Movements');
+  },{ok:'Ndio, Kubali',cancel:'Ghairi'});
 }
 
 function rejectMovement(id){
@@ -4164,10 +4342,11 @@ function viewMovement(id){
 
 function confirmDelMovement(id){
   const mv=(DB.movements||[]).find(m=>m.id===id);if(!mv)return;
-  if(!confirm('Futa transfer '+mv.ref+'?'))return;
-  if(mv.status==='sent') mv.items.forEach(r=>{adjBS(r.productId,mv.fromBranch,r.qty);});// rudisha stoki
-  LS.del(cT.id,'movements',id);bgDel('movements',id);
-  loadFromLocal();toast('info','Transfer imefutwa');renderMovements();
+  _swal.confirm('Futa Transfer','Transfer '+mv.ref+' itafutwa kabisa.',()=>{
+    if(mv.status==='sent') mv.items.forEach(r=>{adjBS(r.productId,mv.fromBranch,r.qty);});
+    LS.del(cT.id,'movements',id);bgDel('movements',id);
+    loadFromLocal();_swal.success('Imefutwa');renderMovements();
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 
 /* ================================================================
@@ -4363,7 +4542,7 @@ async function saveSale(printInv){
     }
     loadFromLocal();
     closeM('m-sale');sRows=[];
-    toast('success',sale.ref+' — TZS '+fmt(tot)+' ✅');
+    _swal.success('Imeuzwa ✅',sale.ref+' — TZS '+fmt(tot));
     renderSales();loadDash();
     // 4. Background sync Sheets — bila kublock UI
     bgSync(cT.id,'sales',{...sale,items:valid});
@@ -4378,6 +4557,7 @@ async function saveSale(printInv){
 }
 function setSF(f,el){SF=f;document.querySelectorAll('.filter-pill[id^="sf-"]').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');renderSales();}
 function renderSales(){
+  _tblLoad('sa-tb',8);
   let rows=filterByBranch([...DB.sales]);
   if(SF==='cash')rows=rows.filter(s=>s.creditType!=='credit');
   if(SF==='credit')rows=rows.filter(s=>s.creditType==='credit');
@@ -4565,19 +4745,19 @@ function downloadInvPDF(){
   if(biz.vatRegNo){doc.text('VRN: '+S(biz.vatRegNo),14,y);y+=5;}
   // Right side — Invoice number
   doc.setFontSize(22);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
-  doc.text('INVOICE',W-14,22,{align:'right'});
+  doc.text(pT('inv_title'),W-14,22,{align:'right'});
   doc.setFontSize(13);doc.setTextColor(80,80,80);
   doc.text(S(sale.ref),W-14,30,{align:'right'});
   doc.setFontSize(9);doc.text(S(fmtDate(sale.date)),W-14,36,{align:'right'});
   // Status badge text
   doc.setFontSize(9);doc.setTextColor(isCredit?220:22,isCredit?38:163,isCredit?38:74);
-  doc.text(isCredit?'MKOPO':'TASLIMU',W-14,43,{align:'right'});
+  doc.text(isCredit?pT('credit_badge'):pT('cash_badge'),W-14,43,{align:'right'});
   // Divider
   y=Math.max(y,50); doc.setDrawColor(...green);doc.setLineWidth(0.8);
   doc.line(14,y,W-14,y); y+=8;
   // Customer + Payment
   doc.setFontSize(8);doc.setTextColor(100,100,100);doc.setFont('helvetica','bold');
-  doc.text('MTEJA',14,y); doc.text('NJIA YA MALIPO',W/2,y);y+=5;
+  doc.text(pT('customer'),14,y); doc.text(pT('pay_method'),W/2,y);y+=5;
   doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);doc.setFontSize(10);
   doc.text(S(sale.custName||'—'),14,y); doc.text(S(cleanPayment(sale.payment)),W/2,y); y+=5;
   if(cust.phone){doc.setFontSize(8);doc.setTextColor(100,100,100);doc.text(S(cust.phone),14,y);y+=4;}
@@ -4585,12 +4765,12 @@ function downloadInvPDF(){
   y+=4;
   // Items table
   const tableBody=items.map((it,i)=>[(i+1).toString(),S(it.pname),S(it.qty),cur+' '+fmt(it.price),cur+' '+fmt(it.total)]);
-  if(n(sale.discount)>0) tableBody.push(['','','Punguzo','','-'+cur+' '+fmt(sale.discount)]);
+  if(n(sale.discount)>0) tableBody.push(['','',pT('discount_row'),'','-'+cur+' '+fmt(sale.discount)]);
   doc.autoTable({
     startY:y,
-    head:[['#','Bidhaa','Idadi','Bei','Jumla']],
+    head:[[pT('item_no'),pT('item_desc'),pT('qty'),pT('price_hdr'),pT('total_hdr')]],
     body:tableBody,
-    foot:[[{content:'JUMLA KUU',colSpan:4,styles:{halign:'right',fontStyle:'bold'}},{content:cur+' '+fmt(sale.total),styles:{fontStyle:'bold',textColor:green}}]],
+    foot:[[{content:pT('grand_total'),colSpan:4,styles:{halign:'right',fontStyle:'bold'}},{content:cur+' '+fmt(sale.total),styles:{fontStyle:'bold',textColor:green}}]],
     headStyles:{fillColor:green,textColor:255,fontSize:9},
     footStyles:{fillColor:[240,249,244],textColor:[22,163,74],fontSize:11},
     styles:{fontSize:9},columnStyles:{0:{cellWidth:8},2:{halign:'center'},3:{halign:'right'},4:{halign:'right'}},
@@ -4599,9 +4779,9 @@ function downloadInvPDF(){
   y=doc.lastAutoTable.finalY+8;
   // Payment summary
   doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);
-  doc.text('Kilicholipwa: '+cur+' '+fmt(sale.paid),14,y);
-  if(isCredit) doc.text('Deni Lililobaki: '+cur+' '+fmt(n(sale.total)-n(sale.paid)),W/2,y);
-  else doc.text('Chenji: '+cur+' '+fmt(sale.change),W/2,y);
+  doc.text(pT('paid')+': '+cur+' '+fmt(sale.paid),14,y);
+  if(isCredit) doc.text(pT('balance')+': '+cur+' '+fmt(n(sale.total)-n(sale.paid)),W/2,y);
+  else doc.text(pT('change_lbl')+': '+cur+' '+fmt(sale.change),W/2,y);
   y+=6;
   // Credit terms
   if(isCredit&&n(cust.paymentDays)>0){
@@ -4609,20 +4789,20 @@ function downloadInvPDF(){
     const due=d.toISOString().slice(0,10);
     doc.setDrawColor(254,215,170);doc.setFillColor(255,247,237);doc.roundedRect(14,y,W-28,18,2,2,'FD');
     doc.setTextColor(194,65,12);doc.setFontSize(9);doc.setFont('helvetica','bold');
-    doc.text('Masharti ya Malipo — Mkopo',17,y+5);
+    doc.text(pT('credit_terms'),17,y+5);
     doc.setFont('helvetica','normal');
-    doc.text('Siku za Kulipa: '+S(cust.paymentDays)+' · Tarehe ya Mwisho: '+S(fmtDate(due)),17,y+12);
+    doc.text(pT('pay_days')+': '+S(cust.paymentDays)+' · '+pT('due_date')+': '+S(fmtDate(due)),17,y+12);
     y+=22;
   }
   // Payment methods
   if(banks.length||mobiles.length){
     y+=2;doc.setDrawColor(220,220,220);doc.setLineWidth(0.3);doc.line(14,y,W-14,y);y+=6;
     doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(100,100,100);
-    doc.text('MAELEZO YA MALIPO',14,y);y+=5;
+    doc.text(pT('pay_details'),14,y);y+=5;
     doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);
     banks.forEach(b=>{
       doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(S(b.bankName||'Benki')+':',14,y);
-      doc.setFont('helvetica','normal');doc.text('Akaunti: '+S(b.accNo)+(b.accName?' · '+S(b.accName):'')+(b.branch?' · '+S(b.branch):''),50,y);y+=5;
+      doc.setFont('helvetica','normal');doc.text(pT('account')+': '+S(b.accNo)+(b.accName?' · '+S(b.accName):'')+(b.branch?' · '+S(b.branch):''),50,y);y+=5;
     });
     mobiles.forEach(m=>{
       doc.setFontSize(9);doc.setFont('helvetica','bold');doc.text(S(m.network||'Mobile')+':',14,y);
@@ -4632,7 +4812,7 @@ function downloadInvPDF(){
   // Footer
   y+=4;doc.setDrawColor(...green);doc.setLineWidth(0.4);doc.line(14,y,W-14,y);y+=5;
   doc.setFontSize(8);doc.setTextColor(150,150,150);
-  doc.text('Asante kwa kununua! · '+S(biz.bizName||cT.name)+' · '+td(),W/2,y,{align:'center'});
+  doc.text(pT('thank_you')+' · '+S(biz.bizName||cT.name)+' · '+td(),W/2,y,{align:'center'});
   doc.save('Invoice-'+S(sale.ref)+'.pdf');
 }
 
@@ -4749,6 +4929,7 @@ async function openPurchM(){
   document.getElementById('pu-dt').value=td();
   document.getElementById('pu-su').innerHTML='<option value="">— Msambazaji —</option>'+
     DB.suppliers.map(s=>`<option value="${s.id}">${s.name}${s.prods?' ('+s.prods+')':''}</option>`).join('');
+  const nt=document.getElementById('pu-notes');if(nt)nt.value='';
   renderPRows();
   openM('m-pur');
 }
@@ -4785,7 +4966,7 @@ async function savePurch(){
   try{
     const tot=valid.reduce((s,r)=>s+r.total,0);const sid=gv('pu-su');const sup=DB.suppliers.find(s=>s.id===sid);
     const pay=gv('pu-pay');const isC=pay==='Mkopo';const pd=n(gv('pu-pd'));
-    const pur={id:uid(),tenantId:cT.id,branchId:cB?cB.id:'',ref:'PO-'+td().replace(/-/g,'').slice(2)+'-'+String(DB.purchases.length+1).padStart(4,'0'),date:gv('pu-dt')||td(),supId:sid||'',supName:sup?sup.name:'—',items:valid,total:tot,paid:pd,payment:pay,creditType:isC?'credit':'cash',created:tStr()};
+    const pur={id:uid(),tenantId:cT.id,branchId:cB?cB.id:'',ref:'PO-'+td().replace(/-/g,'').slice(2)+'-'+String(DB.purchases.length+1).padStart(4,'0'),date:gv('pu-dt')||td(),supId:sid||'',supName:sup?sup.name:'—',items:valid,total:tot,paid:pd,payment:pay,creditType:isC?'credit':'cash',notes:gv('pu-notes')||'',created:tStr()};
     LS.save(cT.id,'purchases',pur);
     valid.forEach(row=>{
       const p=DB.products.find(x=>x.id===row.pid);if(!p)return;
@@ -4798,7 +4979,7 @@ async function savePurch(){
       adjBS(row.pid,cB?cB.id:null,n(row.qty));
     });
     if(sup){if(isC)sup.currentDebt=(n(sup.currentDebt)||0)+tot;sup.totalPurch=(n(sup.totalPurch)||0)+tot;LS.save(cT.id,'suppliers',sup);}
-    loadFromLocal();closeM('m-pur');pRows=[];toast('success',pur.ref+' ✅');renderPurchs();loadDash();
+    loadFromLocal();closeM('m-pur');pRows=[];_swal.success('Imenunuliwa ✅',pur.ref);renderPurchs();loadDash();
     // Background sync
     bgSync(cT.id,'purchases',{...pur,items:valid});
     valid.forEach(row=>{const p=DB.products.find(x=>x.id===row.pid);if(p)bgSync(cT.id,'products',p);});
@@ -4809,18 +4990,20 @@ async function savePurch(){
 }
 function setPF(f,el){PF=f;document.querySelectorAll('.filter-pill[id^="pf-"]').forEach(b=>b.classList.remove('active'));if(el)el.classList.add('active');renderPurchs();}
 function renderPurchs(){
+  _tblLoad('pu-tb',8);
   let rows=filterByBranch([...DB.purchases]);
   if(PF==='cash')rows=rows.filter(p=>p.creditType!=='credit');
   if(PF==='credit')rows=rows.filter(p=>p.creditType==='credit');
   const sq=(gv('pu-srch')||'').toLowerCase();
   if(sq)rows=rows.filter(p=>(p.ref+p.supName+p.date).toLowerCase().includes(sq));
-  pg(rows,'pu-tb','pu-pg',sl=>sl.map(p=>{const items=Array.isArray(p.items)?p.items:[];return`<tr><td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${p.ref}</td><td class="td-muted">${fmtDate(p.date)}</td><td class="td-name">${p.supName||'—'}</td><td class="td-muted">${items.length} ${t('tbl.items')}</td><td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.total)}</td><td><span class="badge badge-neutral">${cleanPayment(p.payment)}</span></td><td><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?t('pay.credit'):t('pay.cash')}</span></td><td class="td-actions"><button class="btn btn-ghost btn-sm" onclick="viewPurch('${p.id}')"><i class="bi bi-eye"></i></button><button class="btn btn-danger btn-sm" onclick="confirmDelPurch('${p.id}')"><i class="bi bi-trash"></i></button></td></tr>`}).join(''));
+  pg(rows,'pu-tb','pu-pg',sl=>sl.map(p=>{const items=Array.isArray(p.items)?p.items:[];return`<tr><td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${p.ref}</td><td class="td-muted">${fmtDate(p.date)}</td><td class="td-name">${p.supName||'—'}</td><td class="td-muted">${items.length} ${t('tbl.items')}</td><td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(p.total)}</td><td><span class="badge badge-neutral">${cleanPayment(p.payment)}</span></td><td><span class="badge badge-${p.creditType==='credit'?'credit':'cash'}">${p.creditType==='credit'?t('pay.credit'):t('pay.cash')}</span></td><td class="td-actions"><button class="btn btn-ghost btn-sm" onclick="viewPurch('${p.id}')"><i class="bi bi-eye"></i></button><button class="btn btn-ghost btn-sm" title="Pakua LPO" onclick="genLPO('${p.id}')"><i class="bi bi-file-earmark-text" style="color:#2563eb;"></i></button><button class="btn btn-danger btn-sm" onclick="confirmDelPurch('${p.id}')"><i class="bi bi-trash"></i></button></td></tr>`}).join(''));
 }
 
 /* ================================================================
    CUSTOMERS
 ================================================================ */
 function renderCusts(){
+  _tblLoad('cu-tb',8);
   const debts=DB.customers.filter(c=>n(c.currentDebt)>0);
   document.getElementById('cu-alerts').innerHTML=debts.length?`<div class="alert alert-danger"><i class="bi bi-currency-exchange" style="font-size:16px;"></i><span>Wateja <strong>${debts.length}</strong> wana madeni: <strong>TZS ${fmt(debts.reduce((s,c)=>s+n(c.currentDebt),0))}</strong></span></div>`:'';
   const q=(gv('cu-q')||'').toLowerCase();
@@ -4831,12 +5014,10 @@ function renderCusts(){
 function deleteCust(id){
   if(!permGuard('customers','delete'))return;
   const c=DB.customers.find(x=>x.id===id);if(!c)return;
-  if(!confirm('Futa mteja "'+c.name+'"?\n\nTaarifa zake zote za mauzo zitabaki lakini hatarekebishwa tena.'))return;
-  LS.del(cT.id,'customers',id);
-  bgDel('customers',id);
-  loadFromLocal();
-  toast('success','Mteja "'+c.name+'" amefutwa');
-  renderCusts();
+  _swal.confirm('Futa Mteja',`"${c.name}" atafutwa. Historia yake ya mauzo itabaki kwenye rekodi.`,()=>{
+    LS.del(cT.id,'customers',id);bgDel('customers',id);loadFromLocal();
+    _swal.success('Imefutwa',`Mteja "${c.name}" amefutwa`);renderCusts();
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 function openCustM(){document.getElementById('c-eid').value='';document.getElementById('cm-t').textContent='Mteja Mpya';['c-nm','c-ph','c-em','c-ad','c-cl','c-nt','c-tin','c-days','c-ob'].forEach(x=>{const e=document.getElementById(x);if(e)e.value='';});document.getElementById('c-gr').value='Kawaida';const obRow=document.getElementById('c-ob-row');if(obRow)obRow.style.display='';openM('m-cust');}
 function editCust(id){const c=DB.customers.find(x=>x.id===id);if(!c)return;document.getElementById('c-eid').value=c.id;document.getElementById('cm-t').textContent='Hariri Mteja';document.getElementById('c-nm').value=c.name;document.getElementById('c-ph').value=c.phone||'';document.getElementById('c-em').value=c.email||'';document.getElementById('c-ad').value=c.addr||'';document.getElementById('c-gr').value=c.group||'Kawaida';document.getElementById('c-cl').value=c.creditLimit||0;document.getElementById('c-nt').value=c.notes||'';document.getElementById('c-tin').value=c.tin||'';document.getElementById('c-days').value=c.paymentDays||'';const obRow=document.getElementById('c-ob-row');if(obRow)obRow.style.display='';const cobEl=document.getElementById('c-ob');if(cobEl)cobEl.value=n(c.openingBalance)||0;openM('m-cust');}
@@ -4849,7 +5030,7 @@ async function saveCust(){
   if(eid){const old=DB.customers.find(x=>x.id===eid);if(old){const obDiff=ob-(n(old.openingBalance)||0);Object.assign(cu,{salesCount:old.salesCount||0,totalSpent:old.totalSpent||0,currentDebt:Math.max(0,(n(old.currentDebt)||0)+obDiff),lastSale:old.lastSale||null,payments:old.payments||[],openingBalance:ob});}}
   const btn=document.querySelector('#m-cust .btn-primary');if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner spinner-sm"></span> Inahifadhi...';}
   LS.save(cT.id,'customers',cu);loadFromLocal();
-  closeM('m-cust');toast('success','Mteja amehifadhiwa ✅');renderCusts();
+  closeM('m-cust');_swal.success('Imehifadhiwa ✅','Mteja amehifadhiwa');renderCusts();
   if(btn){btn.disabled=false;btn.innerHTML='<i class="bi bi-check-lg"></i>Hifadhi';}
   bgSync(cT.id,'customers',cu);
 }
@@ -5047,7 +5228,7 @@ async function saveRecvPay(){
     LS.save(cT.id,'customers',cu);
     loadFromLocal();
     closeM('m-recv');
-    toast('success','Malipo ya TZS '+fmt(amt)+' imehifadhiwa ✅');
+    _swal.success('Malipo Imehifadhiwa ✅','TZS '+fmt(amt)+' imepokewa');
     renderCusts();loadDash();
     // Refresh profile kama ipo wazi
     if(document.getElementById('t-cprof').classList.contains('active'))viewCust(_recvCustId);
@@ -5066,6 +5247,7 @@ async function saveRecvPay(){
    SUPPLIERS
 ================================================================ */
 function renderSups(){
+  _tblLoad('su-tb',7);
   const debts=DB.suppliers.filter(s=>n(s.currentDebt)>0);
   document.getElementById('su-alerts').innerHTML=debts.length?`<div class="alert alert-warning"><i class="bi bi-truck" style="font-size:16px;"></i><span>Wasambazaji <strong>${debts.length}</strong> wana madeni: <strong>TZS ${fmt(debts.reduce((s,x)=>s+n(x.currentDebt),0))}</strong></span></div>`:'';
   const suQ=(document.getElementById('su-q')?.value||'').toLowerCase();
@@ -5077,12 +5259,13 @@ function renderSups(){
 function deleteSup(id){
   if(!permGuard('suppliers','delete'))return;
   const s=DB.suppliers.find(x=>x.id===id);if(!s)return;
-  if(!confirm('Futa msambazaji "'+s.name+'"?\n\nTaarifa zake zote za manunuzi zitabaki lakini hatarekebishwa tena.'))return;
-  LS.del(cT.id,'suppliers',id);
-  bgDel('suppliers',id);
-  loadFromLocal();
-  toast('success','Msambazaji "'+s.name+'" amefutwa');
-  renderSups();
+  _swal.confirm('Futa Msambazaji',`"${s.name}" atafutwa. Historia yake ya manunuzi itabaki kwenye rekodi.`,()=>{
+    LS.del(cT.id,'suppliers',id);
+    bgDel('suppliers',id);
+    loadFromLocal();
+    _swal.success('Imefutwa',`Msambazaji "${s.name}" amefutwa`);
+    renderSups();
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 // ── SUPPLIER PRODUCT SELECT ──────────────────────────────────
 let _supSelProds=[];// Array ya product IDs zilizochaguliwa
@@ -5198,7 +5381,7 @@ async function saveSup(){
   if(!sup.name){toast('error','Jaza jina');return;}
   if(eid){const old=DB.suppliers.find(x=>x.id===eid);if(old){const obDiff=sob-(n(old.openingBalance)||0);Object.assign(sup,{totalPurch:old.totalPurch||0,currentDebt:Math.max(0,(n(old.currentDebt)||0)+obDiff),payments:old.payments||[],openingBalance:sob});}}
   const btn=document.querySelector('#m-sup .btn-primary');if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner spinner-sm"></span> Inahifadhi...';}
-  LS.save(cT.id,'suppliers',sup);loadFromLocal();closeM('m-sup');toast('success','Msambazaji amehifadhiwa ✅');renderSups();
+  LS.save(cT.id,'suppliers',sup);loadFromLocal();closeM('m-sup');_swal.success('Imehifadhiwa ✅','Msambazaji amehifadhiwa');renderSups();
   if(btn){btn.disabled=false;btn.innerHTML='<i class="bi bi-check-lg"></i>Hifadhi';}
   bgSync(cT.id,'suppliers',sup);
 }
@@ -5370,7 +5553,7 @@ async function saveSupPayment(){
     LS.save(cT.id,'suppliers',s);
     loadFromLocal();
     closeM('m-sup-pay');
-    toast('success','Malipo ya TZS '+fmt(amt)+' imehifadhiwa ✅');
+    _swal.success('Malipo Imehifadhiwa ✅','TZS '+fmt(amt)+' imelipwa');
     renderSups();
     if(document.getElementById('t-sprof').classList.contains('active'))viewSup(_supPayId);
     bgSync(cT.id,'suppliers',s);
@@ -6288,6 +6471,7 @@ async function downloadLabelsPDF(){
 const EXP_CATS=['Kodi','Mishahara','Umeme/Maji','Usafirishaji','Vifaa','Matengenezo','Nyingine'];
 
 function renderExps(){
+  _tblLoad('ex-tb',6);
   loadFromLocal();
   const q=(gv('ex-q')||'').toLowerCase();
   const cat=gv('ex-cat')||'';
@@ -6367,18 +6551,19 @@ async function saveExp(){
   const btn=document.querySelector('#m-exp .btn-primary');
   if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner spinner-sm"></span> Inahifadhi...';}
   LS.save(cT.id,'expenses',exp);loadFromLocal();
-  closeM('m-exp');toast('success','Matumizi yamehifadhiwa ✅');renderExps();
+  closeM('m-exp');_swal.success('Imehifadhiwa ✅','Matumizi yamehifadhiwa');renderExps();
   if(btn){btn.disabled=false;btn.innerHTML='<i class="bi bi-check-lg"></i> Hifadhi';}
   bgSync(cT.id,'expenses',exp);
 }
 
 function deleteExp(id){
   if(!permGuard('expenses','delete'))return;
-  if(!confirm('Futa matumizi haya?'))return;
-  LS.del(cT.id,'expenses',id);
-  loadFromLocal();renderExps();
-  toast('success','Matumizi yamefutwa');
-  api({action:'delete',store:'Expenses',id}).catch(()=>{});
+  _swal.confirm('Futa Matumizi','Matumizi haya yatafutwa kabisa.',()=>{
+    LS.del(cT.id,'expenses',id);
+    loadFromLocal();renderExps();
+    _swal.success('Imefutwa','Matumizi yamefutwa');
+    api({action:'delete',store:'Expenses',id}).catch(()=>{});
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 
 function genPL(){
@@ -6501,49 +6686,314 @@ function printPL(){
   </div>`;
   printContent(html);
 }
+// ── PDF Language System ───────────────────────────────────────
+const _pdfI18n={
+  sw:{
+    lpo_title:'HATI YA UNUNUZI WA NDANI',lpo_no:'Nambari ya LPO',
+    supplier:'MSAMBAZAJI',deliver_to:'WASILISHA KWA',
+    item_no:'#',item_desc:'Bidhaa',unit:'Kitengo',qty:'Idadi',unit_price:'Bei ya Kitengo (TZS)',total_col:'Jumla (TZS)',
+    subtotal:'Jumla Ndogo (Subtotal)',grand_total:'JUMLA YOTE',
+    payment_method:'Njia ya Malipo',terms:'MASHARTI NA MAAGIZO',
+    terms1:'Bidhaa zitumwe katika hali nzuri na kwa wakati uliowekwa',
+    terms2:'Hati hii ni ombi rasmi la manunuzi — si stakabadhi ya malipo',
+    notes:'Maagizo',prepared_by:'IMEANDALIWA NA',authorized_by:'IMEIDHINISHWA NA',
+    name_title:'Jina & Cheo',date_line:'Tarehe',stamp:'MUHURI',
+    pl_title:'TAARIFA YA FAIDA NA HASARA',pl_period:'Kipindi',
+    revenue:'Mapato (Revenue)',cash_sales:'Mauzo ya Taslimu',credit_sales:'Mauzo ya Mkopo',
+    total_revenue:'Jumla ya Mapato',cogs:'Gharama za Bidhaa (COGS)',cogs_detail:'Gharama ya Bidhaa Zilizouzwa',
+    total_cogs:'Jumla ya COGS',gross_profit:'FAIDA YA BIDHAA (Gross Profit)',
+    expenses:'Matumizi ya Uendeshaji',no_expenses:'Hakuna matumizi yaliyorekodiwa',
+    total_expenses:'Jumla ya Matumizi',net_profit:'FAIDA HALISI (Net Profit)',net_loss:'HASARA HALISI (Net Loss)',
+    profit_badge:'FAIDA',loss_badge:'HASARA',issued:'Tarehe ya kutoa',
+    inv_title:'ANKARA',customer:'MTEJA',pay_method:'NJIA YA MALIPO',thank_you:'Asante kwa kununua!',
+    draft:'RASIMU',page:'Uk.',sales_count:'Mauzo',exp_count:'Matumizi',
+    revenue_card:'MAPATO JUMLA',cogs_card:'GHARAMA (COGS)',gp_card:'FAIDA YA BIDHAA',
+    rev_hdr:'↑  MAPATO (REVENUE)',exp_hdr:'↓  MATUMIZI (EXPENSES)',no_exp_short:'Hakuna matumizi',
+    total_sales:'Jumla ya Mauzo',gp_label:'Gross Profit',cogs_minus:'(−) COGS',
+    credit_badge:'MKOPO',cash_badge:'TASLIMU',price_hdr:'Bei',total_hdr:'Jumla',discount_row:'Punguzo',
+    paid:'Kilicholipwa',balance:'Deni Lililobaki',change_lbl:'Chenji',
+    credit_terms:'Masharti ya Malipo — Mkopo',pay_days:'Siku za Kulipa',due_date:'Tarehe ya Mwisho',
+    pay_details:'MAELEZO YA MALIPO',account:'Akaunti',
+  },
+  en:{
+    lpo_title:'LOCAL PURCHASE ORDER',lpo_no:'LPO No',
+    supplier:'SUPPLIER',deliver_to:'DELIVER TO',
+    item_no:'#',item_desc:'Description',unit:'Unit',qty:'Qty',unit_price:'Unit Price (TZS)',total_col:'Total (TZS)',
+    subtotal:'Subtotal',grand_total:'GRAND TOTAL',
+    payment_method:'Payment Method',terms:'TERMS & CONDITIONS',
+    terms1:'Goods must be delivered in good condition and on time',
+    terms2:'This document is a purchase request — not a payment receipt',
+    notes:'Special Instructions',prepared_by:'PREPARED BY',authorized_by:'AUTHORIZED BY',
+    name_title:'Name & Title',date_line:'Date',stamp:'STAMP',
+    pl_title:'PROFIT & LOSS STATEMENT',pl_period:'Period',
+    revenue:'Revenue',cash_sales:'Cash Sales',credit_sales:'Credit Sales',
+    total_revenue:'Total Revenue',cogs:'Cost of Goods Sold (COGS)',cogs_detail:'Cost of Goods Sold',
+    total_cogs:'Total COGS',gross_profit:'GROSS PROFIT',
+    expenses:'Operating Expenses',no_expenses:'No expenses recorded',
+    total_expenses:'Total Expenses',net_profit:'NET PROFIT',net_loss:'NET LOSS',
+    profit_badge:'PROFIT',loss_badge:'LOSS',issued:'Issued on',
+    inv_title:'INVOICE',customer:'CUSTOMER',pay_method:'PAYMENT METHOD',thank_you:'Thank you for your purchase!',
+    draft:'DRAFT',page:'Pg.',sales_count:'Sales',exp_count:'Expenses',
+    revenue_card:'TOTAL REVENUE',cogs_card:'COST (COGS)',gp_card:'GROSS PROFIT',
+    rev_hdr:'↑  REVENUE',exp_hdr:'↓  EXPENSES',no_exp_short:'No expenses',
+    total_sales:'Total Sales',gp_label:'Gross Profit',cogs_minus:'(−) COGS',
+    credit_badge:'CREDIT',cash_badge:'CASH',price_hdr:'Price',total_hdr:'Total',discount_row:'Discount',
+    paid:'Paid',balance:'Balance Due',change_lbl:'Change',
+    credit_terms:'Payment Terms — Credit',pay_days:'Payment Days',due_date:'Due Date',
+    pay_details:'PAYMENT DETAILS',account:'Account',
+  },
+};
+let _pdfLang='sw';
+function pT(k){return(_pdfI18n[_pdfLang]||_pdfI18n.sw)[k]||k;}
+function setPdfLang(lang){
+  _pdfLang=lang;
+  document.querySelectorAll('.pdf-lang-btn').forEach(b=>{
+    const active=b.dataset.lang===lang;
+    b.style.background=active?'var(--brand)':'var(--bg-3)';
+    b.style.color=active?'#fff':'var(--text-2)';
+  });
+}
+
+let _plFmt='statement';
+function setPLFmt(f){
+  _plFmt=f;
+  document.getElementById('pl-fmt-stmt').style.cssText='border-radius:0;border:none;padding:4px 10px;font-size:12px;background:'+(f==='statement'?'var(--brand);color:#fff':'var(--bg-3);color:var(--text-2)')+';';
+  document.getElementById('pl-fmt-vis').style.cssText='border-radius:0;border:none;padding:4px 10px;font-size:12px;background:'+(f==='visual'?'var(--brand);color:#fff':'var(--bg-3);color:var(--text-2)')+';';
+}
+
+function _plData(){
+  const from=gv('rp-f')||dAgo(30),to=gv('rp-t')||td();
+  const sls=filterByBranch(DB.sales).filter(s=>s.date>=from&&s.date<=to);
+  const exps=(DB.expenses||[]).filter(e=>e.date>=from&&e.date<=to);
+  const revenue=sls.reduce((s,x)=>s+n(x.total),0);
+  const cashRev=sls.filter(s=>s.creditType!=='credit').reduce((s,x)=>s+n(x.total),0);
+  const creditRev=sls.filter(s=>s.creditType==='credit').reduce((s,x)=>s+n(x.total),0);
+  const allItems=sls.flatMap(s=>Array.isArray(s.items)?s.items:[]);
+  let cogs=0;
+  allItems.forEach(it=>{const p=DB.products.find(x=>x.id===it.pid);if(p)cogs+=n(p.bp)*n(it.qty);else cogs+=n(it.price)*0.7*n(it.qty);});
+  const grossProfit=revenue-cogs;
+  const totExp=exps.reduce((s,e)=>s+n(e.amount),0);
+  const byCat={};exps.forEach(e=>{byCat[e.category]=(byCat[e.category]||0)+n(e.amount);});
+  const catEntries=Object.entries(byCat).sort((a,b)=>b[1]-a[1]);
+  const netProfit=grossProfit-totExp;
+  return{from,to,sls,exps,revenue,cashRev,creditRev,cogs,grossProfit,totExp,catEntries,netProfit,isProfit:netProfit>=0};
+}
+
 function exportPLPDF(){
   if(!_isPLGenerated()){toast('warning','Bonyeza "Tengeneza" kwanza');return;}
-  const body=document.getElementById('pl-body');
   if(!window.jspdf){toast('error','jsPDF haipo');return;}
+  if(_plFmt==='visual') _exportPLVisual(); else _exportPLStatement();
+}
+
+// ── FORMAT 1: STATEMENT (classic income statement) ──────────
+function _exportPLStatement(){
+  const d=_plData();
   const biz=DB.biz||{};
-  const from=document.getElementById('rp-f')?.value||dAgo(30);
-  const to=document.getElementById('rp-t')?.value||td();
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF({unit:'mm',format:'a4'});
-  const W=210,margin=14;
-  const green=[22,163,74];
-  let y=18;
-  // Header bar
-  doc.setFillColor(...green);doc.rect(0,0,W,14,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(11);doc.setFont(undefined,'bold');
-  doc.text('📊 '+(biz.bizName||cT?.name||'StokiPro'),margin,9.5);
-  doc.setFontSize(8);doc.setFont(undefined,'normal');
-  doc.text('P&L · '+fmtDate(from)+' — '+fmtDate(to),W-margin,9.5,{align:'right'});
-  y=24;
-  // Extract text rows from the PL body
-  const lines=[];
-  body.querySelectorAll('div[style*="justify-content:space-between"]').forEach(row=>{
-    const spans=row.querySelectorAll('span');
-    if(spans.length>=2){
-      const label=(spans[0].textContent||'').trim();
-      const value=(spans[spans.length-1].textContent||'').trim();
-      if(label&&value)lines.push({label,value,bold:row.style.fontWeight==='700'||row.style.fontSize==='14px'||row.style.fontSize==='28px'});
-    }
+  const W=210,M=14,PH=297,RX=W-M;
+  const S=v=>String(v==null?'':v);
+
+  const C={g:[22,163,74],r:[220,38,38],dark:[15,20,28],mid:[60,72,88],lite:[120,132,148],line:[210,214,220],bg:[248,250,252],white:[255,255,255]};
+  const f=(v,sign)=>(sign&&v<0?'(':'')+'TZS '+fmt(Math.abs(v))+(sign&&v<0?')':'');
+
+  let y=20;
+
+  // ── Company header (left) — same as invoice ──────────────
+  doc.setFontSize(20);doc.setFont('helvetica','bold');doc.setTextColor(...C.g);
+  doc.text(S(biz.bizName||cT?.name||'StokiPro'),M,y);y+=7;
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
+  if(biz.addr){doc.text(S(biz.addr),M,y);y+=5;}
+  if(biz.phone){doc.text(S(biz.phone),M,y);y+=5;}
+  if(biz.email){doc.text(S(biz.email),M,y);y+=5;}
+
+  // ── Document title (right) ────────────────────────────────
+  doc.setFontSize(18);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+  doc.text(pT('pl_title'),W-M,22,{align:'right'});
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);
+  doc.text(pT('pl_period')+': '+S(fmtDate(d.from))+' — '+S(fmtDate(d.to)),W-M,30,{align:'right'});
+  doc.text(pT('issued')+': '+S(fmtDate(td())),W-M,37,{align:'right'});
+  doc.setFontSize(9);doc.setTextColor(d.isProfit?22:220,d.isProfit?163:38,d.isProfit?74:38);
+  doc.text(d.isProfit?pT('profit_badge'):pT('loss_badge'),W-M,44,{align:'right'});
+
+  // ── Green divider — same as invoice ──────────────────────
+  y=Math.max(y,50);
+  doc.setDrawColor(...C.g);doc.setLineWidth(0.8);doc.line(M,y,W-M,y);y+=8;
+
+  const labelX=M+4;
+  const amtX=W-M-4;
+  const lineH=7;
+
+  const heading=(txt)=>{
+    doc.setFontSize(8.5);doc.setFont(undefined,'bold');doc.setTextColor(...C.dark);
+    doc.text(txt.toUpperCase(),M,y);
+    y+=lineH-1;
+  };
+  const row=(label,amt,clr,indent)=>{
+    doc.setFontSize(8.5);doc.setFont(undefined,'normal');doc.setTextColor(...C.mid);
+    doc.text(label,indent?labelX+4:labelX,y);
+    doc.setFont(undefined,'bold');doc.setTextColor(...(clr||C.mid));
+    doc.text(f(amt),amtX,y,{align:'right'});
+    y+=lineH;
+  };
+  const thinLine=()=>{doc.setDrawColor(...C.line);doc.setLineWidth(0.3);doc.line(labelX,y-1,RX,y-1);};
+  const subtotal=(label,amt,clr)=>{
+    thinLine();
+    doc.setFontSize(9);doc.setFont(undefined,'bold');doc.setTextColor(...C.dark);
+    doc.text(label,labelX,y);
+    doc.setTextColor(...(clr||C.dark));
+    doc.text(f(amt),amtX,y,{align:'right'});
+    y+=lineH+1;
+  };
+  const singleRule=()=>{doc.setDrawColor(...C.line);doc.setLineWidth(0.4);doc.line(M,y-2,RX,y-2);y+=2;};
+  const doubleRule=()=>{
+    doc.setDrawColor(...C.dark);
+    doc.setLineWidth(0.7);doc.line(amtX-32,y,RX,y);
+    y+=1.5;doc.setLineWidth(0.3);doc.line(amtX-32,y,RX,y);
+    y+=4;
+  };
+
+  // ── REVENUE ─────────────────────────────────────────────
+  heading(pT('revenue'));
+  row(pT('cash_sales'),d.cashRev,C.g);
+  row(pT('credit_sales'),d.creditRev,[180,100,0]);
+  subtotal(pT('total_revenue'),d.revenue,C.g);
+  singleRule();
+
+  // ── COST OF GOODS SOLD ───────────────────────────────────
+  heading(pT('cogs'));
+  row(pT('cogs_detail'),d.cogs,C.r);
+  subtotal(pT('total_cogs'),-d.cogs,C.r);
+  singleRule();
+
+  // ── GROSS PROFIT ─────────────────────────────────────────
+  const gpColor=d.grossProfit>=0?C.g:C.r;
+  doc.setFontSize(10);doc.setFont(undefined,'bold');doc.setTextColor(...C.dark);
+  doc.text(pT('gross_profit'),M,y);
+  doc.setTextColor(...gpColor);
+  doc.text(f(d.grossProfit),amtX,y,{align:'right'});
+  y+=lineH+1;
+  doubleRule();
+
+  // ── OPERATING EXPENSES ───────────────────────────────────
+  heading(pT('expenses'));
+  if(d.catEntries.length===0){
+    doc.setFontSize(8.5);doc.setFont(undefined,'italic');doc.setTextColor(...C.lite);
+    doc.text(pT('no_expenses'),labelX,y);y+=lineH;
+  } else {
+    d.catEntries.forEach(([cat,amt])=>row(cat,amt,C.r,true));
+  }
+  subtotal(pT('total_expenses'),-d.totExp,C.r);
+  singleRule();
+
+  // ── NET PROFIT / LOSS ────────────────────────────────────
+  y+=2;
+  const netColor=d.isProfit?C.g:C.r;
+  const netLabel=d.isProfit?pT('net_profit'):pT('net_loss');
+  doc.setFontSize(11);doc.setFont(undefined,'bold');doc.setTextColor(...C.dark);
+  doc.text(netLabel,M,y);
+  doc.setTextColor(...netColor);
+  doc.text(f(d.netProfit),amtX,y,{align:'right'});
+  y+=lineH+1;
+  doubleRule();
+
+  // ── STATS LINE ───────────────────────────────────────────
+  y+=4;
+  doc.setFontSize(7.5);doc.setFont(undefined,'normal');doc.setTextColor(...C.lite);
+  doc.text(pT('sales_count')+': '+d.sls.length+'   ·   '+pT('exp_count')+': '+d.exps.length,M,y);
+
+  // ── Footer — same as invoice ─────────────────────────────
+  doc.setDrawColor(...C.g);doc.setLineWidth(0.4);doc.line(M,y+4,W-M,y+4);y+=9;
+  doc.setFontSize(8);doc.setTextColor(150,150,150);doc.setFont('helvetica','normal');
+  doc.text(S(biz.bizName||cT?.name||'StokiPro')+' · '+pT('sales_count')+': '+d.sls.length+' · '+pT('exp_count')+': '+d.exps.length+' · '+td(),W/2,y,{align:'center'});
+
+  doc.save((biz.bizName||'StokiPro').replace(/\s+/g,'_')+'_PL_Statement_'+td()+'.pdf');
+  _swal.success('Statement PDF imeshuka ✅');
+}
+
+// ── FORMAT 2: VISUAL (card layout) ──────────────────────────
+function _exportPLVisual(){
+  const d=_plData();
+  const biz=DB.biz||{};
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,M=14,PH=297;
+  const S=v=>String(v==null?'':v);
+
+  const C={g:[22,163,74],gd:[15,105,52],gl:[220,252,231],r:[220,38,38],rd:[180,20,20],rl:[254,226,226],amb:[217,119,6],aml:[254,243,199],dark:[18,22,28],mid:[80,95,112],lite:[140,152,165],bg:[246,248,250],border:[218,224,232],white:[255,255,255]};
+
+  let y=20;
+
+  // ── Company header (left) — same as invoice ──────────────
+  doc.setFontSize(20);doc.setFont('helvetica','bold');doc.setTextColor(...C.g);
+  doc.text(S(biz.bizName||cT?.name||'StokiPro'),M,y);y+=7;
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
+  if(biz.addr){doc.text(S(biz.addr),M,y);y+=5;}
+  if(biz.phone){doc.text(S(biz.phone),M,y);y+=5;}
+
+  // ── Title (right) ─────────────────────────────────────────
+  doc.setFontSize(18);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+  doc.text(pT('pl_title'),W-M,22,{align:'right'});
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);
+  doc.text(pT('pl_period')+': '+S(fmtDate(d.from))+' — '+S(fmtDate(d.to)),W-M,30,{align:'right'});
+  doc.setFontSize(9);doc.setTextColor(d.isProfit?22:220,d.isProfit?163:38,d.isProfit?74:38);
+  doc.text(d.isProfit?pT('profit_badge'):pT('loss_badge'),W-M,37,{align:'right'});
+
+  // ── Green divider — same as invoice ──────────────────────
+  y=Math.max(y,46);
+  doc.setDrawColor(...C.g);doc.setLineWidth(0.8);doc.line(M,y,W-M,y);y+=7;
+
+  // 3 summary cards
+  const cW=(W-M*2-10)/3,cH=20;
+  [[C.gl,C.g,pT('revenue_card'),'TZS '+fmt(d.revenue)],[C.rl,C.r,pT('cogs_card'),'TZS '+fmt(d.cogs)],[d.grossProfit>=0?C.gl:C.rl,d.grossProfit>=0?C.g:C.r,pT('gp_card'),'TZS '+fmt(Math.abs(d.grossProfit))]].forEach(([bg,ac,lbl,val],i)=>{
+    const cx=M+i*(cW+5);
+    doc.setFillColor(...bg);doc.roundedRect(cx,y,cW,cH,3,3,'F');
+    doc.setFillColor(...ac);doc.roundedRect(cx,y,3.5,cH,1.5,1.5,'F');
+    doc.setFontSize(6.5);doc.setFont(undefined,'bold');doc.setTextColor(...C.lite);doc.text(lbl,cx+7,y+6.5);
+    doc.setFontSize(9.5);doc.setFont(undefined,'bold');doc.setTextColor(...ac);doc.text(val,cx+7,y+15);
   });
-  doc.setTextColor(30,30,30);
-  lines.forEach(({label,value,bold})=>{
-    if(y>280){doc.addPage();y=18;}
-    doc.setFontSize(bold?10:9);doc.setFont(undefined,bold?'bold':'normal');
-    doc.text(label.slice(0,70),margin,y);
-    doc.text(value.slice(0,40),W-margin,y,{align:'right'});
-    y+=bold?7:5.5;
-  });
-  // Footer
-  doc.setFillColor(245,247,250);doc.rect(0,285,W,12,'F');
-  doc.setTextColor(150,150,150);doc.setFontSize(7.5);
-  doc.text((biz.bizName||'')+'  ·  StokiPro v3  ·  '+fmtDate(td()),W/2,292,{align:'center'});
-  doc.save((biz.bizName||'StokiPro').replace(/\s+/g,'_')+'_PL_'+td()+'.pdf');
-  toast('success','PDF imeshuka ✅');
+  y+=cH+8;
+
+  // Two columns
+  const colW=(W-M*2-6)/2,lX=M,rX=M+colW+6,rH=7.5;
+  const sHdr=(x,lbl,clr,curY)=>{doc.setFillColor(...clr);doc.roundedRect(x,curY,colW,7.5,2,2,'F');doc.setTextColor(...C.white);doc.setFontSize(7.5);doc.setFont(undefined,'bold');doc.text(lbl,x+5,curY+5.2);return curY+10;};
+  const dRow=(x,curY,lbl,val,vc,bold,bgc)=>{doc.setFillColor(...(bgc||C.bg));doc.roundedRect(x,curY-0.5,colW,rH,1,1,'F');doc.setTextColor(...C.dark);doc.setFontSize(bold?8:7.5);doc.setFont(undefined,bold?'bold':'normal');doc.text(lbl,x+4,curY+4.5);doc.setTextColor(...(vc||C.dark));doc.setFont(undefined,'bold');doc.text(val,x+colW-3,curY+4.5,{align:'right'});return curY+rH+1;};
+  const tRow=(x,curY,lbl,val,fc,bc)=>{doc.setFillColor(...fc);doc.roundedRect(x,curY-0.5,colW,9,2,2,'F');doc.setDrawColor(...bc);doc.setLineWidth(0.4);doc.roundedRect(x,curY-0.5,colW,9,2,2,'S');doc.setTextColor(...C.dark);doc.setFontSize(8.5);doc.setFont(undefined,'bold');doc.text(lbl,x+4,curY+5.5);doc.setTextColor(...bc);doc.text(val,x+colW-3,curY+5.5,{align:'right'});return curY+11;};
+
+  const sy=y;
+  let lY=sHdr(lX,pT('rev_hdr'),C.g,sy);
+  lY=dRow(lX,lY,pT('cash_sales'),'TZS '+fmt(d.cashRev),C.g);
+  lY=dRow(lX,lY,pT('credit_sales'),'TZS '+fmt(d.creditRev),C.amb);
+  lY=dRow(lX,lY,pT('total_sales'),'TZS '+fmt(d.revenue),C.g,true,[240,253,244]);
+  lY+=2;lY=dRow(lX,lY,pT('cogs_minus'),'TZS '+fmt(d.cogs),C.r);lY+=2;
+  lY=tRow(lX,lY,pT('gp_label'),'TZS '+fmt(Math.abs(d.grossProfit)),d.grossProfit>=0?C.gl:C.rl,d.grossProfit>=0?C.g:C.r);
+
+  let rY=sHdr(rX,pT('exp_hdr'),C.r,sy);
+  if(!d.catEntries.length){doc.setFillColor(...C.bg);doc.roundedRect(rX,rY-0.5,colW,rH,1,1,'F');doc.setTextColor(...C.lite);doc.setFontSize(7.5);doc.setFont(undefined,'italic');doc.text(pT('no_exp_short'),rX+4,rY+4.5);rY+=rH+1;}
+  else d.catEntries.forEach(([c,a])=>{rY=dRow(rX,rY,c,'TZS '+fmt(a),C.r);});
+  rY+=2;rY=tRow(rX,rY,pT('total_expenses'),'TZS '+fmt(d.totExp),C.rl,C.r);
+
+  y=Math.max(lY,rY)+6;
+
+  // Net profit banner
+  const bH=26,bClr=d.isProfit?C.g:C.r,bdClr=d.isProfit?C.gd:C.rd;
+  doc.setFillColor(...bClr);doc.roundedRect(M,y,W-M*2,bH,4,4,'F');
+  doc.setFillColor(...bdClr);doc.roundedRect(W-M-58,y,58,bH,0,4,'F');doc.rect(W-M-58,y,6,bH,'F');
+  doc.setTextColor(...C.white);
+  doc.setFontSize(7.5);doc.setFont(undefined,'normal');doc.text('NET '+(d.isProfit?pT('profit_badge'):pT('loss_badge')),M+6,y+7);
+  doc.setFontSize(9);doc.setFont(undefined,'bold');doc.text(fmtDate(d.from)+' — '+fmtDate(d.to),M+6,y+14);
+  doc.setFontSize(7.5);doc.setFont(undefined,'normal');doc.text(d.sls.length+' '+pT('sales_count')+'  ·  '+d.exps.length+' '+pT('exp_count'),M+6,y+21);
+  doc.setFontSize(15);doc.setFont(undefined,'bold');doc.text((d.isProfit?'+':'-')+'TZS '+fmt(Math.abs(d.netProfit)),W-M-4,y+16,{align:'right'});
+  y+=bH+8;
+
+  // ── Footer — same as invoice ─────────────────────────────
+  y+=4;
+  doc.setDrawColor(...C.g);doc.setLineWidth(0.4);doc.line(M,y,W-M,y);y+=5;
+  doc.setFontSize(8);doc.setTextColor(150,150,150);doc.setFont('helvetica','normal');
+  doc.text(S(biz.bizName||cT?.name||'StokiPro')+' · '+pT('sales_count')+': '+d.sls.length+' · '+pT('exp_count')+': '+d.exps.length+' · '+td(),W/2,y,{align:'center'});
+
+  doc.save((biz.bizName||'StokiPro').replace(/\s+/g,'_')+'_PL_Visual_'+td()+'.pdf');
+  _swal.success('Visual PDF imeshuka ✅');
 }
 
 /* ================================================================
@@ -6708,7 +7158,7 @@ async function saveBizSet(){
   // Subiri hadi API isave na irudishe confirmation
   const r=await api({action:'save_biz_settings',data:cfg});
   if(r&&r.success){
-    toast('success','Taarifa za biashara zimehifadhiwa ✅');
+    _swal.success('Imehifadhiwa ✅','Taarifa za biashara zimehifadhiwa');
     loadFromLocal();
     updateDashboardVatStatus();
     renderBizCard();
@@ -6867,22 +7317,23 @@ async function saveEditSupPay(){
   pay.debtAfter=Math.max(0,n(pay.debtAfter)+diff);
   s.currentDebt=Math.max(0,n(s.currentDebt)+diff);
   LS.save(cT.id,'suppliers',s);loadFromLocal();
-  closeM('m-editsuppay');toast('success','Malipo yamesasishwa ✅');
+  closeM('m-editsuppay');_swal.success('Malipo yamesasishwa ✅');
   renderSups();
   if(document.getElementById('t-sprof').classList.contains('active'))viewSup(_editSupPayId);
   bgSync(cT.id,'suppliers',s);
 }
 async function deleteEditSupPay(){
-  if(!confirm('Futa malipo haya?'))return;
-  const s=DB.suppliers.find(x=>x.id===_editSupPayId);if(!s)return;
-  const payments=s.payments||[];const pay=payments[_editSupPayIdx];if(!pay)return;
-  s.currentDebt=Math.max(0,n(s.currentDebt)+n(pay.amount));
-  s.payments=payments.filter((_,i)=>i!==_editSupPayIdx);
-  LS.save(cT.id,'suppliers',s);loadFromLocal();
-  closeM('m-editsuppay');toast('info','Malipo yamefutwa');
-  renderSups();
-  if(document.getElementById('t-sprof').classList.contains('active'))viewSup(_editSupPayId);
-  bgSync(cT.id,'suppliers',s);
+  _swal.confirm('Futa Malipo','Malipo haya yatafutwa na deni litaongezeka.',()=>{
+    const s=DB.suppliers.find(x=>x.id===_editSupPayId);if(!s)return;
+    const payments=s.payments||[];const pay=payments[_editSupPayIdx];if(!pay)return;
+    s.currentDebt=Math.max(0,n(s.currentDebt)+n(pay.amount));
+    s.payments=payments.filter((_,i)=>i!==_editSupPayIdx);
+    LS.save(cT.id,'suppliers',s);loadFromLocal();
+    closeM('m-editsuppay');_swal.success('Imefutwa','Malipo yamefutwa');
+    renderSups();
+    if(document.getElementById('t-sprof').classList.contains('active'))viewSup(_editSupPayId);
+    bgSync(cT.id,'suppliers',s);
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 
 // ── EDIT CUSTOMER PAYMENT ───────────────────────────────────
@@ -6909,20 +7360,21 @@ async function saveEditCustPay(){
   pay.debtAfter=Math.max(0,n(pay.debtAfter)+diff);
   cu.currentDebt=Math.max(0,n(cu.currentDebt)+diff);
   LS.save(cT.id,'customers',cu);loadFromLocal();
-  closeM('m-editpay');toast('success','Malipo yamesasishwa ✅');
+  closeM('m-editpay');_swal.success('Malipo yamesasishwa ✅');
   renderCusts();if(document.getElementById('t-cprof').classList.contains('active'))viewCust(_editPayCustId);
   bgSync(cT.id,'customers',cu);
 }
 async function deleteEditCustPay(){
-  if(!confirm('Futa malipo haya?'))return;
-  const cu=DB.customers.find(x=>x.id===_editPayCustId);if(!cu)return;
-  const payments=cu.payments||[];const pay=payments[_editPayIdx];if(!pay)return;
-  cu.currentDebt=Math.max(0,n(cu.currentDebt)+n(pay.amount));
-  cu.payments=payments.filter((_,i)=>i!==_editPayIdx);
-  LS.save(cT.id,'customers',cu);loadFromLocal();
-  closeM('m-editpay');toast('info','Malipo yamefutwa');
-  renderCusts();if(document.getElementById('t-cprof').classList.contains('active'))viewCust(_editPayCustId);
-  bgSync(cT.id,'customers',cu);
+  _swal.confirm('Futa Malipo','Malipo haya yatafutwa na deni litaongezeka.',()=>{
+    const cu=DB.customers.find(x=>x.id===_editPayCustId);if(!cu)return;
+    const payments=cu.payments||[];const pay=payments[_editPayIdx];if(!pay)return;
+    cu.currentDebt=Math.max(0,n(cu.currentDebt)+n(pay.amount));
+    cu.payments=payments.filter((_,i)=>i!==_editPayIdx);
+    LS.save(cT.id,'customers',cu);loadFromLocal();
+    closeM('m-editpay');_swal.success('Imefutwa','Malipo yamefutwa');
+    renderCusts();if(document.getElementById('t-cprof').classList.contains('active'))viewCust(_editPayCustId);
+    bgSync(cT.id,'customers',cu);
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 
 // ── WHATSAPP SHARE INVOICE ───────────────────────────────────
@@ -7213,6 +7665,485 @@ async function deletePurch(id){
 }
 
 /* ================================================================
+   LPO — LOCAL PURCHASE ORDER
+================================================================ */
+let _lpoPending=null;
+
+function genLPO(id){
+  if(!window.jspdf){toast('error','jsPDF haipo');return;}
+  let pur;
+  if(id){
+    pur=DB.purchases.find(x=>x.id===id);
+    if(!pur)return;
+    const sup=DB.suppliers.find(s=>s.id===pur.supId);
+    if(sup){pur=Object.assign({},pur,{supPhone:sup.phone||'',supEmail:sup.email||''});}
+  } else {
+    const valid=pRows.filter(r=>r.pid&&r.qty>0);
+    if(!valid.length){toast('error','Ongeza bidhaa kwanza');return;}
+    const sid=gv('pu-su');
+    const sup=DB.suppliers.find(s=>s.id===sid);
+    pur={ref:'LPO-'+td().replace(/-/g,'').slice(2)+'-DRAFT',date:gv('pu-dt')||td(),supId:sid||'',supName:sup?sup.name:'',supPhone:sup?sup.phone||'':'',supEmail:sup?sup.email||'':'',items:valid,total:valid.reduce((s,r)=>s+r.total,0),payment:gv('pu-pay')||'Taslimu',notes:gv('pu-notes')||'',isDraft:true};
+  }
+  _lpoPending=pur;
+  // Reset signature fields and show prompt
+  const s1=document.getElementById('lpo-sig1'),s2=document.getElementById('lpo-sig2');
+  if(s1)s1.value='';if(s2)s2.value='';
+  openM('m-lpo-sig');
+  // Focus first field
+  setTimeout(()=>{if(s1)s1.focus();},200);
+}
+
+function _lpoGenWithSig(useSig){
+  const sig1=useSig?(document.getElementById('lpo-sig1')?.value||''):'';
+  const sig2=useSig?(document.getElementById('lpo-sig2')?.value||''):'';
+  closeM('m-lpo-sig');
+  if(_lpoPending)_buildLPOPdf(_lpoPending,sig1,sig2);
+  _lpoPending=null;
+}
+
+function _buildLPOPdf(pur,sig1,sig2){
+  const biz=DB.biz||{};
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,ML=14,PH=297; let y=20;
+  const green=[22,163,74];
+  const S=v=>String(v==null?'':v);
+
+  // ── Company header (left) — same as invoice ──────────────
+  doc.setFontSize(20);doc.setFont('helvetica','bold');doc.setTextColor(...green);
+  doc.text(S(biz.bizName||cT?.name||'StokiPro'),ML,y);y+=7;
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
+  if(biz.addr||biz.bizAddress){doc.text(S(biz.addr||biz.bizAddress),ML,y);y+=5;}
+  if(biz.phone||biz.bizPhone){doc.text(S(biz.phone||biz.bizPhone),ML,y);y+=5;}
+  if(biz.email||biz.bizEmail){doc.text(S(biz.email||biz.bizEmail),ML,y);y+=5;}
+
+  // ── Document title (right) — like "INVOICE" on invoice ───
+  doc.setFontSize(22);doc.setFont('helvetica','bold');doc.setTextColor(30,30,30);
+  doc.text(pur._title||pT('lpo_title'),W-ML,22,{align:'right'});
+  doc.setFontSize(11);doc.setTextColor(80,80,80);
+  doc.text(S(pur.ref),W-ML,31,{align:'right'});
+  doc.setFontSize(9);doc.text(S(fmtDate(pur.date)),W-ML,37,{align:'right'});
+  if(pur.isDraft){
+    doc.setFontSize(9);doc.setTextColor(220,38,38);
+    doc.text(pT('draft'),W-ML,44,{align:'right'});
+  }
+
+  // ── Green divider line ────────────────────────────────────
+  y=Math.max(y,50);
+  doc.setDrawColor(...green);doc.setLineWidth(0.8);
+  doc.line(ML,y,W-ML,y);y+=8;
+
+  // ── Supplier + Deliver To section ────────────────────────
+  doc.setFontSize(8);doc.setTextColor(100,100,100);doc.setFont('helvetica','bold');
+  doc.text(pT('supplier'),ML,y);
+  doc.text(pT('deliver_to'),W/2,y);
+  y+=5;
+  doc.setFont('helvetica','normal');doc.setTextColor(30,30,30);doc.setFontSize(10);
+  doc.text(S(pur.supName||'—'),ML,y);
+  doc.text(S(biz.bizName||cT?.name||''),W/2,y);
+  y+=5;
+  doc.setFontSize(8);doc.setTextColor(100,100,100);
+  if(pur.supPhone){doc.text(S(pur.supPhone),ML,y);}
+  if(biz.addr||biz.bizAddress){doc.text(S(biz.addr||biz.bizAddress),W/2,y);}
+  y+=4;
+  if(pur.supEmail){doc.text(S(pur.supEmail),ML,y);}
+  if(biz.phone||biz.bizPhone){doc.text(S(biz.phone||biz.bizPhone),W/2,y);}
+  y+=8;
+
+  // ── Items table ───────────────────────────────────────────
+  const items=Array.isArray(pur.items)?pur.items:[];
+  const tableBody=items.map((it,i)=>{
+    const tot=n(it.total)||n(it.qty)*n(it.price);
+    return[S(i+1),S(it.pname||'—'),S(it.unit||'pcs'),S(n(it.qty)),'TZS '+fmt(n(it.price)),'TZS '+fmt(tot)];
+  });
+  while(tableBody.length<5)tableBody.push(['','','','','','']);
+
+  doc.autoTable({
+    startY:y,
+    head:[[pT('item_no'),pT('item_desc'),pT('unit'),pT('qty'),pT('unit_price'),pT('total_col')]],
+    body:tableBody,
+    foot:[[{content:pT('grand_total'),colSpan:5,styles:{halign:'right',fontStyle:'bold'}},{content:'TZS '+fmt(pur.total),styles:{fontStyle:'bold',textColor:green}}]],
+    headStyles:{fillColor:green,textColor:255,fontSize:9},
+    footStyles:{fillColor:[240,249,244],textColor:[22,163,74],fontSize:11},
+    styles:{fontSize:9,font:'helvetica'},
+    columnStyles:{0:{cellWidth:8,halign:'center'},2:{halign:'center',cellWidth:22},3:{halign:'center',cellWidth:18},4:{halign:'right',cellWidth:42},5:{halign:'right',cellWidth:40}},
+    margin:{left:ML,right:ML},
+    didParseCell(data){
+      if(data.section==='body'&&data.row.raw[0]==='')data.cell.styles.textColor=[255,255,255];
+    },
+  });
+
+  y=doc.lastAutoTable.finalY+8;
+
+  // ── Payment + totals summary ──────────────────────────────
+  doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);
+  doc.text(pT('payment_method')+': '+S(cleanPayment(pur.payment||'Taslimu')),ML,y);y+=6;
+
+  // ── Terms & notes ─────────────────────────────────────────
+  const termsLines=[pT('terms1'),pT('terms2')];
+  if(pur.notes)termsLines.push(pT('notes')+': '+S(pur.notes).slice(0,130));
+  doc.setDrawColor(220,220,220);doc.setLineWidth(0.3);doc.line(ML,y,W-ML,y);y+=5;
+  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(100,100,100);
+  doc.text(pT('terms'),ML,y);y+=5;
+  doc.setFont('helvetica','normal');doc.setTextColor(80,80,80);
+  termsLines.forEach(tm=>{doc.setFontSize(8.5);doc.text('• '+tm,ML,y);y+=5;});
+  y+=4;
+
+  // ── Signature section ─────────────────────────────────────
+  doc.setDrawColor(220,220,220);doc.setLineWidth(0.3);doc.line(ML,y,W-ML,y);y+=6;
+  doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(100,100,100);
+  doc.text(pT('prepared_by'),ML,y);
+  doc.text(pT('authorized_by'),W/2,y);
+  y+=6;
+  // Digital signature names in green italic if provided
+  if(sig1){
+    doc.setFontSize(12);doc.setFont('helvetica','bolditalic');doc.setTextColor(...green);
+    doc.text(S(sig1),ML,y);
+  }
+  if(sig2){
+    doc.setFontSize(12);doc.setFont('helvetica','bolditalic');doc.setTextColor(...green);
+    doc.text(S(sig2),W/2,y);
+  }
+  y+=sig1||sig2?6:4;
+  // Signature lines
+  doc.setDrawColor(30,30,30);doc.setLineWidth(0.5);
+  doc.line(ML,y,W/2-10,y);
+  doc.line(W/2,y,W-ML,y);
+  y+=5;
+  doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(100,100,100);
+  doc.text(pT('name_title')+' & '+pT('date_line')+': ___________________________',ML,y);
+  doc.text(pT('name_title')+' & '+pT('date_line')+': ___________________________',W/2,y);
+  y+=8;
+
+  // ── Footer — same as invoice ──────────────────────────────
+  doc.setDrawColor(...green);doc.setLineWidth(0.4);doc.line(ML,y,W-ML,y);y+=5;
+  doc.setFontSize(8);doc.setTextColor(150,150,150);doc.setFont('helvetica','normal');
+  doc.text(S(biz.bizName||cT?.name||'StokiPro')+' · LPO: '+S(pur.ref)+' · '+td(),W/2,y,{align:'center'});
+
+  // ── Draft watermark ───────────────────────────────────────
+  if(pur.isDraft){
+    doc.saveGraphicsState();
+    doc.setGState(new doc.GState({opacity:0.07}));
+    doc.setTextColor(200,0,0);doc.setFontSize(80);doc.setFont('helvetica','bold');
+    doc.text('DRAFT',W/2,PH/2,{align:'center',angle:38});
+    doc.restoreGraphicsState();
+  }
+
+  const fname=(pur.supName?S(pur.supName).replace(/\s+/g,'_')+'_':'')+'LPO_'+S(pur.ref);
+  doc.save(fname+'.pdf');
+  _swal.success('LPO imeshuka ✅',S(pur.ref)+(pur.isDraft?' — Draft':''));
+}
+
+/* ================================================================
+   LPO MODULE (Draft → Receive → Purchase)
+================================================================ */
+let _lpoRows=[],_lpoEditId=null,_lpoReceiveId=null,_lpoFilter='all';
+
+function setPuTab(tab){
+  const isLPO=tab==='lpo';
+  document.getElementById('pu-pane-lpo').style.display=isLPO?'':'none';
+  document.getElementById('pu-pane-man').style.display=isLPO?'none':'';
+  document.getElementById('pu-act-lpo').style.display=isLPO?'flex':'none';
+  document.getElementById('pu-act-man').style.display=isLPO?'none':'flex';
+  const tl=document.getElementById('pu-tab-lpo'),tm=document.getElementById('pu-tab-man');
+  if(tl){tl.style.background=isLPO?'var(--brand)':'var(--bg-3)';tl.style.color=isLPO?'#fff':'var(--text-2)';}
+  if(tm){tm.style.background=isLPO?'var(--bg-3)':'var(--brand)';tm.style.color=isLPO?'var(--text-2)':'#fff';}
+  if(isLPO)renderLPOs();else renderPurchs();
+}
+
+function setLPOF(f,el){
+  _lpoFilter=f;
+  document.querySelectorAll('.filter-pill[id^="lpof-"]').forEach(b=>b.classList.remove('active'));
+  if(el)el.classList.add('active');
+  renderLPOs();
+}
+
+function renderLPOs(){
+  _tblLoad('lpo-tb',8);
+  let rows=filterByBranch([...(DB.lpos||[])]);
+  if(_lpoFilter!=='all')rows=rows.filter(l=>l.status===_lpoFilter);
+  const sq=(document.getElementById('lpo-srch')?.value||'').toLowerCase();
+  if(sq)rows=rows.filter(l=>(l.ref+l.supName+(l.title||'')).toLowerCase().includes(sq));
+  const sBadge=s=>{const m={pending:['warning','Pending'],partial:['info','Partial'],received:['cash','Received'],cancelled:['danger','Imefutwa']};const[c,lb]=m[s]||['neutral',s];return`<span class="badge badge-${c}">${lb}</span>`;};
+  pg(rows,'lpo-tb','lpo-pg',sl=>sl.map(l=>{
+    const items=Array.isArray(l.items)?l.items:[];
+    const editable=l.status==='pending'||l.status==='partial';
+    const receivable=l.status==='pending'||l.status==='partial';
+    return`<tr>
+      <td class="td-mono" style="color:var(--brand-light);font-size:11.5px;">${l.ref}</td>
+      <td class="td-muted" style="font-size:12px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${l.title||''}">${l.title||'LPO'}</td>
+      <td class="td-name">${l.supName||'—'}</td>
+      <td class="td-muted">${fmtDate(l.date)}</td>
+      <td class="td-muted">${items.length} item${items.length!==1?'s':''}</td>
+      <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(l.total)}</td>
+      <td>${sBadge(l.status)}</td>
+      <td class="td-actions">
+        <button class="btn btn-ghost btn-sm" title="PDF" onclick="viewLPOPdf('${l.id}')"><i class="bi bi-file-earmark-pdf" style="color:#e74c3c;"></i></button>
+        ${receivable?`<button class="btn btn-ghost btn-sm" title="Pokea Bidhaa" onclick="openReceiveLPO('${l.id}')"><i class="bi bi-inbox-fill" style="color:var(--brand-light);"></i></button>`:''}
+        ${editable?`<button class="btn btn-ghost btn-sm" title="Hariri" onclick="openLPOEdit('${l.id}')"><i class="bi bi-pencil"></i></button>`:''}
+        <button class="btn btn-danger btn-sm" title="Futa LPO" onclick="deleteLPO('${l.id}')"><i class="bi bi-trash"></i></button>
+      </td>
+    </tr>`;
+  }).join(''));
+}
+
+function _lpoSupDropdown(selId){
+  return'<option value="">— Chagua —</option><option value="__manual__">✏️ Andika mwenyewe...</option>'+
+    DB.suppliers.map(s=>`<option value="${s.id}">${s.name}</option>`).join('');
+}
+
+function openLPONew(){
+  _lpoEditId=null;_lpoRows=[];
+  document.getElementById('lpo-modal-title').textContent='Tengeneza LPO';
+  document.getElementById('lpo-title').value='LOCAL PURCHASE ORDER';
+  document.getElementById('lpo-date').value=td();
+  document.getElementById('lpo-notes').value='';
+  document.getElementById('lpo-sig1-new').value='';
+  document.getElementById('lpo-sig2-new').value='';
+  document.getElementById('lpo-want-sig').checked=false;
+  document.getElementById('lpo-sig-fields').style.display='none';
+  document.getElementById('lpo-sup-manual').style.display='none';
+  const sel=document.getElementById('lpo-sup');sel.innerHTML=_lpoSupDropdown();sel.value='';
+  renderLPORows();openM('m-lpo-new');
+}
+
+function openLPOEdit(id){
+  const lpo=(DB.lpos||[]).find(l=>l.id===id);if(!lpo)return;
+  _lpoEditId=id;_lpoRows=lpo.items.map(it=>({...it}));
+  document.getElementById('lpo-modal-title').textContent='Hariri LPO';
+  document.getElementById('lpo-title').value=lpo.title||'LOCAL PURCHASE ORDER';
+  document.getElementById('lpo-date').value=lpo.date;
+  document.getElementById('lpo-notes').value=lpo.notes||'';
+  document.getElementById('lpo-sig1-new').value=lpo.sig1||'';
+  document.getElementById('lpo-sig2-new').value=lpo.sig2||'';
+  const hasSig=!!(lpo.sig1||lpo.sig2);
+  document.getElementById('lpo-want-sig').checked=hasSig;
+  document.getElementById('lpo-sig-fields').style.display=hasSig?'':'none';
+  const sel=document.getElementById('lpo-sup');sel.innerHTML=_lpoSupDropdown();
+  if(lpo.supId&&DB.suppliers.find(s=>s.id===lpo.supId)){
+    sel.value=lpo.supId;document.getElementById('lpo-sup-manual').style.display='none';
+  }else if(lpo.supName){
+    sel.value='__manual__';document.getElementById('lpo-sup-manual').style.display='';
+    document.getElementById('lpo-sup-name').value=lpo.supName||'';
+    document.getElementById('lpo-sup-phone').value=lpo.supPhone||'';
+  }
+  renderLPORows();openM('m-lpo-new');
+}
+
+function onLPOSupChange(){
+  const val=document.getElementById('lpo-sup').value;
+  document.getElementById('lpo-sup-manual').style.display=val==='__manual__'?'':'none';
+  if(val==='__manual__'){document.getElementById('lpo-sup-name').value='';document.getElementById('lpo-sup-phone').value='';}
+}
+
+function lpoAddCatalog(){_lpoRows.push({pid:'',pname:'',unit:'pcs',qty:1,price:0,total:0,isManual:false});renderLPORows();}
+function lpoAddManual(){_lpoRows.push({pid:null,pname:'',unit:'pcs',qty:1,price:0,total:0,isManual:true});renderLPORows();}
+function lpoRmRow(i){_lpoRows.splice(i,1);renderLPORows();}
+
+function renderLPORows(){
+  const list=document.getElementById('lpo-rows');
+  const tot=_lpoRows.reduce((s,r)=>s+r.total,0);
+  document.getElementById('lpo-tot').textContent='TZS '+fmt(tot);
+  if(!_lpoRows.length){list.innerHTML=`<div style="text-align:center;padding:14px;color:var(--text-3);font-size:13px;background:var(--bg-3);border-radius:var(--radius-sm);">Bonyeza "Catalog" au "Manual" kuongeza bidhaa</div>`;return;}
+  list.innerHTML=_lpoRows.map((row,i)=>`<div class="sale-item" style="margin-bottom:8px;">
+    <div class="input-row" style="grid-template-columns:2fr 1fr 1.2fr 0.7fr auto;gap:8px;align-items:end;">
+      <div><label class="form-label" style="font-size:10.5px;">${row.isManual?'Bidhaa (Manual)':'Bidhaa'}</label>
+        ${row.isManual
+          ?`<input type="text" class="form-control" style="font-size:13px;" placeholder="Jina la bidhaa" value="${row.pname||''}" oninput="_lpoRows[${i}].pname=this.value"/>`
+          :`<select class="form-select" style="font-size:13px;padding:8px 28px 8px 10px;" onchange="onLPOS(${i},this.value)">
+              <option value="">Chagua...</option>${DB.products.map(p=>`<option value="${p.id}"${p.id===row.pid?' selected':''}>${p.name}</option>`).join('')}
+            </select>`
+        }
+      </div>
+      <div><label class="form-label" style="font-size:10.5px;">Idadi</label><input type="number" class="form-control" style="font-size:13px;" value="${row.qty}" min="0" step="0.01" onchange="onLPOQ(${i},this.value)"/></div>
+      <div><label class="form-label" style="font-size:10.5px;">Bei (TZS)</label><input type="number" class="form-control" style="font-size:13px;" value="${row.price}" onchange="onLPOP(${i},this.value)"/></div>
+      <div><label class="form-label" style="font-size:10.5px;">Unit</label><input type="text" class="form-control" style="font-size:13px;" value="${row.unit||'pcs'}" oninput="_lpoRows[${i}].unit=this.value"/></div>
+      <div style="padding-bottom:2px;"><button onclick="lpoRmRow(${i})" style="background:var(--danger-soft);border:1.5px solid rgba(239,68,68,0.3);color:var(--danger);border-radius:var(--radius-sm);padding:8px 9px;cursor:pointer;"><i class="bi bi-trash"></i></button></div>
+    </div>
+    <div style="text-align:right;font-size:11px;color:var(--text-3);margin-top:3px;">= TZS ${fmt(row.total)}</div>
+  </div>`).join('');
+}
+
+function onLPOS(i,pid){
+  if(!pid){_lpoRows[i]={..._lpoRows[i],pid:'',pname:'',price:0,total:0};renderLPORows();return;}
+  const p=DB.products.find(x=>x.id===pid);
+  if(p){_lpoRows[i].pid=pid;_lpoRows[i].pname=p.name;_lpoRows[i].unit=p.unit||'pcs';_lpoRows[i].price=n(p.bp);_lpoRows[i].total=_lpoRows[i].qty*n(p.bp);}
+  renderLPORows();
+}
+function onLPOQ(i,v){_lpoRows[i].qty=n(v)||0;_lpoRows[i].total=_lpoRows[i].qty*_lpoRows[i].price;renderLPORows();}
+function onLPOP(i,v){_lpoRows[i].price=n(v)||0;_lpoRows[i].total=_lpoRows[i].qty*_lpoRows[i].price;renderLPORows();}
+
+function saveLPO(andPDF){
+  if(!permGuard('purchases','add'))return;
+  const title=(document.getElementById('lpo-title').value||'').trim()||'LOCAL PURCHASE ORDER';
+  const date=gv('lpo-date')||td();
+  const notes=gv('lpo-notes')||'';
+  const pay=gv('lpo-pay')||'Taslimu';
+  const supVal=document.getElementById('lpo-sup').value;
+  let supId='',supName='',supPhone='',supEmail='';
+  if(supVal==='__manual__'){
+    supName=(document.getElementById('lpo-sup-name')?.value||'').trim();
+    supPhone=document.getElementById('lpo-sup-phone')?.value||'';
+    if(!supName){toast('error','Weka jina la msambazaji');return;}
+  }else if(supVal){
+    const sup=DB.suppliers.find(s=>s.id===supVal);
+    if(sup){supId=sup.id;supName=sup.name;supPhone=sup.phone||'';supEmail=sup.email||'';}
+  }
+  const valid=_lpoRows.filter(r=>r.pname&&n(r.qty)>0);
+  if(!valid.length){toast('error','Ongeza bidhaa angalau moja');return;}
+  const total=valid.reduce((s,r)=>s+r.total,0);
+  const wantSig=document.getElementById('lpo-want-sig')?.checked;
+  const sig1=wantSig?(document.getElementById('lpo-sig1-new')?.value||''):'';
+  const sig2=wantSig?(document.getElementById('lpo-sig2-new')?.value||''):'';
+  if(!DB.lpos)DB.lpos=[];
+  const isEdit=!!_lpoEditId;
+  const old=isEdit?DB.lpos.find(l=>l.id===_lpoEditId):null;
+  const ref=old?.ref||('LPO-'+td().replace(/-/g,'').slice(2)+'-'+String(DB.lpos.length+1).padStart(4,'0'));
+  const lpo={
+    id:_lpoEditId||uid(),tenantId:cT.id,branchId:cB?cB.id:'',
+    ref,title,date,supId,supName,supPhone,supEmail,
+    items:valid,total,payment:pay,notes,sig1,sig2,
+    status:old?.status||'pending',
+    receivedItems:old?.receivedItems||{},
+    purchaseIds:old?.purchaseIds||[],
+    created:old?.created||tStr(),
+  };
+  LS.save(cT.id,'lpos',lpo);
+  loadFromLocal();closeM('m-lpo-new');
+  _swal.success(isEdit?'LPO imehifadhiwa ✅':'LPO imetengenezwa ✅',ref);
+  renderLPOs();
+  if(andPDF)setTimeout(()=>_buildLPOPdfFromLPO(lpo),300);
+  bgSync(cT.id,'lpos',lpo);
+  logActivity('LPO: '+ref+' · '+supName+' · TZS '+fmt(total),'Manunuzi');
+}
+
+function viewLPOPdf(id){
+  const lpo=(DB.lpos||[]).find(l=>l.id===id);if(!lpo)return;
+  _buildLPOPdfFromLPO(lpo);
+}
+
+function _buildLPOPdfFromLPO(lpo){
+  const pur={
+    ref:lpo.ref,date:lpo.date,
+    supName:lpo.supName,supPhone:lpo.supPhone,supEmail:lpo.supEmail,
+    items:(lpo.items||[]).map(it=>({pname:it.pname,unit:it.unit||'pcs',qty:it.qty,price:it.price,total:it.total})),
+    total:lpo.total,payment:lpo.payment,notes:lpo.notes,
+    isDraft:lpo.status==='pending'||lpo.status==='partial',
+    _title:lpo.title||'LOCAL PURCHASE ORDER',
+  };
+  _buildLPOPdf(pur,lpo.sig1||'',lpo.sig2||'');
+}
+
+function cancelLPO(id){
+  const lpo=(DB.lpos||[]).find(l=>l.id===id);if(!lpo)return;
+  _swal.confirm('Simamisha LPO',`"${lpo.ref}" itasimamishwa.`,()=>{
+    lpo.status='cancelled';LS.save(cT.id,'lpos',lpo);loadFromLocal();renderLPOs();
+    _swal.success('LPO imesimamishwa',lpo.ref);bgSync(cT.id,'lpos',lpo);
+  },{ok:'Ndio, Simamisha',cancel:'Ghairi',dangerous:true});
+}
+
+function deleteLPO(id){
+  if(!permGuard('purchases','delete'))return;
+  const lpo=(DB.lpos||[]).find(l=>l.id===id);if(!lpo)return;
+  _swal.confirm('Futa LPO',`"${lpo.ref}" itafutwa kabisa. Hatua hii haiwezi kurudishwa.`,()=>{
+    LS.del(cT.id,'lpos',id);loadFromLocal();renderLPOs();
+    _swal.success('LPO imefutwa',lpo.ref);
+    bgDel('lpos',id);
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
+}
+
+// ── RECEIVE ────────────────────────────────────────────────────
+let _lpoRecvRows=[];
+
+function openReceiveLPO(id){
+  const lpo=(DB.lpos||[]).find(l=>l.id===id);if(!lpo)return;
+  _lpoReceiveId=id;
+  _lpoRecvRows=(lpo.items||[]).map((it,i)=>{
+    const alreadyRecv=n((lpo.receivedItems||{})[i]||0);
+    const remaining=Math.max(0,n(it.qty)-alreadyRecv);
+    return{...it,recvQty:remaining,alreadyRecv,idx:i};
+  });
+  const info=document.getElementById('lpo-recv-info');
+  info.innerHTML=`<strong>${lpo.ref}</strong> — <em>${lpo.title||'LPO'}</em><br>Msambazaji: <strong>${lpo.supName||'—'}</strong> · Tarehe ya LPO: ${fmtDate(lpo.date)}`;
+  document.getElementById('lpo-recv-paid').value='';
+  renderRecvRows();openM('m-lpo-recv');
+}
+
+function renderRecvRows(){
+  const list=document.getElementById('lpo-recv-rows');
+  if(!_lpoRecvRows.length){list.innerHTML='<div style="color:var(--text-3);text-align:center;padding:10px;">Hakuna bidhaa</div>';return;}
+  const tot=_lpoRecvRows.reduce((s,r)=>s+n(r.recvQty)*n(r.price),0);
+  list.innerHTML=`<div style="overflow-x:auto;"><table class="data-table" style="font-size:12.5px;">
+    <thead><tr><th>Bidhaa</th><th>Iliyoombiwa</th><th>Iliyopokewa</th><th>Inayopokewa</th><th>Bei (TZS)</th><th>Jumla</th></tr></thead>
+    <tbody>
+      ${_lpoRecvRows.map((row,i)=>`<tr>
+        <td>${row.pname||'—'}</td>
+        <td class="td-mono">${row.qty} ${row.unit||''}</td>
+        <td class="td-mono td-muted">${row.alreadyRecv} ${row.unit||''}</td>
+        <td><input type="number" class="form-control" style="width:80px;font-size:12px;" value="${row.recvQty}" min="0" step="0.01"
+          onchange="_lpoRecvRows[${i}].recvQty=Math.min(n(this.value),${n(row.qty)-n(row.alreadyRecv)});_lpoRecvRows[${i}].total=_lpoRecvRows[${i}].recvQty*_lpoRecvRows[${i}].price;renderRecvRows()"/></td>
+        <td><input type="number" class="form-control" style="width:100px;font-size:12px;" value="${row.price}"
+          onchange="_lpoRecvRows[${i}].price=n(this.value);_lpoRecvRows[${i}].total=_lpoRecvRows[${i}].recvQty*n(this.value);renderRecvRows()"/></td>
+        <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(n(row.recvQty)*n(row.price))}</td>
+      </tr>`).join('')}
+      <tr style="background:var(--bg-3);">
+        <td colspan="5" style="text-align:right;font-weight:700;padding:10px 8px;">JUMLA:</td>
+        <td class="td-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(tot)}</td>
+      </tr>
+    </tbody>
+  </table></div>`;
+}
+
+async function confirmReceiveLPO(){
+  if(!permGuard('purchases','add'))return;
+  const lpo=(DB.lpos||[]).find(l=>l.id===_lpoReceiveId);if(!lpo)return;
+  const recvItems=_lpoRecvRows.filter(r=>n(r.recvQty)>0);
+  if(!recvItems.length){toast('error','Weka idadi iliyopokewa');return;}
+  const tot=recvItems.reduce((s,r)=>s+n(r.recvQty)*n(r.price),0);
+  const pay=gv('lpo-recv-pay')||'Taslimu';
+  const paid=n(gv('lpo-recv-paid'));
+  const isC=pay==='Mkopo';
+  const purItems=recvItems.map(r=>({pid:r.pid||'',pname:r.pname,unit:r.unit||'pcs',qty:r.recvQty,price:r.price,total:n(r.recvQty)*n(r.price),batchNo:r.batchNo||'',expiryDate:r.expiryDate||''}));
+  const pur={id:uid(),tenantId:cT.id,branchId:cB?cB.id:'',
+    ref:'PO-'+td().replace(/-/g,'').slice(2)+'-'+String(DB.purchases.length+1).padStart(4,'0'),
+    date:td(),supId:lpo.supId||'',supName:lpo.supName||'—',
+    items:purItems,total:tot,paid,payment:pay,creditType:isC?'credit':'cash',
+    notes:'Kutoka LPO: '+lpo.ref,created:tStr(),fromLPO:lpo.id};
+  LS.save(cT.id,'purchases',pur);
+  // Update stock
+  purItems.forEach(row=>{
+    if(!row.pid)return;
+    const p=DB.products.find(x=>x.id===row.pid);if(!p)return;
+    if(isExpiryOn()&&(row.batchNo||row.expiryDate)){
+      if(!Array.isArray(p.batches))p.batches=[];
+      p.batches.push({id:uid(),batchNo:row.batchNo||('B'+String(p.batches.length+1).padStart(3,'0')),qty:n(row.qty),expiryDate:row.expiryDate||'',purchaseDate:td(),bp:n(row.price)});
+      LS.save(cT.id,'products',p);
+    }
+    adjBS(row.pid,cB?cB.id:null,n(row.qty));
+  });
+  // Update supplier
+  const sup=DB.suppliers.find(s=>s.id===lpo.supId);
+  if(sup){if(isC)sup.currentDebt=(n(sup.currentDebt)||0)+tot;sup.totalPurch=(n(sup.totalPurch)||0)+tot;LS.save(cT.id,'suppliers',sup);}
+  // Update LPO tracking
+  if(!lpo.receivedItems)lpo.receivedItems={};
+  recvItems.forEach(r=>{lpo.receivedItems[r.idx]=(n(lpo.receivedItems[r.idx]||0))+n(r.recvQty);});
+  if(!lpo.purchaseIds)lpo.purchaseIds=[];
+  lpo.purchaseIds.push(pur.id);
+  const fullyRecv=lpo.items.every((it,i)=>n(lpo.receivedItems[i]||0)>=n(it.qty));
+  lpo.status=fullyRecv?'received':'partial';
+  if(fullyRecv)lpo.receivedAt=tStr();
+  LS.save(cT.id,'lpos',lpo);
+  loadFromLocal();closeM('m-lpo-recv');
+  _swal.success('Imepokewa ✅',pur.ref+(fullyRecv?' — LPO imekamilika':'  — Partial'));
+  renderLPOs();loadDash();
+  bgSync(cT.id,'purchases',{...pur,items:purItems});
+  bgSync(cT.id,'lpos',lpo);
+  if(sup)bgSync(cT.id,'suppliers',sup);
+  purItems.forEach(row=>{const p=DB.products.find(x=>x.id===row.pid);if(p)bgSync(cT.id,'products',p);});
+  logActivity('Kupokea LPO: '+lpo.ref+' → '+pur.ref+' · TZS '+fmt(tot),'Manunuzi');
+}
+
+/* ================================================================
    BRANCH SYSTEM
 ================================================================ */
 
@@ -7343,7 +8274,7 @@ async function saveBranch(){
   LS.save(cT.id,'branches',branch);
   loadFromLocal();
   closeM('m-branch');
-  toast('success', (eid?'Tawi limeharirishwa':'Tawi limeongezwa')+' ✅');
+  _swal.success((eid?'Tawi limeharirishwa':'Tawi limeongezwa')+' ✅');
   renderBranches();
   updateBranchSelector();
   if(btn){btn.disabled=false;btn.innerHTML='<i class="bi bi-check-lg"></i>Hifadhi';}
@@ -7354,21 +8285,18 @@ async function deleteBranch(id){
   const b = DB.branches.find(x=>x.id===id);
   if(!b) return;
   if(b.isHQ){toast('error','Huwezi kufuta tawi kuu (HQ)');return;}
-  // Check if has data
   const hasSales = DB.sales.some(s=>s.branchId===id);
   const hasPurch = DB.purchases.some(p=>p.branchId===id);
-  if(hasSales||hasPurch){
-    if(!confirm(`Tawi "${b.name}" lina data (mauzo/manunuzi). Bado unataka kulifuta?`)) return;
-  } else {
-    if(!confirm(`Futa tawi "${b.name}"?`)) return;
-  }
-  LS.del(cT.id,'branches',id);
-  if(cB && cB.id===id) setBranch(null);
-  loadFromLocal();
-  renderBranches();
-  updateBranchSelector();
-  toast('info','Tawi limefutwa');
-  bgDel('branches',id);
+  const msg=hasSales||hasPurch?`Tawi "${b.name}" lina data (mauzo/manunuzi). Bado unataka kulifuta?`:`Tawi "${b.name}" litafutwa kabisa.`;
+  _swal.confirm('Futa Tawi',msg,()=>{
+    LS.del(cT.id,'branches',id);
+    if(cB && cB.id===id) setBranch(null);
+    loadFromLocal();
+    renderBranches();
+    updateBranchSelector();
+    _swal.success('Imefutwa','Tawi limefutwa');
+    bgDel('branches',id);
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 
 function renderBranches(){
@@ -8339,6 +9267,7 @@ function applyNavPerms(){
 
 // ── Render users table ──
 function renderTUsers(){
+  _tblLoad('tusr-tb',8);
   var rows = DB.tUsers || [];
   var branches = DB.branches || [];
   var tbody = document.getElementById('tusr-tb');
@@ -8516,7 +9445,7 @@ async function saveTUser(){
     loadFromLocal();
     renderTUsers();
     closeM('m-tuser');
-    toast('success', (eid?'Mtumiaji amesasishwa':'Mtumiaji ameongezwa')+' ✅');
+    _swal.success((eid?'Mtumiaji amesasishwa':'Mtumiaji ameongezwa')+' ✅');
   } catch(e) {
     console.error('saveTUser error:', e);
     errEl.innerHTML = '<div class="alert alert-danger">Hitilafu: '+e.message+'</div>';
@@ -8524,12 +9453,14 @@ async function saveTUser(){
 }
 
 async function deleteTUser(id){
-  if(!confirm('Futa mtumiaji huyu?')) return;
-  LS.del(cT.id,'tUsers',id);
-  bgDel('tUsers',id);
-  loadFromLocal();
-  renderTUsers();
-  toast('info','Mtumiaji amefutwa');
+  const u=(DB.tUsers||[]).find(x=>x.id===id);if(!u)return;
+  _swal.confirm('Futa Mtumiaji',`"${u.name||u.username}" atafutwa kabisa.`,()=>{
+    LS.del(cT.id,'tUsers',id);
+    bgDel('tUsers',id);
+    loadFromLocal();
+    renderTUsers();
+    _swal.success('Imefutwa','Mtumiaji amefutwa');
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 
 // ── Role Modal ──
@@ -8612,7 +9543,7 @@ async function saveRole(){
   loadFromLocal();
   renderRoles();
   closeM('m-role');
-  toast('success','Role imehifadhiwa ✅');
+  _swal.success('Role imehifadhiwa ✅');
 }
 
 async function deleteRole(){
@@ -8620,13 +9551,14 @@ async function deleteRole(){
   if(!eid) return;
   var inUse = (DB.tUsers||[]).some(function(u){ return u.roleId === eid; });
   if(inUse){ toast('error','Role hii inatumika na mtumiaji — badilisha kwanza'); return; }
-  if(!confirm('Futa role hii?')) return;
-  LS.del(cT.id,'roles',eid);
-  bgDel('roles',eid);
-  loadFromLocal();
-  renderRoles();
-  closeM('m-role');
-  toast('info','Role imefutwa');
+  _swal.confirm('Futa Role','Role hii itafutwa kabisa.',()=>{
+    LS.del(cT.id,'roles',eid);
+    bgDel('roles',eid);
+    loadFromLocal();
+    renderRoles();
+    closeM('m-role');
+    _swal.success('Imefutwa','Role imefutwa');
+  },{ok:'Ndio, Futa',cancel:'Ghairi',dangerous:true});
 }
 
 // ── PIN Quick Switch ──
