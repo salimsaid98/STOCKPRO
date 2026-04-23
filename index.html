@@ -53,7 +53,14 @@ input,select,textarea{font-family:var(--font);}
 #load-screen{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity 0.4s ease;}
 #load-screen.hide{opacity:0;pointer-events:none;}
 .load-brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
-.load-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--brand-dark),var(--brand-light));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 20px var(--brand-glow);}
+.load-icon-wrap{position:relative;display:flex;align-items:center;justify-content:center;}
+.load-ring{position:absolute;border-radius:50%;border:1.5px solid var(--brand-light);opacity:0;pointer-events:none;}
+.load-ring-1{width:76px;height:76px;animation:ringOut 2.4s ease-out infinite 0s;}
+.load-ring-2{width:100px;height:100px;animation:ringOut 2.4s ease-out infinite 0.5s;}
+.load-ring-3{width:124px;height:124px;animation:ringOut 2.4s ease-out infinite 1s;}
+@keyframes ringOut{0%{opacity:0.7;transform:scale(0.6);}100%{opacity:0;transform:scale(1);}}
+.load-icon{width:52px;height:52px;background:linear-gradient(135deg,var(--brand-dark),var(--brand-light));border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 4px 20px var(--brand-glow);animation:loadGlow 2s ease-in-out infinite;position:relative;z-index:1;}
+@keyframes loadGlow{0%,100%{box-shadow:0 4px 20px rgba(22,163,74,0.3);}50%{box-shadow:0 4px 40px rgba(22,163,74,0.6),0 0 60px rgba(22,163,74,0.2);}}
 .load-name{font-size:28px;font-weight:800;letter-spacing:-1px;}.load-name span{color:var(--brand-light);}
 .load-bar{width:300px;height:3px;background:var(--bg-3);border-radius:99px;overflow:hidden;}
 .load-fill{height:100%;background:linear-gradient(90deg,var(--brand-dark),var(--brand-light));border-radius:99px;width:0%;transition:width 0.4s ease;}
@@ -109,13 +116,35 @@ textarea.form-control{resize:vertical;min-height:80px;}
 .card-header h3{font-size:15px;font-weight:700;}
 
 /* STAT CARDS */
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;position:relative;overflow:hidden;transition:transform var(--transition),box-shadow var(--transition);}
-.stat-card:hover{transform:translateY(-2px);box-shadow:var(--shadow);}
-.stat-card-accent{width:3px;position:absolute;left:0;top:0;bottom:0;border-radius:99px 0 0 99px;}
-.stat-label{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-3);margin-bottom:8px;}
-.stat-value{font-size:26px;font-weight:800;font-family:var(--mono);letter-spacing:-1px;line-height:1;margin-bottom:6px;}
-.stat-meta{font-size:12px;color:var(--text-3);}
-.stat-icon-bg{position:absolute;right:16px;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:20px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:18px 20px;display:flex;align-items:center;gap:16px;position:relative;overflow:hidden;transition:transform var(--transition),box-shadow var(--transition),border-color var(--transition);}
+.stat-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.1);}
+.stat-card-accent{display:none;}
+.sc-icon-wrap{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;transition:transform var(--transition);}
+.stat-card:hover .sc-icon-wrap{transform:scale(1.08);}
+.sc-brand .sc-icon-wrap{background:rgba(22,163,74,0.15);color:var(--brand-light);}
+.sc-amber .sc-icon-wrap{background:rgba(245,158,11,0.14);color:var(--accent-light);}
+.sc-info .sc-icon-wrap{background:rgba(59,130,246,0.14);color:#60a5fa;}
+.sc-danger .sc-icon-wrap{background:rgba(239,68,68,0.14);color:#f87171;}
+.sc-brand:hover{border-color:rgba(22,163,74,0.35);}
+.sc-amber:hover{border-color:rgba(245,158,11,0.35);}
+.sc-info:hover{border-color:rgba(59,130,246,0.35);}
+.sc-danger:hover{border-color:rgba(239,68,68,0.35);}
+.sc-body{flex:1;min-width:0;}
+.stat-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:var(--text-3);margin-bottom:5px;}
+.stat-value{font-size:22px;font-weight:800;font-family:var(--mono);letter-spacing:-0.5px;line-height:1;margin-bottom:5px;}
+.stat-meta{font-size:12px;color:var(--text-2);}
+.stat-icon-bg{display:none;}
+/* Dashboard hero header */
+.db-hero{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:20px;position:relative;overflow:hidden;}
+.db-hero::before{content:'';position:absolute;right:-40px;top:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(22,163,74,0.08) 0%,transparent 70%);pointer-events:none;}
+.db-hero-left{display:flex;align-items:center;gap:14px;}
+.db-hero-badge{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,var(--brand-dark),var(--brand-light));display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 4px 16px rgba(22,163,74,0.35);flex-shrink:0;}
+.db-hero-name{font-size:20px;font-weight:800;letter-spacing:-0.5px;line-height:1.2;}
+.db-hero-date{font-size:12px;color:var(--text-3);font-family:var(--mono);margin-top:3px;}
+.db-quick-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+/* Dashboard chart header */
+.db-chart-hdr{display:flex;align-items:center;gap:8px;}
+.db-chart-hdr-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
 
 /* BADGES */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:99px;font-size:11px;font-weight:700;font-family:var(--mono);}
@@ -339,36 +368,259 @@ textarea.form-control{resize:vertical;min-height:80px;}
 .profile-sub{font-size:13px;opacity:0.85;}
 
 /* LANDING */
+/* ── LANDING PAGE ── */
 #page-landing{background:var(--bg);overflow-x:hidden;}
-.landing-bg-mesh{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 70% 50% at 10% 0%,rgba(22,163,74,0.12) 0%,transparent 60%),radial-gradient(ellipse 50% 40% at 90% 90%,rgba(245,158,11,0.07) 0%,transparent 50%);}
-.landing-grid-lines{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.4;}
-.landing-nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:16px 48px;backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
-.hero-content{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:100px 48px 80px;text-align:center;}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--brand-glow);border:1px solid rgba(22,163,74,0.3);color:var(--brand-light);padding:6px 16px;border-radius:99px;font-size:12px;font-weight:700;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:28px;}
-.hero-title{font-size:clamp(44px,7vw,84px);font-weight:800;line-height:1.04;letter-spacing:-2.5px;margin-bottom:22px;}
-.hero-title .accent{color:var(--brand-light);}
-.hero-desc{font-size:18px;color:var(--text-2);max-width:600px;margin:0 auto 40px;line-height:1.7;}
-.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:60px;}
-.features-section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:60px 48px;}
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:48px;}
-.feature-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px;transition:all var(--transition);position:relative;overflow:hidden;}
-.feature-card:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:var(--shadow);}
-.feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--brand),var(--brand-light));transform:scaleX(0);transform-origin:left;transition:transform var(--transition);}
-.feature-card:hover::before{transform:scaleX(1);}
-.feature-icon{width:44px;height:44px;border-radius:var(--radius-sm);background:var(--brand-glow);border:1px solid rgba(22,163,74,0.2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
-.feature-card h4{font-size:15px;font-weight:700;margin-bottom:8px;}
-.feature-card p{font-size:13px;color:var(--text-2);line-height:1.6;}
+.landing-bg-mesh{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 80% 60% at 5% -5%,rgba(22,163,74,0.14) 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 95% 95%,rgba(99,102,241,0.1) 0%,transparent 55%),radial-gradient(ellipse 40% 40% at 65% 8%,rgba(245,158,11,0.05) 0%,transparent 45%);}
+.landing-grid-lines{position:fixed;inset:0;pointer-events:none;z-index:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.3;}
+.landing-nav{position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:14px 48px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--border);}
+/* Hero — 2 column */
+.hero-content{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:80px 48px 64px;display:flex;align-items:center;gap:56px;}
+.hero-text{flex:1;min-width:0;}
+.hero-visual{flex-shrink:0;width:390px;position:relative;animation:heroSlide 0.9s cubic-bezier(0.34,1.56,0.64,1) both 0.15s;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:var(--brand-glow);border:1px solid rgba(22,163,74,0.3);color:var(--brand-light);padding:6px 16px;border-radius:99px;font-size:12px;font-weight:700;font-family:var(--mono);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:24px;animation:heroUp 0.7s cubic-bezier(0.34,1.56,0.64,1) both 0.1s;}
+.hero-title{font-size:clamp(36px,5vw,62px);font-weight:800;line-height:1.06;letter-spacing:-2px;margin-bottom:20px;animation:heroUp 0.7s cubic-bezier(0.34,1.56,0.64,1) both 0.25s;}
+.hero-title .accent{background:linear-gradient(120deg,var(--brand-light) 0%,#a3e635 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{font-size:17px;color:var(--text-2);max-width:500px;margin-bottom:34px;line-height:1.7;animation:heroFade 0.7s ease both 0.4s;}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;animation:heroFade 0.7s ease both 0.55s;}
+/* Dashboard mockup */
+.hero-mockup{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:16px;overflow:hidden;box-shadow:0 28px 72px rgba(0,0,0,0.5),0 0 0 1px rgba(255,255,255,0.04);animation:hmFloat 4s ease-in-out infinite;}
+@keyframes hmFloat{0%,100%{transform:translateY(0) rotate(-0.5deg);}50%{transform:translateY(-10px) rotate(0.5deg);}}
+.hm-chrome{display:flex;align-items:center;gap:6px;padding:10px 14px;background:var(--bg-3);border-bottom:1px solid var(--border);}
+.hm-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.hm-dot.r{background:#ff5f57;}.hm-dot.y{background:#febc2e;}.hm-dot.g{background:#28c840;}
+.hm-chrome-title{font-size:11px;color:var(--text-3);font-family:var(--mono);margin-left:4px;flex:1;}
+.hm-chrome-badge{font-size:9px;background:rgba(22,163,74,0.2);color:#4ade80;border:1px solid rgba(22,163,74,0.3);padding:2px 8px;border-radius:99px;font-weight:700;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.5;}}
+.hm-body{padding:12px;}
+.hm-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:10px;}
+.hm-sc{background:var(--bg-3);border:1px solid var(--border);border-radius:8px;padding:9px 10px;}
+.hm-sc-lbl{font-size:9px;color:var(--text-3);text-transform:uppercase;letter-spacing:0.05em;font-weight:700;}
+.hm-sc-val{font-size:15px;font-weight:800;letter-spacing:-0.5px;margin:3px 0 2px;color:var(--text-1);}
+.hm-sc-chg{font-size:9px;font-weight:700;}
+.hm-sc-chg.up{color:#4ade80;}.hm-sc-chg.dn{color:#f87171;}.hm-sc-chg.nu{color:var(--text-3);}
+.hm-chart-row{display:flex;align-items:flex-end;gap:4px;height:54px;background:var(--bg-3);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:10px;}
+.hm-bar{flex:1;background:rgba(22,163,74,0.2);border-radius:3px 3px 0 0;transform-origin:bottom;animation:barGrow 1s cubic-bezier(0.34,1.56,0.64,1) both;}
+.hm-bar:nth-child(1){animation-delay:0.1s;}.hm-bar:nth-child(2){animation-delay:0.2s;}.hm-bar:nth-child(3){animation-delay:0.3s;}.hm-bar:nth-child(4){animation-delay:0.4s;}.hm-bar:nth-child(5){animation-delay:0.5s;}.hm-bar:nth-child(6){animation-delay:0.6s;}.hm-bar:nth-child(7){animation-delay:0.7s;}
+.hm-bar.hi{background:var(--brand);box-shadow:0 0 10px rgba(22,163,74,0.6);}
+@keyframes barGrow{from{transform:scaleY(0);opacity:0;}to{transform:scaleY(1);opacity:1;}}
+.hm-pills-row{display:flex;gap:6px;margin-bottom:10px;}
+.hm-pill{font-size:9.5px;font-weight:700;padding:3px 9px;border-radius:99px;}
+.hm-pill.g{background:rgba(22,163,74,0.15);color:#4ade80;border:1px solid rgba(22,163,74,0.25);}
+.hm-pill.b{background:rgba(99,102,241,0.15);color:#818cf8;border:1px solid rgba(99,102,241,0.25);}
+.hm-pill.a{background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.25);}
+.hm-recent{background:var(--bg-3);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
+.hm-rec-hd{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-3);padding:6px 10px;border-bottom:1px solid var(--border);}
+.hm-rec-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;border-bottom:1px solid var(--border);font-size:10.5px;}
+.hm-rec-row:last-child{border-bottom:none;}
+.hm-rec-name{color:var(--text-1);font-weight:600;}.hm-rec-cat{color:var(--text-3);font-size:9px;}
+.hm-rec-amt{color:#4ade80;font-weight:700;font-family:var(--mono);font-size:11px;}
+/* Stats bar */
+.landing-stats{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 48px 64px;}
+.landing-stats-inner{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;}
+.lst-it{flex:1;text-align:center;padding:22px 12px;position:relative;}
+.lst-it:not(:last-child)::after{content:'';position:absolute;right:0;top:20%;height:60%;width:1px;background:var(--border);}
+.lst-it-num{font-size:26px;font-weight:800;letter-spacing:-1px;line-height:1.1;}
+.lst-it-num .acc{color:var(--brand-light);}
+.lst-it-lbl{font-size:11px;font-weight:600;color:var(--text-3);text-transform:uppercase;letter-spacing:0.08em;margin-top:4px;}
+/* Features section */
+.features-section{position:relative;z-index:1;max-width:1160px;margin:0 auto;padding:0 48px 64px;}
+.sec-hd{text-align:center;margin-bottom:44px;}
+.sec-hd-eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--brand-light);margin-bottom:12px;}
+.sec-hd-eyebrow::before,.sec-hd-eyebrow::after{content:'';width:36px;height:1px;background:rgba(22,163,74,0.4);}
+.sec-hd h2{font-size:clamp(24px,3.5vw,36px);font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
+.sec-hd p{color:var(--text-2);font-size:15px;max-width:540px;margin:0 auto;}
+/* Features controls */
+.features-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px;position:relative;}
+.features-controls .f-left{display:flex;align-items:center;gap:12px;}
+.features-controls .f-title{font-size:28px;font-weight:800;letter-spacing:-1px;}
+.features-controls .f-actions{display:flex;align-items:center;gap:8px;}
+.toggle-btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg-2);font-weight:700;cursor:pointer;font-size:13px;color:var(--text-1)}
+.filter-btn{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid var(--border);cursor:pointer;font-size:13px;color:var(--text-1)}
+.filter-panel{position:absolute;right:48px;top:64px;background:var(--surface);border:1px solid var(--border);padding:12px;border-radius:12px;box-shadow:var(--shadow-lg);display:none;min-width:220px;z-index:50}
+.filter-panel.show{display:block}
+.filter-panel label{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);cursor:pointer}
+.filter-quick{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.filter-quick button{font-size:12px;padding:6px 8px;border-radius:8px;border:1px solid var(--border);background:var(--bg-3);cursor:pointer}
+.feature-category{grid-column:1 / -1;display:flex;align-items:center;gap:12px;margin:8px 0 -8px;padding-top:16px;}
+.feature-category::before{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border));}
+.feature-category-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);padding:0 8px;white-space:nowrap;cursor:pointer}
+.feature-category::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);} 
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;animation:fadeInUp 0.6s ease-out;}
+.feature-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:28px;transition:transform 0.12s ease,box-shadow 0.35s,border-color 0.35s,opacity 0.35s;position:relative;overflow:visible;display:flex;flex-direction:column;gap:14px;opacity:0;will-change:transform;}
+.feature-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(22,163,74,0.06) 0%,transparent 100%);opacity:0;transition:opacity 0.35s;pointer-events:none;border-radius:var(--radius-lg);}
+.feature-card:hover{transform:translateY(-6px);border-color:var(--fc-clr,var(--brand-light));}
+.feature-card:hover::before{opacity:1;}
+.feature-card-badge{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;padding:4px 10px;border-radius:20px;background:rgba(22,163,74,0.12);color:var(--brand-light);border:1px solid rgba(22,163,74,0.25);}
+.feature-card.pro .feature-card-badge{background:rgba(249,115,22,0.12);color:var(--warning);border-color:rgba(249,115,22,0.25);}
+.feature-card.pro .feature-card-number{color:var(--warning);}
+.feature-icon{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:4px;background:linear-gradient(135deg,rgba(22,163,74,0.12) 0%,rgba(22,163,74,0.06) 100%);border:1.5px solid rgba(22,163,74,0.2);position:relative;transition:all 0.35s;flex-shrink:0;animation:iconFloat 3s ease-in-out infinite;}
+.feature-card:hover .feature-icon{background:linear-gradient(135deg,rgba(22,163,74,0.18) 0%,rgba(22,163,74,0.12) 100%);border-color:rgba(22,163,74,0.35);box-shadow:0 8px 20px rgba(22,163,74,0.18);}
+.feature-card.accent .feature-icon{background:linear-gradient(135deg,rgba(245,158,11,0.12) 0%,rgba(245,158,11,0.06) 100%);border-color:rgba(245,158,11,0.2);}
+.feature-card.accent:hover .feature-icon{background:linear-gradient(135deg,rgba(245,158,11,0.18) 0%,rgba(245,158,11,0.12) 100%);border-color:rgba(245,158,11,0.35);box-shadow:0 8px 20px rgba(245,158,11,0.18);}
+.feature-card.info .feature-icon{background:linear-gradient(135deg,rgba(59,130,246,0.12) 0%,rgba(59,130,246,0.06) 100%);border-color:rgba(59,130,246,0.2);}
+.feature-card.info:hover .feature-icon{background:linear-gradient(135deg,rgba(59,130,246,0.18) 0%,rgba(59,130,246,0.12) 100%);border-color:rgba(59,130,246,0.35);box-shadow:0 8px 20px rgba(59,130,246,0.18);}
+.feature-card.warning .feature-icon{background:linear-gradient(135deg,rgba(249,115,22,0.12) 0%,rgba(249,115,22,0.06) 100%);border-color:rgba(249,115,22,0.2);}
+.feature-card.warning:hover .feature-icon{background:linear-gradient(135deg,rgba(249,115,22,0.18) 0%,rgba(249,115,22,0.12) 100%);border-color:rgba(249,115,22,0.35);box-shadow:0 8px 20px rgba(249,115,22,0.18);}
+.feature-card.accent .feature-card-number{color:var(--accent-light);}
+.feature-card.info .feature-card-number{color:var(--info);}
+.feature-card.warning .feature-card-number{color:var(--warning);}
+.feature-card h4{font-size:15px;font-weight:700;letter-spacing:-0.3px;margin-bottom:6px;transition:color 0.35s;position:relative;}
+.feature-card p{font-size:13px;color:var(--text-2);line-height:1.65;transition:color 0.35s;margin:0;}
+/* Scroll-triggered entrance — JS adds .vis */
+.feature-card.vis{animation:cardEntrance 0.7s cubic-bezier(0.34,1.56,0.64,1) both;}
+.feature-category{opacity:0;transform:translateX(-22px);}
+.feature-category.vis{animation:catSlide 0.6s cubic-bezier(0.34,1.56,0.64,1) both;}
+@keyframes catSlide{from{opacity:0;transform:translateX(-22px);}to{opacity:1;transform:none;}}
+.features-controls{opacity:0;}
+.features-controls.vis{animation:heroUp 0.6s ease both;}
+/* Gradient underline on hover */
+.feature-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--fc-clr,var(--brand-light)),transparent);transform:scaleX(0);transform-origin:center;transition:transform 0.4s cubic-bezier(0.4,0,0.2,1);}
+.feature-card:hover::after{transform:scaleX(1);}
+/* Numbered badge */
+.feature-card-number{position:absolute;top:-12px;right:16px;font-size:56px;font-weight:800;color:var(--fc-clr,var(--brand-light));opacity:0.08;font-family:var(--mono);}
+/* Glow pulse on hover */
+.feature-card:hover{animation:glowPulse 2s ease-in-out infinite;}
+.feature-card.accent:hover{animation:glowPulseAccent 2s ease-in-out infinite;}
+.feature-card.info:hover{animation:glowPulseInfo 2s ease-in-out infinite;}
+.feature-card.warning:hover{animation:glowPulseWarn 2s ease-in-out infinite;}
+@keyframes glowPulse{0%,100%{box-shadow:0 20px 48px rgba(0,0,0,0.15),0 0 30px rgba(22,163,74,0.15);}50%{box-shadow:0 28px 64px rgba(0,0,0,0.22),0 0 56px rgba(22,163,74,0.35);}}
+@keyframes glowPulseAccent{0%,100%{box-shadow:0 20px 48px rgba(0,0,0,0.15),0 0 30px rgba(245,158,11,0.15);}50%{box-shadow:0 28px 64px rgba(0,0,0,0.22),0 0 56px rgba(245,158,11,0.35);}}
+@keyframes glowPulseInfo{0%,100%{box-shadow:0 20px 48px rgba(0,0,0,0.15),0 0 30px rgba(59,130,246,0.15);}50%{box-shadow:0 28px 64px rgba(0,0,0,0.22),0 0 56px rgba(59,130,246,0.35);}}
+@keyframes glowPulseWarn{0%,100%{box-shadow:0 20px 48px rgba(0,0,0,0.15),0 0 30px rgba(249,115,22,0.15);}50%{box-shadow:0 28px 64px rgba(0,0,0,0.22),0 0 56px rgba(249,115,22,0.35);}}
+/* Spotlight effect */
+.features-grid:has(.feature-card:hover) .feature-card:not(:hover){opacity:0.5;transform:scale(0.97);}
+/* Category header */
+.feature-category{grid-column:1 / -1;display:flex;align-items:center;gap:12px;margin:8px 0 -8px;padding-top:16px;}
+.feature-category::before{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--border));}
+.feature-category-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-3);padding:0 8px;white-space:nowrap;}
+.feature-category::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+/* Keyframes */
+.feature-card:hover .feature-icon{animation:iconBounce 0.6s cubic-bezier(0.34,1.56,0.64,1);}
+@keyframes cardEntrance{from{opacity:0;transform:translateY(28px) scale(0.94);}to{opacity:1;transform:translateY(0) scale(1);}}
+@keyframes iconBounce{0%{transform:scale(1.1) rotate(3deg);}50%{transform:scale(1.15) rotate(-2deg);}100%{transform:scale(1.1) rotate(3deg);}}
+@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+/* CTA section */
+.cta-section{position:relative;z-index:1;margin:0 48px 64px;border-radius:var(--radius-xl);overflow:hidden;background:linear-gradient(135deg,rgba(22,163,74,0.18) 0%,rgba(22,163,74,0.06) 50%,rgba(99,102,241,0.12) 100%);border:1px solid rgba(22,163,74,0.22);padding:64px 48px;text-align:center;}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 90% at 50% -10%,rgba(22,163,74,0.18) 0%,transparent 60%);pointer-events:none;}
+.cta-section h2{font-size:clamp(24px,4vw,40px);font-weight:800;letter-spacing:-1px;margin-bottom:12px;position:relative;}
+.cta-section p{font-size:16px;color:var(--text-2);margin-bottom:32px;position:relative;max-width:480px;margin-left:auto;margin-right:auto;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;}
 .landing-footer{text-align:center;padding:48px;color:var(--text-3);font-size:13px;border-top:1px solid var(--border);position:relative;z-index:1;}
+/* ── Hero keyframes ── */
+@keyframes heroUp{from{opacity:0;transform:translateY(28px);}to{opacity:1;transform:translateY(0);}}
+@keyframes heroFade{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+@keyframes heroSlide{from{opacity:0;transform:translateX(40px);}to{opacity:1;transform:translateX(0);}}
+/* ── Background orbs ── */
+.land-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(80px);will-change:transform;}
+.land-orb-1{width:520px;height:520px;background:rgba(22,163,74,0.08);top:-15%;left:-8%;animation:orbDrift1 24s ease-in-out infinite;}
+.land-orb-2{width:440px;height:440px;background:rgba(99,102,241,0.06);bottom:5%;right:-8%;animation:orbDrift2 30s ease-in-out infinite 5s;}
+.land-orb-3{width:300px;height:300px;background:rgba(245,158,11,0.05);top:40%;left:35%;animation:orbDrift3 20s ease-in-out infinite 10s;}
+@keyframes orbDrift1{0%,100%{transform:translate(0,0);}33%{transform:translate(50px,-30px);}66%{transform:translate(-20px,50px);}}
+@keyframes orbDrift2{0%,100%{transform:translate(0,0);}33%{transform:translate(-40px,30px);}66%{transform:translate(30px,-50px);}}
+@keyframes orbDrift3{0%,100%{transform:translate(0,0);}50%{transform:translate(40px,-40px);}}
+/* ── Floating notifications ── */
+.hv-notif{position:absolute;background:var(--surface);border:1px solid var(--border-2);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 14px 36px rgba(0,0,0,0.45),0 0 0 1px rgba(255,255,255,0.04);white-space:nowrap;z-index:20;pointer-events:none;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.hv-notif-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.hv-notif-ic.g{background:rgba(22,163,74,0.2);color:#4ade80;}
+.hv-notif-ic.b{background:rgba(99,102,241,0.2);color:#818cf8;}
+.hv-notif-ic.a{background:rgba(245,158,11,0.2);color:#fbbf24;}
+.hv-notif-t{font-size:12px;font-weight:700;color:var(--text-1);}
+.hv-notif-s{font-size:10.5px;color:var(--text-3);margin-top:1px;}
+.hv-notif-1{top:-20px;right:-28px;animation:nf1 5s ease-in-out infinite;}
+.hv-notif-2{bottom:26%;left:-36px;animation:nf2 6s ease-in-out infinite 1.5s;}
+.hv-notif-3{bottom:10%;right:-32px;animation:nf3 5.5s ease-in-out infinite 3s;}
+@keyframes nf1{0%,100%{transform:translateY(0) rotate(-1deg);}50%{transform:translateY(-10px) rotate(0.5deg);}}
+@keyframes nf2{0%,100%{transform:translateY(0) rotate(1deg);}50%{transform:translateY(-12px) rotate(-0.5deg);}}
+@keyframes nf3{0%,100%{transform:translateY(0) rotate(-0.5deg);}50%{transform:translateY(-8px) rotate(1deg);}}
+/* Stats bar entrance */
+.landing-stats-inner{animation:heroUp 0.7s ease both 0.7s;}
+/* Landing mobile */
+/* Privacy / Feedback / Footer polished styles */
+.trust-section{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:24px 28px 40px;background:linear-gradient(180deg,var(--bg-2),transparent);border-radius:14px;}
+.trust-inner{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;}
+.trust-card{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);padding:18px;border-radius:12px;box-shadow:var(--shadow);}
+.trust-card .ico{font-size:28px;margin-bottom:10px;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:10px;background:var(--bg-3);border:1px solid var(--border);}
+.trust-card h4{font-size:15px;margin:6px 0;font-weight:800;color:var(--text-1)}
+.trust-card p{font-size:13px;color:var(--text-2);line-height:1.6}
+.feedback-card{max-width:680px;margin:18px auto 0;background:var(--surface);border:1px solid var(--border);padding:20px;border-radius:12px;box-shadow:var(--shadow);}
+.feedback-card .form-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.feedback-card .form-control{flex:1}
+.feedback-note{font-size:12px;color:var(--text-3);margin-top:10px}
+.dev-card{background:var(--surface);border:1px solid var(--border);padding:18px;border-radius:12px;display:flex;gap:18px;align-items:center;box-shadow:var(--shadow);}
+.dev-photo{width:90px;height:90px;border-radius:12px;border:2px solid var(--brand);overflow:hidden;display:flex;align-items:center;justify-content:center;background:var(--bg-3);}
+.dev-card .meta{flex:1}
+.dev-links{display:flex;gap:10px;margin-top:8px}
+.dev-links a{display:inline-flex;align-items:center;gap:8px;color:var(--text-2);font-size:13px;text-decoration:none}
+.site-footer{max-width:1160px;margin:0 auto;padding:28px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;gap:20px;align-items:center;color:var(--text-3);}
+.site-footer .left{display:flex;gap:14px;align-items:center}
+.site-footer .links{display:flex;gap:12px}
+.site-footer .legal{font-size:12px;color:var(--text-3)}
+@media(max-width:900px){
+  .features-grid{grid-template-columns:1fr;gap:14px;}
+  .feature-card{padding:20px;}
+  .feature-card-number{font-size:40px;top:-8px;right:12px;}
+  .features-grid:has(.feature-card:hover) .feature-card:not(:hover){opacity:1;transform:scale(1);}
+  .feature-category{margin:12px 0 -4px;}
+  .hero-content{flex-direction:column;padding:56px 24px 44px;gap:40px;}
+  .hero-text{text-align:center;}
+  .hero-desc{max-width:100%;}
+  .hero-ctas{justify-content:center;}
+  .hero-visual{width:100%;max-width:420px;margin:0 auto;animation:heroUp 0.9s cubic-bezier(0.34,1.56,0.64,1) both 0.15s;}
+  .hv-notif{display:none;}
+  .land-orb{display:none;}
+  .landing-nav{padding:14px 20px;}
+  .landing-stats{padding:0 20px 48px;}
+  .features-section{padding:0 20px 48px;}
+  .cta-section{margin:0 20px 48px;padding:40px 24px;}
+}
 
-/* AUTH */
-#page-auth{min-height:100vh;display:none;align-items:center;justify-content:center;background:var(--bg);position:relative;overflow:hidden;}
+/* AUTH — 2-pane split layout */
+#page-auth{min-height:100vh;display:none;flex-direction:row;background:var(--bg);position:relative;overflow:hidden;}
 #page-auth.active{display:flex;}
-.auth-bg{position:fixed;inset:0;background:radial-gradient(ellipse 60% 60% at 50% -10%,rgba(22,163,74,0.1) 0%,transparent 60%);pointer-events:none;}
-.auth-card{width:100%;max-width:440px;position:relative;z-index:1;}
-.auth-inner{background:var(--surface);border:1px solid var(--border-2);border-radius:var(--radius-xl);padding:32px;box-shadow:var(--shadow-lg);animation:slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);}
-.auth-tabs{display:flex;gap:4px;background:var(--bg-3);border-radius:var(--radius-sm);padding:4px;margin-bottom:22px;border:1px solid var(--border);}
+.auth-bg{display:none;}
+/* Left pane */
+.auth-left{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:64px;border-right:1px solid var(--border);position:relative;overflow:hidden;}
+.auth-left::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 15% 50%,rgba(22,163,74,0.09) 0%,transparent 60%),radial-gradient(ellipse 60% 60% at 85% 10%,rgba(99,102,241,0.06) 0%,transparent 50%);pointer-events:none;}
+.auth-left-grid{position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:44px 44px;opacity:0.25;}
+.auth-left-body{position:relative;z-index:1;max-width:460px;}
+.auth-left-title{font-size:clamp(28px,3.5vw,40px);font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin:16px 0 12px;}
+.auth-left-title .accent{background:linear-gradient(120deg,var(--brand-light) 0%,#a3e635 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.auth-left-desc{color:var(--text-2);font-size:15px;line-height:1.7;max-width:380px;margin-bottom:0;}
+.auth-left-foot{position:absolute;bottom:32px;left:64px;font-size:12px;color:var(--text-3);}
+/* Feature list */
+.auth-feat{display:flex;flex-direction:column;gap:4px;margin-top:32px;}
+.auth-feat-item{display:flex;align-items:flex-start;gap:14px;padding:12px 14px;border-radius:12px;border:1px solid transparent;transition:all 0.2s;cursor:default;}
+.auth-feat-item:hover{background:var(--surface);border-color:var(--border);}
+.auth-feat-ic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px;}
+.auth-feat-title{font-size:13.5px;font-weight:700;color:var(--text-1);margin-bottom:2px;}
+.auth-feat-sub{font-size:12px;color:var(--text-3);line-height:1.5;}
+/* Right pane */
+.auth-right{width:480px;flex-shrink:0;display:flex;align-items:center;justify-content:center;padding:40px 48px;overflow-y:auto;background:var(--bg-2);border-left:1px solid var(--border);}
+.auth-card{width:100%;max-width:380px;position:relative;z-index:1;}
+.auth-inner{animation:slideUp 0.4s cubic-bezier(0.34,1.56,0.64,1);}
+/* Heading */
+.auth-heading{margin-bottom:24px;}
+.auth-heading h2{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:5px;}
+.auth-heading p{font-size:13px;color:var(--text-2);}
+.auth-heading p button{background:none;border:none;color:var(--brand-light);font-weight:700;cursor:pointer;font-size:13px;padding:0;font-family:var(--font);}
+/* Tabs */
+.auth-tabs{display:flex;gap:4px;background:var(--bg-3);border-radius:var(--radius-sm);padding:4px;margin-bottom:20px;border:1px solid var(--border);}
 .auth-tab{flex:1;text-align:center;padding:8px;font-size:13px;font-weight:600;border-radius:6px;cursor:pointer;color:var(--text-3);transition:all var(--transition);}
-.auth-tab.active{background:var(--brand);color:#fff;}
+.auth-tab.active{background:var(--brand);color:#fff;box-shadow:0 2px 8px rgba(22,163,74,0.35);}
+/* Input with icon */
+.auth-field{position:relative;}
+.auth-field-ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:15px;pointer-events:none;z-index:2;}
+.auth-field .form-control{padding-left:40px!important;}
+/* Mobile: only show form */
+.auth-mobile-logo{display:none;text-align:center;margin-bottom:28px;}
+@media(max-width:900px){
+  #page-auth.active{flex-direction:column;}
+  .auth-left{display:none;}
+  .auth-right{width:100%;min-height:100vh;padding:32px 24px;background:var(--bg);}
+  .auth-mobile-logo{display:block;}
+}
+/* Demo creds */
 .auth-demo{background:var(--bg-3);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 14px;font-size:12.5px;color:var(--text-2);margin-top:16px;}
 .auth-demo strong{color:var(--text-1);display:block;margin-bottom:6px;}
 .demo-row{display:flex;justify-content:space-between;padding:3px 0;}
@@ -501,9 +753,12 @@ textarea.form-control{resize:vertical;min-height:80px;}
   .card-header{padding:12px 14px;}
   .card-header h3{font-size:13px;}
   /* ── Stat cards ── */
-  .stat-card{padding:14px;}
-  .stat-value{font-size:20px;}
-  .stat-icon-bg{display:none;}
+  .stat-card{padding:14px 16px;gap:12px;}
+  .sc-icon-wrap{width:42px;height:42px;font-size:18px;border-radius:10px;}
+  .stat-value{font-size:18px;}
+  .db-hero{padding:14px 16px;}
+  .db-hero-name{font-size:17px;}
+  .db-quick-actions .btn-lg{padding:9px 16px;font-size:13px;}
   /* ── Analytics 3-col → 1-col ── */
   #an-tb,#an-hd,#an-bd{min-height:0;}
   .pp-row:hover{background:var(--bg-3);border-radius:var(--radius-sm);}
@@ -590,10 +845,15 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
 <div id="load-screen">
   <div class="load-brand">
-    <div class="load-icon">📦</div>
+    <div class="load-icon-wrap">
+      <div class="load-ring load-ring-1"></div>
+      <div class="load-ring load-ring-2"></div>
+      <div class="load-ring load-ring-3"></div>
+      <div class="load-icon">📦</div>
+    </div>
     <div class="load-name">Stoki<span>Pro</span></div>
   </div>
-  <div style="font-size:11.5px;font-family:var(--mono);color:var(--text-3);margin-top:-10px;">v3 · Sheets First</div>
+  <div style="font-size:11.5px;font-family:var(--mono);color:var(--text-3);margin-top:-10px;letter-spacing:0.05em;">v3 · Sheets First · Auto-Sync</div>
   <div class="load-bar"><div class="load-fill" id="lf"></div></div>
   <div class="load-msg" id="lm">Inaanzisha...</div>
 </div>
@@ -601,6 +861,9 @@ textarea.form-control{resize:vertical;min-height:80px;}
 <div id="page-landing" class="page active">
   <div class="landing-bg-mesh"></div>
   <div class="landing-grid-lines"></div>
+  <div class="land-orb land-orb-1"></div>
+  <div class="land-orb land-orb-2"></div>
+  <div class="land-orb land-orb-3"></div>
   <nav class="landing-nav">
     <div class="brand-logo"><div class="brand-icon">📦</div><div><div class="brand-name">Stoki<span>Pro</span></div><div class="brand-tag">v3 · Sheets-First · Auto-Sync</div></div></div>
     <div class="flex gap-2">
@@ -610,165 +873,404 @@ textarea.form-control{resize:vertical;min-height:80px;}
     </div>
   </nav>
   <div class="hero-content">
-    <div class="hero-eyebrow"><i class="bi bi-lightning-charge-fill"></i><span data-t="landing.tagline">Sheets-First · Auto-Sync · Invoice · Analytics</span></div>
-    <h1 class="hero-title"><span data-t="landing.hero">Simamia Biashara Yako</span><br><span class="accent" data-t="landing.hero2">Kwa Urahisi Kamili</span></h1>
-    <p class="hero-desc" data-t="landing.desc">Mfumo wa kisasa wa biashara — data yako kwenye Google Sheets yako moja kwa moja.</p>
-    <div class="hero-ctas">
-      <button class="btn btn-primary btn-lg" onclick="goPg('auth','r')"><i class="bi bi-rocket-takeoff-fill"></i><span data-t="btn.start_free">Anza Sasa — Bure</span></button>
-      <button class="btn btn-ghost btn-lg" onclick="goPg('auth','l')"><i class="bi bi-play-circle-fill"></i><span data-t="btn.demo">Jaribu Demo</span></button>
+    <div class="hero-text">
+      <div class="hero-eyebrow"><i class="bi bi-lightning-charge-fill"></i><span data-t="landing.tagline">Sheets-First · Auto-Sync · Invoice · Analytics</span></div>
+      <h1 class="hero-title"><span data-t="landing.hero">Simamia Biashara Yako</span><br><span class="accent" data-t="landing.hero2">Kwa Urahisi Kamili</span></h1>
+      <p class="hero-desc" data-t="landing.desc">Mfumo wa kisasa wa biashara — data yako kwenye Google Sheets yako moja kwa moja.</p>
+      <div class="hero-ctas">
+        <button class="btn btn-primary btn-lg" onclick="goPg('auth','r')"><i class="bi bi-rocket-takeoff-fill"></i><span data-t="btn.start_free">Anza Sasa — Bure</span></button>
+        <button class="btn btn-ghost btn-lg" onclick="goPg('auth','l')"><i class="bi bi-play-circle-fill"></i><span data-t="btn.demo">Jaribu Demo</span></button>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <!-- Floating notifications -->
+      <div class="hv-notif hv-notif-1">
+        <div class="hv-notif-ic g"><i class="bi bi-check-lg"></i></div>
+        <div><div class="hv-notif-t">Sync Complete</div><div class="hv-notif-s">Google Sheets · Just now</div></div>
+      </div>
+      <div class="hv-notif hv-notif-2">
+        <div class="hv-notif-ic a"><i class="bi bi-receipt"></i></div>
+        <div><div class="hv-notif-t">+TZS 240,000</div><div class="hv-notif-s">Amina Stores · Mauzo mapya</div></div>
+      </div>
+      <div class="hv-notif hv-notif-3">
+        <div class="hv-notif-ic b"><i class="bi bi-bar-chart-fill"></i></div>
+        <div><div class="hv-notif-t">Faida ↑ 28%</div><div class="hv-notif-s">Wiki hii vs iliyopita</div></div>
+      </div>
+      <div class="hero-mockup">
+        <div class="hm-chrome">
+          <div class="hm-dot r"></div><div class="hm-dot y"></div><div class="hm-dot g"></div>
+          <span class="hm-chrome-title">StokiPro — Dashboard</span>
+          <span class="hm-chrome-badge">● LIVE</span>
+        </div>
+        <div class="hm-body">
+          <div class="hm-stats-row">
+            <div class="hm-sc"><div class="hm-sc-lbl">Mauzo Leo</div><div class="hm-sc-val">847K</div><div class="hm-sc-chg up">↑ 12%</div></div>
+            <div class="hm-sc"><div class="hm-sc-lbl">Bidhaa</div><div class="hm-sc-val">342</div><div class="hm-sc-chg nu">In stock</div></div>
+            <div class="hm-sc"><div class="hm-sc-lbl">Wateja</div><div class="hm-sc-val">1,247</div><div class="hm-sc-chg up">↑ 5 wapya</div></div>
+          </div>
+          <div class="hm-chart-row">
+            <div class="hm-bar" style="height:38%"></div>
+            <div class="hm-bar" style="height:60%"></div>
+            <div class="hm-bar" style="height:44%"></div>
+            <div class="hm-bar" style="height:78%"></div>
+            <div class="hm-bar" style="height:52%"></div>
+            <div class="hm-bar hi" style="height:88%"></div>
+            <div class="hm-bar" style="height:70%"></div>
+          </div>
+          <div class="hm-pills-row">
+            <span class="hm-pill g">↑ Faida +28%</span>
+            <span class="hm-pill b">Sync ✓</span>
+            <span class="hm-pill a">VAT 47,200</span>
+          </div>
+          <div class="hm-recent">
+            <div class="hm-rec-hd">Mauzo ya Hivi Karibuni</div>
+            <div class="hm-rec-row"><div><div class="hm-rec-name">Juma Hassan</div><div class="hm-rec-cat">Bidhaa × 3</div></div><div class="hm-rec-amt">+85,000</div></div>
+            <div class="hm-rec-row"><div><div class="hm-rec-name">Amina Stores</div><div class="hm-rec-cat">Invoice #0042</div></div><div class="hm-rec-amt">+240,000</div></div>
+            <div class="hm-rec-row"><div><div class="hm-rec-name">Fatuma Ali</div><div class="hm-rec-cat">Bidhaa × 1</div></div><div class="hm-rec-amt">+32,500</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Stats bar -->
+  <div class="landing-stats">
+    <div class="landing-stats-inner">
+      <div class="lst-it"><div class="lst-it-num">500<span class="acc">+</span></div><div class="lst-it-lbl">Biashara Zinazotumia</div></div>
+      <div class="lst-it"><div class="lst-it-num">1<span class="acc">M+</span></div><div class="lst-it-lbl">Transactions</div></div>
+      <div class="lst-it"><div class="lst-it-num">99<span class="acc">%</span></div><div class="lst-it-lbl">Uptime</div></div>
+      <div class="lst-it"><div class="lst-it-num"><span class="acc">∞</span></div><div class="lst-it-lbl">Offline Mode</div></div>
     </div>
   </div>
   <div class="features-section">
-    <div style="text-align:center;margin-bottom:16px;"><h2 style="font-size:32px;font-weight:800;letter-spacing:-1px;" data-t="landing.features">Vipengele Vyote Unavyohitaji</h2></div>
-    <div class="features-grid">
-      <div class="feature-card"><div class="feature-icon">📊</div><h4 data-t="landing.f1_title">Analytics za Kina</h4><p data-t="landing.f1_desc">Top buyers, bidhaa zinazoendea, madeni — yote kwa mchoro.</p></div>
-      <div class="feature-card"><div class="feature-icon">🧾</div><h4 data-t="landing.f2_title">Invoice ya Mteja</h4><p data-t="landing.f2_desc">Chapisha risiti na invoice za kitaalamu kwa kila mauzo.</p></div>
-      <div class="feature-card"><div class="feature-icon">👤</div><h4 data-t="landing.f3_title">Profiles za Wateja</h4><p data-t="landing.f3_desc">Historia kamili — bidhaa, mauzo, madeni, malipo.</p></div>
-      <div class="feature-card"><div class="feature-icon">🔄</div><h4 data-t="landing.f4_title">Auto-Sync</h4><p data-t="landing.f4_desc">Kila mabadiliko yanakwenda Google Sheets moja kwa moja.</p></div>
-      <div class="feature-card"><div class="feature-icon">📱</div><h4 data-t="landing.f5_title">Mobile Friendly</h4><p data-t="landing.f5_desc">FAB button na bottom tabs kwa matumizi rahisi kwenye simu.</p></div>
-      <div class="feature-card"><div class="feature-icon">📧</div><h4 data-t="landing.f6_title">Arifa za Email</h4><p data-t="landing.f6_desc">Stoki inayokwisha, madeni, na ripoti ya kila siku kwa email.</p></div>
-      <div class="feature-card"><div class="feature-icon">🏪</div><h4 data-t="landing.f10_title">Matawi Mengi</h4><p data-t="landing.f10_desc">Duka kuu na matawi — kila tawi na data yake, ripoti zake, na watumiaji wake.</p></div>
-      <div class="feature-card"><div class="feature-icon">💳</div><h4 data-t="landing.f11_title">Malipo & Madeni</h4><p data-t="landing.f11_desc">Fuatilia madeni ya wateja na wasambazaji, historia ya malipo, na mikopo.</p></div>
-      <div class="feature-card"><div class="feature-icon">📦</div><h4 data-t="landing.f12_title">Batch Tracking</h4><p data-t="landing.f12_desc">Fuatilia bidhaa kwa batch — tarehe ya kuisha, bei ya ununuzi, na hesabu sahihi.</p></div>
-      <div class="feature-card"><div class="feature-icon">🔁</div><h4 data-t="landing.f13_title">Tracking za Transactions</h4><p data-t="landing.f13_desc">Rekodi kamili ya mauzo, manunuzi, na malipo — chuja kwa tarehe, tawi, au mtumiaji.</p></div>
-      <div class="feature-card"><div class="feature-icon">🧮</div><h4 data-t="landing.f14_title">Hesabu za Malipo</h4><p data-t="landing.f14_desc">Jumla ya mauzo, faida, VAT, mikopo, na bakaa — mahesabu sahihi kwa kila transaction.</p></div>
-      <div class="feature-card"><div class="feature-icon">📷</div><h4 data-t="landing.f15_title">QR Code ya Bidhaa</h4><p data-t="landing.f15_desc">Generate QR kwa kila bidhaa, chapisha label ya bei, na scan kwa simu kuongeza kwenye cart moja kwa moja.</p></div>
-      <div class="feature-card"><div class="feature-icon">👥</div><h4 data-t="landing.f16_title">Usimamizi wa Watumiaji</h4><p data-t="landing.f16_desc">Ongeza wafanyakazi, wapa roles na ruhusa maalum — kila mtu anaona na kufanya tu anachoruhusiwa.</p></div>
-      <div class="feature-card"><div class="feature-icon">🔐</div><h4 data-t="landing.f17_title">Mabadiliko ya Haraka kwa PIN</h4><p data-t="landing.f17_desc">Badilisha mtumiaji kwa PIN ya tarakimu 4 bila kutoka — kasha na cashier waweze kutumia mfumo mmoja kwa urahisi.</p></div>
-      <div class="feature-card"><div class="feature-icon">🛡️</div><h4 data-t="landing.f18_title">Udhibiti wa Ruhusa</h4><p data-t="landing.f18_desc">Roles zilizowekwa tayari (Owner, Manager, Cashier, Storekeeper) au tengeneza yako — chagua kwa kila moduli ni nani anaweza kuona, kuongeza, kuhariri, au kufuta.</p></div>
-      <div class="feature-card"><div class="feature-icon">📋</div><h4 data-t="landing.f19_title">Rekodi za Shughuli</h4><p data-t="landing.f19_desc">Fuatilia kila kilichofanywa na nani na lini — mauzo, manunuzi, marekebisho ya stoki, na mabadiliko yote ya data yako.</p></div>
-      <div class="feature-card" style="border-color:rgba(99,102,241,0.35);background:linear-gradient(135deg,var(--surface) 80%,rgba(99,102,241,0.06));">
-        <div class="feature-icon">🔒</div>
+    <div class="features-controls">
+      <div class="f-left">
+        <div class="f-title" data-t="landing.features">Vipengele Vyote Unavyohitaji</div>
+      </div>
+      <div class="f-actions">
+        <button class="toggle-btn" id="show-all">Onyesha Zote</button>
+        <button class="toggle-btn" id="hide-all">Ficha Zote</button>
+        <button class="filter-btn" id="filter-toggle" aria-expanded="false" aria-controls="filter-panel"><i class="bi bi-funnel-fill"></i> Chuja</button>
+      </div>
+      <div class="filter-panel" id="filter-panel" aria-hidden="true" role="region" aria-label="Feature category filters">
+        <div style="font-weight:700;margin-bottom:8px;">Chagua Categories</div>
+        <div id="filter-list">
+          <!-- checkboxes inserted by JS -->
+        </div>
+        <div class="filter-quick">
+          <button onclick="applyQuick('all')">Wote</button>
+          <button onclick="applyQuick('none')">Hakuna</button>
+        </div>
+      </div>
+    </div>
+    <div class="features-grid" id="features-grid">
+      <div class="feature-category"><span class="feature-category-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> Analytics & Insights</span></div>
+      <div class="feature-card info">
+        <div class="feature-card-number">01</div>
+        <div class="feature-card-badge">Popular</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"/><polyline points="19 5 12 12 5 5"/></svg></div>
+        <h4 data-t="landing.f1_title">Analytics za Kina</h4>
+        <p data-t="landing.f1_desc">Top buyers, bidhaa zinazoendea, madeni — yote kwa mchoro.</p>
+      </div>
+      <div class="feature-category"><span class="feature-category-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Invoicing & Documents</span></div>
+      <div class="feature-card accent">
+        <div class="feature-card-number">02</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="13" x2="8" y2="13"/><line x1="12" y1="17" x2="8" y2="17"/><polyline points="8 9 8 9.01"/></svg></div>
+        <h4 data-t="landing.f2_title">Invoice ya Mteja</h4>
+        <p data-t="landing.f2_desc">Chapisha risiti na invoice za kitaalamu kwa kila mauzo.</p>
+      </div>
+      <div class="feature-card accent">
+        <div class="feature-card-number">03</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+        <h4 data-t="landing.f15_title">QR Code ya Bidhaa</h4>
+        <p data-t="landing.f15_desc">Generate QR kwa kila bidhaa, chapisha label ya bei, na scan kwa simu kuongeza kwenye cart moja kwa moja.</p>
+      </div>
+      <div class="feature-category"><span class="feature-category-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg> Customer & Management</span></div>
+      <div class="feature-card">
+        <div class="feature-card-number">04</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+        <h4 data-t="landing.f3_title">Profiles za Wateja</h4>
+        <p data-t="landing.f3_desc">Historia kamili — bidhaa, mauzo, madeni, malipo.</p>
+      </div>
+      <div class="feature-card info">
+        <div class="feature-card-number">05</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
+        <h4 data-t="landing.f11_title">Malipo & Madeni</h4>
+        <p data-t="landing.f11_desc">Fuatilia madeni ya wateja na wasambazaji, historia ya malipo, na mikopo.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-number">06</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+        <h4 data-t="landing.f16_title">Usimamizi wa Watumiaji</h4>
+        <p data-t="landing.f16_desc">Ongeza wafanyakazi, wapa roles na ruhusa maalum — kila mtu anaona na kufanya tu anachoruhusiwa.</p>
+      </div>
+      <div class="feature-category"><span class="feature-category-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg> Inventory & Tracking</span></div>
+      <div class="feature-card">
+        <div class="feature-card-number">07</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+        <h4 data-t="landing.f12_title">Batch Tracking</h4>
+        <p data-t="landing.f12_desc">Fuatilia bidhaa kwa batch — tarehe ya kuisha, bei ya ununuzi, na hesabu sahihi.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-number">08</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg></div>
+        <h4 data-t="landing.f6_title">Arifa za Email</h4>
+        <p data-t="landing.f6_desc">Stoki inayokwisha, madeni, na ripoti ya kila siku kwa email.</p>
+      </div>
+      <div class="feature-category"><span class="feature-category-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36M20.49 15a9 9 0 0 1-14.85 3.36"/></svg> Sync & Integration</span></div>
+      <div class="feature-card accent">
+        <div class="feature-card-number">09</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36M20.49 15a9 9 0 0 1-14.85 3.36"/></svg></div>
+        <h4 data-t="landing.f4_title">Auto-Sync</h4>
+        <p data-t="landing.f4_desc">Kila mabadiliko yanakwenda Google Sheets moja kwa moja.</p>
+      </div>
+      <div class="feature-card accent">
+        <div class="feature-card-number">10</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <h4 data-t="landing.f13_title">Tracking za Transactions</h4>
+        <p data-t="landing.f13_desc">Rekodi kamili ya mauzo, manunuzi, na malipo — chuja kwa tarehe, tawi, au mtumiaji.</p>
+      </div>
+      <div class="feature-category"><span class="feature-category-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"/><polyline points="12 12 20 7.5"/><polyline points="12 12 12 21"/><polyline points="12 12 4 7.5"/></svg> Organization</span></div>
+      <div class="feature-card accent">
+        <div class="feature-card-number">11</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V2h12v7"/><path d="M6 9c0 1 .9 2 2 2h8c1.1 0 2-1 2-2"/><rect x="2" y="11" width="20" height="10" rx="1"/><line x1="2" y1="19" x2="22" y2="19"/></svg></div>
+        <h4 data-t="landing.f10_title">Matawi Mengi</h4>
+        <p data-t="landing.f10_desc">Duka kuu na matawi — kila tawi na data yake, ripoti zake, na watumiaji wake.</p>
+      </div>
+      <div class="feature-card info">
+        <div class="feature-card-number">12</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+        <h4 data-t="landing.f5_title">Mobile Friendly</h4>
+        <p data-t="landing.f5_desc">FAB button na bottom tabs kwa matumizi rahisi kwenye simu.</p>
+      </div>
+      <div class="feature-category"><span class="feature-category-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><rect x="1" y="4" width="22" height="6"/><line x1="6" y1="10" x2="6" y2="20"/><line x1="12" y1="10" x2="12" y2="20"/><line x1="18" y1="10" x2="18" y2="20"/></svg> Financial Calculations</span></div>
+      <div class="feature-card warning">
+        <div class="feature-card-number">13</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><rect x="1" y="4" width="22" height="6"/><line x1="6" y1="10" x2="6" y2="20"/><line x1="12" y1="10" x2="12" y2="20"/><line x1="18" y1="10" x2="18" y2="20"/></svg></div>
+        <h4 data-t="landing.f14_title">Hesabu za Malipo</h4>
+        <p data-t="landing.f14_desc">Jumla ya mauzo, faida, VAT, mikopo, na bakaa — mahesabu sahihi kwa kila transaction.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card-number">14</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg></div>
+        <h4 data-t="landing.f19_title">Rekodi za Shughuli</h4>
+        <p data-t="landing.f19_desc">Fuatilia kila kilichofanywa na nani na lini — mauzo, manunuzi, marekebisho ya stoki, na mabadiliko yote ya data yako.</p>
+      </div>
+      <div class="feature-category"><span class="feature-category-label"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> Security & Access</span></div>
+      <div class="feature-card warning">
+        <div class="feature-card-number">15</div>
+        <div class="feature-card-badge">Pro</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+        <h4 data-t="landing.f17_title">Mabadiliko ya Haraka kwa PIN</h4>
+        <p data-t="landing.f17_desc">Badilisha mtumiaji kwa PIN ya tarakimu 4 bila kutoka — kasha na cashier waweza kutumia mfumo mmoja kwa urahisi.</p>
+      </div>
+      <div class="feature-card warning">
+        <div class="feature-card-number">16</div>
+        <div class="feature-card-badge">Pro</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h4 data-t="landing.f18_title">Udhibiti wa Ruhusa</h4>
+        <p data-t="landing.f18_desc">Roles zilizowekwa tayari (Owner, Manager, Cashier, Storekeeper) au tengeneza yako — chagua kwa kila moduli ni nani anaweza kuona, kuongeza, kuhariri, au kufuta.</p>
+      </div>
+      <div class="feature-card warning">
+        <div class="feature-card-number">17</div>
+        <div class="feature-card-badge">Pro</div>
+        <div class="feature-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v6m0 6v4M1 10h6m6 0h4M6 6l4 4M18 6l-4 4m0 8l4 4M6 18l4-4"/></svg></div>
         <h4 data-t="landing.f20_title">Usalama &amp; Faragha ya Data</h4>
         <p data-t="landing.f20_desc">Data yako inahifadhiwa kwa usalama wa hali ya juu — inachukuliwa kwa uzito mkubwa na kulindwa kutoka ufikiaji wowote usioidhinishwa.</p>
       </div>
     </div>
   </div>
 
+  <!-- ── CTA Section ── -->
+  <div class="cta-section">
+    <h2>Anza Leo — <span style="background:linear-gradient(120deg,var(--brand-light),#a3e635);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Bila Malipo</span></h2>
+    <p>Jiunge na biashara zinazotumia StokiPro kusimamia mauzo, stoki, na fedha — kila kitu mahali pamoja, syncs na Google Sheets moja kwa moja.</p>
+    <div class="cta-btns">
+      <button class="btn btn-primary btn-lg" onclick="goPg('auth','r')"><i class="bi bi-rocket-takeoff-fill"></i><span data-t="btn.start_free">Anza Sasa — Bure</span></button>
+      <button class="btn btn-ghost btn-lg" onclick="goPg('auth','l')"><i class="bi bi-box-arrow-in-right"></i><span data-t="landing.login">Ingia Akaunti</span></button>
+    </div>
+  </div>
+
   <!-- ── Privacy / Trust Section ── -->
-  <div style="position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 48px 56px;">
-    <div style="background:linear-gradient(135deg,rgba(99,102,241,0.07),rgba(22,163,74,0.05));border:1px solid rgba(99,102,241,0.2);border-radius:var(--radius-lg);padding:36px 40px;">
-      <div style="text-align:center;margin-bottom:28px;">
-        <span style="font-size:34px;">🛡️</span>
-        <h3 style="font-size:21px;font-weight:800;margin:8px 0 4px;" data-t="privacy.title">Data Yako — Inalindwa Kikamilifu</h3>
-        <p style="color:var(--text-2);font-size:13.5px;" data-t="privacy.subtitle">Tunaelewa kwamba data ya biashara ni siri — tunaitunza kwa teknolojia ya kisasa na uwajibikaji wa hali ya juu</p>
+  <section class="trust-section" aria-labelledby="trust-title">
+    <div class="trust-inner">
+      <div style="flex:1;min-width:260px;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;">
+          <div class="ico"><i class="bi bi-shield-fill-check" style="color:#4ade80;font-size:24px;"></i></div>
+          <div>
+            <h3 id="trust-title" style="margin:0;font-size:18px;font-weight:800;">Your Data — Fully Protected</h3>
+            <div style="font-size:13px;color:var(--text-2);">Data yako inalindwa kwa viwango vya juu — tunajali faragha na usalama.</div>
+          </div>
+        </div>
+        <p class="feedback-note">We encrypt sensitive information, isolate tenant data, and provide optional backups. You remain in control — export or delete your data anytime.</p>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:20px;">
-        <div style="text-align:center;padding:14px;">
-          <div style="font-size:26px;margin-bottom:8px;">🏦</div>
-          <div style="font-weight:700;font-size:13.5px;margin-bottom:4px;" data-t="privacy.p1_title">Uhifadhi Salama</div>
-          <div style="font-size:12px;color:var(--text-2);line-height:1.6;" data-t="privacy.p1_desc">Data yako inahifadhiwa kwenye seva zilizolindwa — ufikiaji unafuatiliwa na kudhibitiwa kwa kiwango cha juu cha usalama</div>
+      <div style="flex:2;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;">
+        <div class="trust-card">
+          <div class="ico"><i class="bi bi-database-fill-lock" style="color:#818cf8;font-size:22px;"></i></div>
+          <h4>Secure Storage</h4>
+          <p>Data yako ihifadhiwa kwenye seva zilizoegeshwa, na ufikiaji unadhibitiwa kwa ruhusa.</p>
         </div>
-        <div style="text-align:center;padding:14px;">
-          <div style="font-size:26px;margin-bottom:8px;">🙈</div>
-          <div style="font-weight:700;font-size:13.5px;margin-bottom:4px;" data-t="privacy.p2_title">Kutengwa kwa Biashara</div>
-          <div style="font-size:12px;color:var(--text-2);line-height:1.6;" data-t="privacy.p2_desc">Kila biashara ina nafasi yake iliyotengwa kabisa — hakuna mtumiaji wala biashara nyingine inayoweza kuona data yako</div>
+        <div class="trust-card">
+          <div class="ico"><i class="bi bi-lock-fill" style="color:#fbbf24;font-size:22px;"></i></div>
+          <h4>Encryption & Access</h4>
+          <p>Encryption kwa mpito na wakati wa kuhifadhiwa. MFA inapatikana kwa watumiaji wa admin.</p>
         </div>
-        <div style="text-align:center;padding:14px;">
-          <div style="font-size:26px;margin-bottom:8px;">🔐</div>
-          <div style="font-weight:700;font-size:13.5px;margin-bottom:4px;" data-t="privacy.p3_title">Nywila Salama</div>
-          <div style="font-size:12px;color:var(--text-2);line-height:1.6;" data-t="privacy.p3_desc">Nywila zinafichwa kabla ya kuhifadhiwa — hata sisi hatuzijui nywila zako</div>
+        <div class="trust-card">
+          <div class="ico"><i class="bi bi-eye-fill" style="color:#22d3ee;font-size:22px;"></i></div>
+          <h4>Audit & Logs</h4>
+          <p>Rekodi za shughuli zinakusanywa kwa usimamizi wa hatari na uwazi wa audit.</p>
         </div>
-        <div style="text-align:center;padding:14px;">
-          <div style="font-size:26px;margin-bottom:8px;">📴</div>
-          <div style="font-weight:700;font-size:13.5px;margin-bottom:4px;" data-t="privacy.p4_title">Offline Kwanza</div>
-          <div style="font-size:12px;color:var(--text-2);line-height:1.6;" data-t="privacy.p4_desc">Mfumo unafanya kazi bila internet — data inabaki kwenye kifaa chako hadi uunganishe</div>
+        <div class="trust-card">
+          <div class="ico"><i class="bi bi-wifi-off" style="color:#f87171;font-size:22px;"></i></div>
+          <h4>Offline-First</h4>
+          <p>Mfumo unaendelea kufanya kazi bila mtandao; data itaunganishwa salama baadaye.</p>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- ── Feedback Form ── -->
-  <div style="position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 48px 56px;">
-    <div style="text-align:center;margin-bottom:24px;">
+  <section style="position:relative;z-index:1;max-width:760px;margin:0 auto;padding:0 24px 40px;">
+    <div style="text-align:center;margin-bottom:18px;">
       <span style="font-size:30px;">💬</span>
-      <h3 style="font-size:21px;font-weight:800;margin:8px 0 4px;" data-t="feedback.title">Maoni au Maswali?</h3>
-      <p style="color:var(--text-2);font-size:13.5px;" data-t="feedback.subtitle">Tuambie — tutakujibu haraka iwezekanavyo</p>
+      <h3 style="font-size:20px;font-weight:800;margin:8px 0 4px;" data-t="feedback.title">Feedback & Questions</h3>
+      <p style="color:var(--text-2);font-size:13px;">We'd love to hear from you — bug reports, suggestions, or partnership inquiries.</p>
     </div>
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;">
-      <div id="fb-success" style="display:none;background:rgba(22,163,74,0.1);border:1px solid var(--brand);color:var(--brand-light);padding:12px 16px;border-radius:var(--radius-sm);margin-bottom:16px;font-size:13.5px;"><i class="bi bi-check-circle-fill"></i> <span data-t="feedback.sent">Asante! Ujumbe wako umefika — tutawasiliana nawe hivi karibuni.</span></div>
-      <div id="fb-error" style="display:none;" class="alert alert-danger mb-3"></div>
-      <div class="form-group">
-        <label class="form-label" data-t="feedback.name">Jina Lako</label>
-        <input type="text" class="form-control" id="fb-name" placeholder="Jina lako kamili" data-tp="feedback.name_ph"/>
+    <div class="feedback-card">
+      <div id="fb-success" style="display:none;background:rgba(22,163,74,0.08);border:1px solid var(--brand);color:var(--brand);padding:12px 16px;border-radius:8px;margin-bottom:12px;font-size:13.5px;">✓ <span data-t="feedback.sent">Thank you — your message was received.</span></div>
+      <div id="fb-error" style="display:none;color:var(--danger);font-size:13px;margin-bottom:8px;"></div>
+      <div class="form-row">
+        <div class="form-group" style="flex:1;min-width:180px;">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-control" id="fb-name" placeholder="Your full name" />
+        </div>
+        <div class="form-group" style="flex:1;min-width:180px;">
+          <label class="form-label">Email <span style="color:var(--text-3);font-weight:400;">(optional)</span></label>
+          <input type="email" class="form-control" id="fb-email" placeholder="you@email.com" />
+        </div>
       </div>
       <div class="form-group">
-        <label class="form-label" data-t="feedback.email_lbl">Barua Pepe <span style="color:var(--text-3);font-weight:400;">(hiari)</span></label>
-        <input type="email" class="form-control" id="fb-email" placeholder="example@email.com"/>
+        <label class="form-label">Message *</label>
+        <textarea class="form-control" id="fb-msg" rows="5" placeholder="Write your message..." style="min-height:120px;"></textarea>
       </div>
-      <div class="form-group">
-        <label class="form-label" data-t="feedback.message_lbl">Ujumbe Wako *</label>
-        <textarea class="form-control" id="fb-msg" rows="4" placeholder="Andika maoni, mapendekezo, au tatizo..." data-tp="feedback.message_ph" style="resize:vertical;min-height:100px;"></textarea>
+      <div style="display:flex;gap:12px;align-items:center;justify-content:space-between;margin-top:12px;flex-wrap:wrap;">
+        <div class="feedback-note">We respect your privacy — messages are used only for support and product improvement.</div>
+        <div style="margin-left:auto;">
+          <button class="btn btn-ghost" onclick="document.getElementById('fb-name').value='';document.getElementById('fb-email').value='';document.getElementById('fb-msg').value='';">Clear</button>
+          <button class="btn btn-primary" id="fb-btn" onclick="submitFeedback()">Send Message</button>
+        </div>
       </div>
-      <button class="btn btn-primary btn-block" id="fb-btn" onclick="submitFeedback()" style="font-size:15px;padding:12px;">
-        <i class="bi bi-send-fill"></i> <span data-t="feedback.send">Tuma Ujumbe</span>
-      </button>
     </div>
-  </div>
+  </section>
 
   <!-- ── Developer Card ── -->
-  <div style="position:relative;z-index:1;max-width:640px;margin:0 auto;padding:0 48px 56px;">
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px 32px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
-      <div style="flex-shrink:0;position:relative;">
-        <div style="width:90px;height:90px;border-radius:50%;border:3px solid var(--brand);overflow:hidden;background:var(--bg-3);display:flex;align-items:center;justify-content:center;">
-          <img id="dev-photo-img" src="" alt="Salim Said Mohamed" style="width:100%;height:100%;object-fit:cover;display:none;"/>
-          <span id="dev-photo-placeholder" style="font-size:32px;">👤</span>
-        </div>
-        <!-- Kitufe cha camera — kinaonekana kwa admin peke yake -->
-        <div id="dev-cam-btn" style="display:none;position:absolute;bottom:0;right:0;background:var(--brand);border-radius:50%;width:26px;height:26px;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);" onclick="document.getElementById('dev-photo-input').click()" title="Badilisha picha">
-          <i class="bi bi-camera-fill" style="color:#fff;font-size:11px;"></i>
-        </div>
-        <input type="file" id="dev-photo-input" accept="image/*" style="display:none;" onchange="loadDevPhoto(event)"/>
+  <div style="position:relative;z-index:1;max-width:880px;margin:0 auto;padding:0 24px 36px;">
+    <div class="dev-card">
+      <div class="dev-photo">
+        <img id="dev-photo-img" src="" alt="Salim Said Mohamed" style="width:100%;height:100%;object-fit:cover;display:none;"/>
+        <span id="dev-photo-placeholder" style="font-size:28px;">👤</span>
       </div>
-      <div style="flex:1;min-width:180px;">
-        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--brand-light);margin-bottom:3px;" data-t="dev.label">Imetengenezwa na</div>
-        <div style="font-size:19px;font-weight:800;margin-bottom:2px;">Salim Said Mohamed</div>
-        <div style="font-size:12.5px;color:var(--text-2);margin-bottom:12px;" data-t="dev.role">Full-Stack Developer · StokiPro v3</div>
-        <div style="display:flex;flex-direction:column;gap:7px;">
-          <a href="tel:+255684758289" style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='var(--brand-light)'" onmouseout="this.style.color='var(--text-2)'">
-            <i class="bi bi-telephone-fill" style="color:var(--brand-light);"></i>+255 684 758 289
-          </a>
-          <a href="mailto:salumsaidmohamed83@gmail.com" style="display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--text-2);text-decoration:none;transition:color 0.15s;" onmouseover="this.style.color='var(--brand-light)'" onmouseout="this.style.color='var(--text-2)'">
-            <i class="bi bi-envelope-fill" style="color:var(--brand-light);"></i>salumsaidmohamed83@gmail.com
-          </a>
+      <div class="meta">
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--brand-light);">Built by</div>
+        <div style="font-size:18px;font-weight:800;margin-top:2px;">Salim Said Mohamed</div>
+        <div style="font-size:13px;color:var(--text-2);margin-top:6px;">Full‑Stack Developer · StokiPro v3</div>
+        <div class="dev-links">
+          <a href="tel:+255684758289"><i class="bi bi-telephone-fill" style="color:var(--brand-light);"></i>+255 684 758 289</a>
+          <a href="mailto:salumsaidmohamed83@gmail.com"><i class="bi bi-envelope-fill" style="color:var(--brand-light);"></i>Email</a>
+          <a href="https://github.com/salimsaid98" target="_blank" rel="noopener" title="GitHub"><i class="bi bi-github"></i>GitHub</a>
         </div>
       </div>
     </div>
   </div>
 
   <!-- ── Footer ── -->
-  <div style="position:relative;z-index:1;border-top:1px solid var(--border);padding:24px 48px;text-align:center;">
-    <div style="color:var(--text-3);font-size:13px;margin-bottom:5px;">
-      © 2026 <strong style="color:var(--text-2);">StokiPro v3</strong> — <span data-t="landing.footer_rights">Haki zote zimehifadhiwa</span>
+  <footer class="site-footer" role="contentinfo">
+    <div class="left">
+      <div style="display:flex;align-items:center;gap:10px;"><div style="width:44px;height:44px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--brand-light));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;">SP</div>
+      <div style="display:flex;flex-direction:column;"><strong style="color:var(--text-1);">StokiPro v3</strong><span style="font-size:12px;color:var(--text-3);">Sheets‑First · Auto‑Sync</span></div></div>
+      <div class="links" style="margin-left:18px;">
+        <a class="nav-link" href="#">Pricing</a>
+        <a class="nav-link" href="#">Docs</a>
+        <a class="nav-link" href="#">Privacy</a>
+      </div>
     </div>
-    <div style="font-size:12px;color:var(--text-3);" data-t="landing.footer_dev">
-      Imeundwa &amp; kutengenezwa na <strong style="color:var(--text-2);">Salim Said Mohamed</strong> · <span data-t="landing.footer_region">Afrika Mashariki</span>
+    <div style="text-align:right;">
+      <div class="legal">© 2026 StokiPro — All rights reserved</div>
+      <div style="margin-top:6px;">
+        <a href="#" style="margin-right:10px;color:var(--text-2);">Terms</a>
+        <a href="#" style="margin-right:10px;color:var(--text-2);">Privacy</a>
+        <a href="#" style="color:var(--text-2);">Contact</a>
+      </div>
     </div>
-  </div>
+  </footer>
 </div>
 
 <div id="page-auth" class="page">
-  <div class="auth-bg"></div>
-  <div class="auth-card">
-    <div class="auth-inner">
-      <div style="text-align:center;margin-bottom:22px;">
-        <div class="brand-logo" style="justify-content:center;gap:12px;margin-bottom:4px;">
-          <div class="brand-icon" style="width:40px;height:40px;font-size:20px;">📦</div>
-          <div><div class="brand-name">Stoki<span>Pro</span></div><div class="brand-tag">v3 · Sheets First</div></div>
+  <!-- Left pane -->
+  <div class="auth-left">
+    <div class="auth-left-grid"></div>
+    <div class="auth-left-body">
+      <div class="brand-logo" style="margin-bottom:36px;">
+        <div class="brand-icon" style="width:46px;height:46px;font-size:22px;">📦</div>
+        <div><div class="brand-name">Stoki<span>Pro</span></div><div class="brand-tag">v3 · Sheets-First · Auto-Sync</div></div>
+      </div>
+      <div class="hero-eyebrow" style="margin-bottom:16px;font-size:11px;"><i class="bi bi-stars"></i> Trusted by 500+ businesses</div>
+      <h2 class="auth-left-title">Simamia Biashara<br><span class="accent">Mahali Pamoja.</span></h2>
+      <p class="auth-left-desc">Mfumo wa kisasa wa biashara — mauzo, stoki, wateja, na analytics katika app moja inayosync na Google Sheets.</p>
+      <div class="auth-feat">
+        <div class="auth-feat-item">
+          <div class="auth-feat-ic" style="background:rgba(22,163,74,0.15);"><i class="bi bi-cloud-check-fill" style="color:#4ade80;"></i></div>
+          <div><div class="auth-feat-title">Auto-Sync na Google Sheets</div><div class="auth-feat-sub">Data yako ipo salama na inasync moja kwa moja bila kupoteza kitu</div></div>
+        </div>
+        <div class="auth-feat-item">
+          <div class="auth-feat-ic" style="background:rgba(99,102,241,0.15);"><i class="bi bi-bar-chart-line-fill" style="color:#818cf8;"></i></div>
+          <div><div class="auth-feat-title">Analytics za Wakati Halisi</div><div class="auth-feat-sub">Mauzo, faida, madeni — yote moja kwa moja kwenye dashboard</div></div>
+        </div>
+        <div class="auth-feat-item">
+          <div class="auth-feat-ic" style="background:rgba(245,158,11,0.15);"><i class="bi bi-phone-fill" style="color:#fbbf24;"></i></div>
+          <div><div class="auth-feat-title">Mobile Friendly Kabisa</div><div class="auth-feat-sub">Tumia kwenye simu yoyote bila app download</div></div>
+        </div>
+        <div class="auth-feat-item">
+          <div class="auth-feat-ic" style="background:rgba(239,68,68,0.15);"><i class="bi bi-shield-check-fill" style="color:#f87171;"></i></div>
+          <div><div class="auth-feat-title">Usalama wa Hali ya Juu</div><div class="auth-feat-sub">Encryption, tenant isolation, na audit logs za kila kitu</div></div>
         </div>
       </div>
-      <div style="display:flex;justify-content:flex-end;margin-bottom:8px;">
-        <button class="btn btn-ghost btn-sm lang-toggle" onclick="toggleLang()" style="font-size:12px;font-weight:700;padding:6px 10px;"><span style="font-size:13px;">🇬🇧</span> EN</button>
-      </div>
-      <div class="auth-tabs">
-        <div class="auth-tab active" id="atl" onclick="authTab('l')" data-t="auth.login">Ingia</div>
-        <div class="auth-tab" id="atr" onclick="authTab('r')" data-t="auth.register">Sajili</div>
-      </div>
+    </div>
+    <div class="auth-left-foot">© 2026 StokiPro · All rights reserved</div>
+  </div>
+  <!-- Right pane -->
+  <div class="auth-right">
+    <div class="auth-card">
+      <div class="auth-inner">
+        <!-- Mobile logo -->
+        <div class="auth-mobile-logo">
+          <div class="brand-logo" style="justify-content:center;gap:10px;">
+            <div class="brand-icon" style="width:38px;height:38px;font-size:18px;">📦</div>
+            <div><div class="brand-name" style="font-size:18px;">Stoki<span>Pro</span></div></div>
+          </div>
+        </div>
+        <!-- Dynamic heading -->
+        <div class="auth-heading">
+          <h2 id="auth-hd-title">Karibu tena 👋</h2>
+          <p id="auth-hd-sub">Bado huna akaunti? <button onclick="authTab('r')">Sajili bure</button></p>
+        </div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:12px;">
+          <button class="btn btn-ghost btn-sm lang-toggle" onclick="toggleLang()" style="font-size:12px;font-weight:700;padding:6px 10px;"><span style="font-size:13px;">🇬🇧</span> EN</button>
+        </div>
+        <div class="auth-tabs">
+          <div class="auth-tab active" id="atl" onclick="authTab('l')" data-t="auth.login">Ingia</div>
+          <div class="auth-tab" id="atr" onclick="authTab('r')" data-t="auth.register">Sajili</div>
+        </div>
       
       <div id="afl">
         <div id="auth-err" style="display:none;" class="alert alert-danger mb-2"><i class="bi bi-x-circle" style="font-size:15px;"></i><span id="auth-emsg"></span></div>
-        <div class="form-group"><label class="form-label" data-t="lbl.username">Jina la Mtumiaji</label><input type="text" class="form-control" id="lu" data-tp="lbl.username" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
-        <div class="form-group"><label class="form-label" data-t="lbl.password">Nywila</label><input type="password" class="form-control" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        <div class="form-group">
+          <label class="form-label" data-t="lbl.username">Jina la Mtumiaji</label>
+          <div class="auth-field"><i class="bi bi-person-fill auth-field-ic"></i><input type="text" class="form-control" id="lu" data-tp="lbl.username" placeholder="admin" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" data-t="lbl.password">Nywila</label>
+          <div class="auth-field"><i class="bi bi-lock-fill auth-field-ic"></i><input type="password" class="form-control" id="lp" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+        </div>
         <button class="btn btn-primary btn-block" id="btn-login" onclick="doLogin()" style="font-size:15px;padding:12px;"><i class="bi bi-box-arrow-in-right"></i><span data-t="btn.login">Ingia</span></button>
         <div style="text-align:right;margin-top:8px;">
           <button style="border:none;background:none;color:var(--brand-light);font-size:12.5px;cursor:pointer;font-family:var(--font);" onclick="openM('m-forgot')" data-t="lbl.forgot_pw">Umesahau nywila?</button>
@@ -822,9 +1324,10 @@ textarea.form-control{resize:vertical;min-height:80px;}
         <button class="btn btn-primary btn-block" id="reg-btn" onclick="doReg()"><i class="bi bi-person-plus"></i><span data-t="reg.submit">Sajili Biashara</span></button>
         </div><!-- /reg-form-body -->
       </div>
-      <div style="text-align:center;margin-top:14px;"><button class="btn btn-ghost btn-sm" onclick="goPg('landing')"><i class="bi bi-arrow-left"></i><span data-t="reg.back">Nyumbani</span></button></div>
-    </div>
-  </div>
+      <div style="text-align:center;margin-top:16px;"><button class="btn btn-ghost btn-sm" onclick="goPg('landing')"><i class="bi bi-arrow-left"></i><span data-t="reg.back">Nyumbani</span></button></div>
+      </div><!-- /auth-inner -->
+    </div><!-- /auth-card -->
+  </div><!-- /auth-right -->
 </div>
 
 <div id="page-admin" class="page">
@@ -1034,17 +1537,67 @@ textarea.form-control{resize:vertical;min-height:80px;}
 
         
         <div class="section-panel active" id="t-db">
-          <div class="section-hdr mb-4"><div class="section-hdr-title" id="t-greet">Habari!</div><span id="t-date" style="font-size:12px;color:var(--text-3);font-family:var(--mono);"></span></div>
-          <div id="t-db-alerts" class="mb-3"></div>
-          <div class="grid grid-4 mb-4" id="t-stats"></div>
-          <div class="grid grid-2 mb-4">
-            <div class="chart-card"><div class="chart-header"><span class="chart-title" data-t="dash.sales_chart">Mauzo — Siku za Hivi Karibuni</span><select class="form-select" id="t-cp" onchange="renderTCharts()" style="width:85px;font-size:11.5px;padding:4px 8px;"><option value="7" data-t="dash.7days">7 Siku</option><option value="30" data-t="dash.30days">30 Siku</option></select></div><div class="chart-body"><canvas id="ch-ts" height="180"></canvas></div></div>
-            <div class="chart-card"><div class="chart-header"><span class="chart-title" data-t="dash.top_products">Top Bidhaa (Idadi)</span></div><div class="chart-body"><canvas id="ch-tp" height="180"></canvas></div></div>
+          <!-- Hero header -->
+          <div class="db-hero">
+            <div class="db-hero-left">
+              <div class="db-hero-badge" id="t-hero-badge">🌅</div>
+              <div>
+                <div class="db-hero-name" id="t-greet">Habari!</div>
+                <div class="db-hero-date" id="t-date"></div>
+              </div>
+            </div>
+            <div class="db-quick-actions">
+              <button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-an')"><i class="bi bi-bar-chart-line"></i> Analytics</button>
+              <button class="btn btn-primary" onclick="openSaleM()"><i class="bi bi-plus-lg"></i> Mauzo Mapya</button>
+            </div>
           </div>
+          <!-- Alerts -->
+          <div id="t-db-alerts" class="mb-3"></div>
+          <!-- Stats -->
+          <div class="grid grid-4 mb-4" id="t-stats"></div>
+          <!-- Charts -->
+          <div class="grid grid-2 mb-4">
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="db-chart-hdr">
+                  <div class="db-chart-hdr-ic" style="background:rgba(22,163,74,0.15);color:var(--brand-light);"><i class="bi bi-graph-up-arrow"></i></div>
+                  <span class="chart-title" data-t="dash.sales_chart">Mauzo — Siku za Hivi Karibuni</span>
+                </div>
+                <select class="form-select" id="t-cp" onchange="renderTCharts()" style="width:85px;font-size:11.5px;padding:4px 8px;">
+                  <option value="7" data-t="dash.7days">7 Siku</option>
+                  <option value="30" data-t="dash.30days">30 Siku</option>
+                </select>
+              </div>
+              <div class="chart-body"><canvas id="ch-ts" height="180"></canvas></div>
+            </div>
+            <div class="chart-card">
+              <div class="chart-header">
+                <div class="db-chart-hdr">
+                  <div class="db-chart-hdr-ic" style="background:rgba(129,140,248,0.15);color:#818cf8;"><i class="bi bi-trophy-fill"></i></div>
+                  <span class="chart-title" data-t="dash.top_products">Top Bidhaa (Idadi)</span>
+                </div>
+              </div>
+              <div class="chart-body"><canvas id="ch-tp" height="180"></canvas></div>
+            </div>
+          </div>
+          <!-- Debt widget -->
           <div id="t-debt-widget" class="mb-4" style="display:none;"></div>
+          <!-- Recent + Low stock -->
           <div class="grid grid-2">
-            <div class="card"><div class="card-header"><h3 data-t="dash.recent_sales">Mauzo ya Hivi Karibuni</h3><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-sa')" data-t="dash.see_all">Yote →</button></div><div class="card-body" id="t-rs"></div></div>
-            <div class="card"><div class="card-header"><h3 data-t="dash.low_stock">Stoki Inayokwisha</h3><button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-st')" data-t="dash.see_stock">Stoki →</button></div><div class="card-body" id="t-ls"></div></div>
+            <div class="card">
+              <div class="card-header">
+                <h3 style="display:flex;align-items:center;gap:8px;"><i class="bi bi-receipt" style="color:var(--brand-light);font-size:15px;"></i><span data-t="dash.recent_sales">Mauzo ya Hivi Karibuni</span></h3>
+                <button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-sa')" data-t="dash.see_all">Yote →</button>
+              </div>
+              <div class="card-body" id="t-rs"></div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <h3 style="display:flex;align-items:center;gap:8px;"><i class="bi bi-boxes" style="color:#f87171;font-size:15px;"></i><span data-t="dash.low_stock">Stoki Inayokwisha</span></h3>
+                <button class="btn btn-ghost btn-sm" onclick="tSec(null,'t-st')" data-t="dash.see_stock">Stoki →</button>
+              </div>
+              <div class="card-body" id="t-ls"></div>
+            </div>
           </div>
         </div>
 
@@ -2875,7 +3428,15 @@ const clrSess=()=>sessionStorage.removeItem('sp3v');
 const GOOGLE_BTN_HTML='<svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.08 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.35-8.16 2.35-6.26 0-11.57-3.59-13.46-8.83l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg> <span data-t="btn.google_login">Ingia na Google</span>';
 function resetGoogleBtn(){const gb=document.getElementById('btn-google');if(gb){gb.disabled=false;gb.innerHTML=GOOGLE_BTN_HTML;}if(typeof google!=='undefined'&&google?.accounts?.id)google.accounts.id.disableAutoSelect();}
 function goPg(pg,tab){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const el=document.getElementById('page-'+pg);if(el)el.classList.add('active');if(pg==='auth'&&tab)authTab(tab);if(pg==='landing')initDevPhoto();if(pg==='auth'||pg==='landing')resetGoogleBtn();}
-function authTab(t){['l','r'].forEach(x=>{document.getElementById('at'+x)?.classList.toggle('active',x===t);const f=document.getElementById('af'+x);if(f)f.style.display=x===t?'block':'none';});}
+function authTab(t){
+  ['l','r'].forEach(x=>{document.getElementById('at'+x)?.classList.toggle('active',x===t);const f=document.getElementById('af'+x);if(f)f.style.display=x===t?'block':'none';});
+  const title=document.getElementById('auth-hd-title');
+  const sub=document.getElementById('auth-hd-sub');
+  if(title)title.textContent=t==='l'?'Karibu tena 👋':'Anza Safari ✨';
+  if(sub)sub.innerHTML=t==='l'?
+    'Bado huna akaunti? <button onclick="authTab(\'r\')" style="background:none;border:none;color:var(--brand);font-weight:700;cursor:pointer;font-family:var(--font);font-size:inherit;padding:0;">Sajili bure</button>':
+    'Tayari una akaunti? <button onclick="authTab(\'l\')" style="background:none;border:none;color:var(--brand);font-weight:700;cursor:pointer;font-family:var(--font);font-size:inherit;padding:0;">Ingia</button>';
+}
 const AT={'a-db':'Dashboard','a-tn':'Tenants','a-us':'Watumiaji','a-an':'Analytics','a-ac':'Audit Logs','a-se':'Sessions & Vifaa','a-st':'Mipangilio'};
 const TT={'t-db':'Dashboard','t-br':'Matawi ya Biashara','t-pr':'Bidhaa','t-st':'Stoki','t-sa':'Mauzo','t-pu':'Manunuzi','t-ret':'Rudishano','t-qt':'Makisio','t-cu':'Wateja','t-cprof':'Wasifu wa Mteja','t-su':'Wasambazaji','t-sprof':'Wasifu wa Msambazaji','t-ex':'Matumizi','t-an':'Analytics','t-rp':'Ripoti','t-bs':'Biashara Yangu','t-vat':'VAT / Kodi','t-usr':'Watumiaji & Roles'};
 const FAB_MAP={'t-sa':openSaleM,'t-pr':openProdM,'t-pu':()=>{const isLPO=document.getElementById('pu-pane-lpo').style.display!=='none';if(isLPO)openLPONew();else openPurchM();},'t-cu':openCustM,'t-su':openSupM,'t-st':()=>openAdjM(),'t-ex':openExpM,'t-qt':openNewQuote};
@@ -2901,6 +3462,82 @@ function tSec(el,id){
 }
 function fabAct(){if(FAB_MAP[_tSec])FAB_MAP[_tSec]();}
 function setBT(el){document.querySelectorAll('.bot-tab').forEach(b=>b.classList.remove('active'));document.querySelectorAll('.more-item').forEach(m=>m.classList.remove('active'));if(el)el.classList.add('active');}
+function runStatsCounters(){
+  const items=document.querySelectorAll('.lst-it-num');
+  items.forEach(el=>{
+    const text=el.textContent.trim();
+    const match=text.match(/^(\d+)(.*)/);
+    if(!match)return;
+    const target=parseInt(match[1]),suffix=match[2]||'',duration=1400;
+    const start=performance.now();
+    const tick=now=>{
+      const p=Math.min((now-start)/duration,1);
+      const ease=1-Math.pow(1-p,3);
+      el.textContent=Math.round(ease*target)+suffix;
+      if(p<1)requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  /* Stats counter */
+  const statsEl=document.querySelector('.landing-stats-inner');
+  if(statsEl){
+    const ob=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){runStatsCounters();ob.disconnect();}
+    },{threshold:0.4});
+    ob.observe(statsEl);
+  }
+
+  /* ── Features section scroll-triggered animations ── */
+  /* Controls heading */
+  const ctrl=document.querySelector('.features-controls');
+  if(ctrl){
+    const ob2=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){ctrl.classList.add('vis');ob2.disconnect();}
+    },{threshold:0.3});
+    ob2.observe(ctrl);
+  }
+
+  /* Category headers */
+  document.querySelectorAll('.feature-category').forEach((cat,i)=>{
+    const ob=new IntersectionObserver(entries=>{
+      if(entries[0].isIntersecting){
+        setTimeout(()=>cat.classList.add('vis'),i*60);
+        ob.disconnect();
+      }
+    },{threshold:0.2,rootMargin:'0px 0px -40px 0px'});
+    ob.observe(cat);
+  });
+
+  /* Feature cards — staggered per visible batch */
+  const cards=[...document.querySelectorAll('.feature-card')];
+  let batchTimer=null;
+  const cardOb=new IntersectionObserver(entries=>{
+    const visible=entries.filter(e=>e.isIntersecting);
+    if(!visible.length)return;
+    clearTimeout(batchTimer);
+    batchTimer=setTimeout(()=>{
+      visible.forEach((entry,i)=>{
+        setTimeout(()=>entry.target.classList.add('vis'),i*80);
+      });
+    },30);
+  },{threshold:0.15,rootMargin:'0px 0px -30px 0px'});
+  cards.forEach(c=>cardOb.observe(c));
+
+  /* ── 3D tilt effect on feature cards ── */
+  cards.forEach(card=>{
+    card.addEventListener('mousemove',e=>{
+      const r=card.getBoundingClientRect();
+      const x=(e.clientX-r.left)/r.width-0.5;
+      const y=(e.clientY-r.top)/r.height-0.5;
+      card.style.transform=`translateY(-6px) perspective(700px) rotateX(${-y*9}deg) rotateY(${x*9}deg)`;
+    });
+    card.addEventListener('mouseleave',()=>{
+      card.style.transform='';
+    });
+  });
+});
 function setMoreActive(el){document.querySelectorAll('.more-item').forEach(m=>m.classList.remove('active'));if(el)el.classList.add('active');setBT(document.getElementById('bt-more'));closeMore();}
 function toggleMore(){document.getElementById('more-dr').classList.toggle('show');}
 function closeMore(){document.getElementById('more-dr').classList.remove('show');}
@@ -3681,7 +4318,9 @@ function loadDash(){
   if(!cU||!cT)return;
   try{loadFromLocal();}catch(e){console.error('loadFromLocal:',e);return;}// Reload kutoka LS
   const h=new Date().getHours();
-  document.getElementById('t-greet').textContent=(h<12?t('greet.morning'):h<17?t('greet.afternoon'):t('greet.evening'))+', '+cU.fullname.split(' ')[0]+'! 👋';
+  const badge=document.getElementById('t-hero-badge');
+  if(badge)badge.textContent=h<12?'🌅':h<17?'☀️':'🌙';
+  document.getElementById('t-greet').textContent=(h<12?t('greet.morning'):h<17?t('greet.afternoon'):t('greet.evening'))+', '+cU.fullname.split(' ')[0]+'!';
   document.getElementById('t-date').textContent=new Date().toLocaleDateString('sw-TZ',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   document.getElementById('t-av').textContent=cU.fullname[0].toUpperCase();
   document.getElementById('t-unm').textContent=cU.fullname;
@@ -3706,7 +4345,21 @@ function loadDash(){
   }
   document.getElementById('t-db-alerts').innerHTML=al.join('');
   renderDebtWidget();
-  document.getElementById('t-rs').innerHTML=_brSales.slice(0,5).map(s=>`<div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);"><div><div style="font-size:13px;font-weight:700;">${s.ref}</div><div style="font-size:11.5px;color:var(--text-3);">${s.custName||'—'} · ${fmtDate(s.date)}</div></div><div style="text-align:right;"><div class="font-mono font-bold" style="color:var(--brand-light);">TZS ${fmt(s.total)}</div><span class="badge badge-${s.creditType==='credit'?'credit':'cash'}">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span></div></div>`).join('')||`<div style="text-align:center;padding:24px;color:var(--text-3);">Hakuna mauzo bado</div>`;
+  const cur2=(DB.biz||{}).currency||'TZS';
+  document.getElementById('t-rs').innerHTML=_brSales.slice(0,5).map(s=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div style="width:36px;height:36px;border-radius:10px;background:${s.creditType==='credit'?'rgba(239,68,68,0.12)':'rgba(22,163,74,0.12)'};display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="bi bi-${s.creditType==='credit'?'clock-history':'check-circle-fill'}" style="font-size:15px;color:${s.creditType==='credit'?'var(--danger)':'var(--brand-light)'};"></i>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:700;">${s.ref}</div>
+        <div style="font-size:11.5px;color:var(--text-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.custName||'—'} · ${fmtDate(s.date)}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div class="font-mono" style="font-size:13px;font-weight:800;color:var(--brand-light);">${cur2} ${fmt(s.total)}</div>
+        <span class="badge badge-${s.creditType==='credit'?'credit':'cash'}" style="font-size:10px;">${s.creditType==='credit'?'Mkopo':'Taslimu'}</span>
+      </div>
+    </div>`).join('')||`<div style="text-align:center;padding:32px;color:var(--text-3);"><i class="bi bi-receipt" style="font-size:32px;display:block;margin-bottom:8px;"></i>Hakuna mauzo bado</div>`;
   document.getElementById('t-ls').innerHTML=low.length?low.slice(0,5).map(p=>{const pct=Math.min(100,n(p.minStock)>0?n(p.stock)/(n(p.minStock)*2)*100:80);return`<div class="mb-2"><div class="flex justify-between mb-1"><span style="font-size:12.5px;">${p.name}</span><span class="badge badge-danger">${p.stock} ${p.unit||''}</span></div><div class="progress"><div class="progress-bar red" style="width:${pct}%"></div></div></div>`}).join(''):`<div style="text-align:center;padding:20px;"><i class="bi bi-check-circle-fill" style="font-size:32px;color:var(--brand-light);display:block;margin-bottom:8px;"></i><div style="font-size:13px;font-weight:700;color:var(--brand-light);">Stoki Zote Sawa!</div></div>`;
   renderTCharts();
 }
@@ -9432,7 +10085,8 @@ function chPg(tbId,pgId,p){const el=document.getElementById(pgId);if(el){el.data
    HELPERS
 ================================================================ */
 const SCOL={brand:'linear-gradient(135deg,var(--brand-dark),var(--brand-light))',amber:'linear-gradient(135deg,#d97706,var(--accent))',info:'linear-gradient(135deg,#1d4ed8,var(--info))',danger:'linear-gradient(135deg,#b91c1c,var(--danger))'};
-function SC(label,val,meta,col){return`<div class="stat-card"><div class="stat-card-accent" style="background:${SCOL[col]||SCOL.brand};"></div><div class="stat-label">${label}</div><div class="stat-value">${val}</div>${meta?`<div class="stat-meta">${meta}</div>`:''}</div>`;}
+const SCIC={brand:'graph-up-arrow',amber:'calendar-week',info:'person-lines-fill',danger:'boxes'};
+function SC(label,val,meta,col){const ic=SCIC[col]||'bar-chart-fill';return`<div class="stat-card sc-${col||'brand'}"><div class="sc-icon-wrap"><i class="bi bi-${ic}"></i></div><div class="sc-body"><div class="stat-label">${label}</div><div class="stat-value">${val}</div>${meta?`<div class="stat-meta">${meta}</div>`:''}</div></div>`;}
 function ES(msg){return`<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px;">${msg}</div>`;}
 function dCh(id){if(_ch[id]){_ch[id].destroy();delete _ch[id];}}
 function cOpt(dk,gc,tc){return{responsive:true,plugins:{legend:{display:false}},scales:{x:{grid:{color:gc},ticks:{color:tc,font:{family:'DM Mono',size:10}}},y:{grid:{color:gc},ticks:{color:tc,font:{family:'DM Mono',size:10}},beginAtZero:true}}};}
@@ -10925,5 +11579,144 @@ function populateUnitDatalist(){
     <button class="btn btn-ghost" id="qr-scan-torch-btn" style="color:#fff;border-color:rgba(255,255,255,0.3);display:none;" onclick="toggleTorch()"><i class="bi bi-lightning-fill"></i> Tochi</button>
   </div>
 </div>
+<script>
+// Features toggle & filter script
+(function(){
+  function qs(sel,ctx){return (ctx||document).querySelector(sel)}
+  function qsa(sel,ctx){return Array.from((ctx||document).querySelectorAll(sel))}
+
+  var grid = qs('#features-grid');
+  if(!grid) return;
+
+  // Build categories structure from DOM
+  var nodes = Array.from(grid.children);
+  var categories = [];
+  var cur = null;
+  nodes.forEach(function(n){
+    if(n.classList.contains('feature-category')){
+      var label = n.querySelector('.feature-category-label');
+      var name = label ? label.textContent.trim() : 'Category';
+      cur = {name:name, header: n, cards: []};
+      categories.push(cur);
+    } else if(n.classList && n.classList.contains('feature-card')){
+      if(!cur){ // direct cards before any category
+        cur = {name:'General', header:null, cards:[]}; categories.push(cur);
+      }
+      cur.cards.push(n);
+    }
+  });
+
+  // Render filter panel checkboxes
+  var filterList = qs('#filter-list');
+  categories.forEach(function(cat,idx){
+    var id = 'fcat_'+idx;
+    var lbl = document.createElement('label');
+    lbl.innerHTML = '<input type="checkbox" data-idx="'+idx+'" id="'+id+'" checked/> <span>'+cat.name+'</span>';
+    filterList.appendChild(lbl);
+  });
+
+  // Attach collapse on category header click
+  categories.forEach(function(cat,idx){
+    if(cat.header){
+      var lab = cat.header.querySelector('.feature-category-label');
+      if(lab){
+        lab.addEventListener('click',function(){ toggleCategory(idx); });
+      }
+    }
+  });
+
+  function toggleCategory(idx,forceShow){
+    var cat = categories[idx];
+    if(!cat) return;
+    var collapsed = cat.header && cat.header.classList.toggle('collapsed');
+    if(typeof forceShow === 'boolean') collapsed = !forceShow;
+    cat.cards.forEach(function(c){
+      c.style.display = collapsed ? 'none' : '';
+    });
+  }
+
+  // Show all / hide all
+  qs('#show-all').addEventListener('click',function(){
+    categories.forEach(function(cat,idx){
+      if(cat.header) cat.header.classList.remove('collapsed');
+      cat.cards.forEach(function(c){ c.style.display = ''; });
+      var cb = qs('#fcat_'+idx); if(cb) cb.checked = true;
+    });
+    savePrefs();
+  });
+  qs('#hide-all').addEventListener('click',function(){
+    categories.forEach(function(cat,idx){
+      if(cat.header) cat.header.classList.add('collapsed');
+      cat.cards.forEach(function(c){ c.style.display = 'none'; });
+      var cb = qs('#fcat_'+idx); if(cb) cb.checked = false;
+    });
+    savePrefs();
+  });
+
+  // Filter panel toggle
+  qs('#filter-toggle').addEventListener('click',function(e){
+    var p = qs('#filter-panel');
+    p.classList.toggle('show');
+    p.setAttribute('aria-hidden', !p.classList.contains('show'));
+  });
+
+  // Checkbox handlers
+  filterList.addEventListener('change',function(e){
+    var cb = e.target.closest('input[type=checkbox]');
+    if(!cb) return;
+    var idx = Number(cb.dataset.idx);
+    var visible = cb.checked;
+    var cat = categories[idx];
+    if(!cat) return;
+    cat.cards.forEach(function(c){ c.style.display = visible ? '' : 'none'; });
+    if(cat.header){ if(visible) cat.header.classList.remove('collapsed'); else cat.header.classList.add('collapsed'); }
+    savePrefs();
+  });
+
+  // Quick apply
+  window.applyQuick = function(mode){
+    if(mode==='all') qs('#show-all').click();
+    else if(mode==='none') qs('#hide-all').click();
+  };
+
+  // Persist preferences
+  function savePrefs(){
+    try{
+      var prefs = categories.map(function(cat,idx){
+        var cb = qs('#fcat_'+idx);
+        return {name:cat.name, visible: !!(cb && cb.checked)};
+      });
+      localStorage.setItem('stokipro.features.filter', JSON.stringify(prefs));
+    }catch(e){}
+  }
+
+  function loadPrefs(){
+    try{
+      var raw = localStorage.getItem('stokipro.features.filter');
+      if(!raw) return;
+      var prefs = JSON.parse(raw);
+      prefs.forEach(function(p,idx){
+        var cat = categories[idx]; if(!cat) return;
+        var visible = !!p.visible;
+        var cb = qs('#fcat_'+idx); if(cb) cb.checked = visible;
+        cat.cards.forEach(function(c){ c.style.display = visible ? '' : 'none'; });
+        if(cat.header){ if(!visible) cat.header.classList.add('collapsed'); else cat.header.classList.remove('collapsed'); }
+      });
+    }catch(e){}
+  }
+
+  // Initialize
+  loadPrefs();
+
+  // Close filter panel on outside click
+  document.addEventListener('click', function(e){
+    var p = qs('#filter-panel');
+    if(!p) return;
+    var toggle = qs('#filter-toggle');
+    if(p.classList.contains('show') && !p.contains(e.target) && e.target !== toggle){ p.classList.remove('show'); p.setAttribute('aria-hidden','true'); }
+  });
+
+})();
+</script>
 </body>
 </html>
