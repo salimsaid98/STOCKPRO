@@ -2872,7 +2872,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
    CONFIG
 ================================================================ */
 // const BACKEND='https://script.google.com/macros/s/AKfycbxmK3DCgbOxZs5d-ilR4JeDPrrnEfx2F8k6Si14uWawyp7OMZZua-layEzmyc5kubZT/exec';
-const BACKEND='https://script.google.com/macros/s/AKfycbzMERWQEjMUXMPWuQZr5SSZR9ElA_bIoLYuRLAacM-z1gYvlDmJpSHH228wccdhoZs4/exec';
+const BACKEND='https://script.google.com/macros/s/AKfycbxywSaXYCjXfq3-t-dMLgHw5XywC9a73GQbymD4zoMpv73RgsoFiEYQRztd_W4Qx8C_/exec';
 const PS=15;
 
 /* ================================================================
@@ -4971,16 +4971,48 @@ async function saveAdj(){
   const pid=gv('adj-p'),tp=gv('adj-t'),qty=n(gv('adj-q')),rsn=gv('adj-r');
   if(!pid||qty<=0){toast('error','Jaza taarifa');return;}
   const p=DB.products.find(x=>x.id===pid);if(!p)return;
+  
   const bId=getEffectiveBranchFilter()||null;
   const old=getBS(pid,bId);
-  if(tp==='set'){adjBS(pid,bId,qty-old);}
-  else if(tp==='add'){adjBS(pid,bId,qty);}
-  else{adjBS(pid,bId,-qty);}
+  let newQty=old;
+  
+  if(tp==='set'){
+    newQty=qty;
+  } else if(tp==='add'){
+    newQty=old+qty;
+  } else {
+    newQty=Math.max(0,old-qty);
+  }
+  
+  // 🔥 CALL BACKEND — adjust_stock API
+  const res=await api({
+    action:'adjust_stock',
+    tenantId:cT.id,
+    productId:pid,
+    newStock:newQty,
+    reason:rsn||'Manual adjustment'
+  });
+  
+  if(!res.success){
+    toast('error',res.error||'Kosa inatoka');
+    return;
+  }
+  
+  // Update local
+  const p2=p;
+  p2.stock=newQty;
+  LS.save(cT.id,'products',p2);
+  DB.products=LS.get(cT.id,'products');
+  bgSync(cT.id,'products',p2);
+  
   loadFromLocal();
-  closeM('m-adj');_swal.success('Stoki imesasishwa ✅');renderStock();loadDash();
+  closeM('m-adj');
+  toast('success','Stoki imesasishwa ✅');
+  renderStock();
+  loadDash();
+  
   const adjLabel={add:'Ongeza',remove:'Punguza',set:'Weka'}[tp]||tp;
-  const newVal=getBS(pid,bId);
-  logActivity(adjLabel+' Stoki: '+p.name+' ('+old+'→'+newVal+')'+(rsn?' — '+rsn:''),'Stoki');
+  logActivity(adjLabel+' Stoki: '+p.name+' ('+old+'→'+newQty+')'+(rsn?' — '+rsn:''),'Stoki');
 }
 
 /* ================================================================
