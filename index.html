@@ -2872,7 +2872,7 @@ textarea.form-control{resize:vertical;min-height:80px;}
    CONFIG
 ================================================================ */
 // const BACKEND='https://script.google.com/macros/s/AKfycbxmK3DCgbOxZs5d-ilR4JeDPrrnEfx2F8k6Si14uWawyp7OMZZua-layEzmyc5kubZT/exec';
-const BACKEND='https://script.google.com/macros/s/AKfycbxywSaXYCjXfq3-t-dMLgHw5XywC9a73GQbymD4zoMpv73RgsoFiEYQRztd_W4Qx8C_/exec';
+const BACKEND='https://script.google.com/macros/s/AKfycby1alGSs8LTKQKbCPEB_Xn0oR-V_Jd9R1gVw5W8AuFuoV1NUmHTQbmVi-EiYVmJLzqR/exec';
 const PS=15;
 
 /* ================================================================
@@ -3182,7 +3182,9 @@ async function pullFromSheets(tid){
           const localBatches=Array.isArray(localItem.batches)?localItem.batches:[];
           const sheetsBatches=Array.isArray(parsed.batches)?parsed.batches:[];
           merged.batches=localBatches.length>=sheetsBatches.length?localBatches:sheetsBatches;
-          if(store==='products'&&localItem.stock!==undefined) merged.stock=localItem.stock;
+          // FIX: Sheets ndiyo source of truth kwa stock daima — local haishinidi tena
+          // (hapo awali local ilikuwa inashinda, ikasababisha stock kutosasishwa baada ya uuzaji)
+          if(store==='products') merged.stock=parsed.stock;
           LS.save(tid,store,merged);
         }
       });
@@ -5572,8 +5574,18 @@ async function saveSale(printInv){
     };
     // 1. Hifadhi LOCAL kwanza — haraka, hakuna wait
     LS.save(cT.id,'sales',sale);
-    // 2. Update stoki local (FEFO deduction kama expiry ON, otherwise branch-aware adjBS)
-    valid.forEach(row=>{const p=DB.products.find(x=>x.id===row.pid);if(p){if(isExpiryOn()&&p.batches?.length){deductFEFO(p,row.qty);LS.save(cT.id,'products',p);}else{adjBS(row.pid,cB?cB.id:null,-row.qty);}}});
+    
+    // 2. FIX: Punguza stoki LOCAL palepale — UI ionyeshe mara moja bila kusubiri sync
+    // Backend pia itapunguza (updateProductStock) — lakini tunabadilisha local hapa kwanza
+    // ili user aone stoki sahihi wakati huo huo, kisha Sheets itasasisha na kuthibitisha.
+    valid.forEach(row=>{
+      const p=DB.products.find(x=>x.id===row.pid);
+      if(p){
+        p.stock=Math.max(0,(n(p.stock)||0)-n(row.qty));
+        LS.save(cT.id,'products',p);
+      }
+    });
+    
     // 3. Update customer local
     if(cu){
       if(isC)cu.currentDebt=(n(cu.currentDebt)||0)+tot;
@@ -5582,14 +5594,18 @@ async function saveSale(printInv){
       cu.totalSpent=(n(cu.totalSpent)||0)+tot;
       LS.save(cT.id,'customers',cu);
     }
+    // 4. Background sync Sheets — bila kublock UI
+    bgSync(cT.id,'sales',{...sale,items:valid});
+    // FIX: Sync products kwenda Sheets ili stock iwe accurate
+    valid.forEach(row=>{const p=DB.products.find(x=>x.id===row.pid);if(p)bgSync(cT.id,'products',p);});
+    if(cu)bgSync(cT.id,'customers',cu);
+    
+    console.log('📦 Sale Created:', {saleId: sale.id, items: valid, deductedQty: valid.reduce((s,r)=>s+r.qty,0)});
+    
     loadFromLocal();
     closeM('m-sale');sRows=[];
     _swal.success('Imeuzwa ✅',sale.ref+' — TZS '+fmt(tot));
     renderSales();loadDash();
-    // 4. Background sync Sheets — bila kublock UI
-    bgSync(cT.id,'sales',{...sale,items:valid});
-    valid.forEach(row=>{const p=DB.products.find(x=>x.id===row.pid);if(p)bgSync(cT.id,'products',p);});
-    if(cu)bgSync(cT.id,'customers',cu);
     if(printInv)setTimeout(()=>showInv(sale),300);
     // Email + activity log
     checkLowStockEmail(valid);
@@ -8414,6 +8430,8 @@ function startAutoSync(){
       // Refresh current section tu
       if(!document.hidden){
         const sec=document.querySelector('#page-tenant .section-panel.active');
+        // FIX: Stock page isasishwe kila wakati (real-time sync)
+        if(sec&&sec.id==='t-st') renderStock();
         if(sec&&TSEC_LOADERS[sec.id])TSEC_LOADERS[sec.id]();
         loadDash();
       }
